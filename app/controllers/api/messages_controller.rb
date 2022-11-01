@@ -1,4 +1,4 @@
-require "byebug"
+# require "byebug"
 
 class Api::MessagesController < ApplicationController
 	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId"]

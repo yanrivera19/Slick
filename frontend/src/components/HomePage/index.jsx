@@ -18,7 +18,7 @@ const HomePage = () => {
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
-    console.log(consumer);
+    // console.log(consumer);
     const eventId = document.addEventListener("scroll", checkNavPosition);
 
     return () => {

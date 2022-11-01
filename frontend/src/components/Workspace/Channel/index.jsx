@@ -51,13 +51,13 @@ const Channel = ({ conversation, subs }) => {
 
   if (!channel) return null;
 
-  console.log(channel);
+  // console.log(channel);
 
   return (
     <>
-      {Object.channel.messages &&
+      {Object.values(channel.messages).length > 0 &&
         Object.values(channel.messages).map((message) => {
-          debugger;
+          // debugger;
           return (
             <>
               <strong>{message.content}</strong>

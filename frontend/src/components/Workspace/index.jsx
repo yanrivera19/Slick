@@ -66,14 +66,14 @@ const Workspace = () => {
 
   const subscription = (channelName, channelId) => {
     return consumer.subscriptions.create(
-      console.log(channelId),
+      // console.log(channelId),
       {
         channel: channelName,
         id: channelId,
       },
       {
         received: (message) => {
-          console.log("Received message: ", message);
+          // console.log("Received message: ", message);
         },
       }
     );
