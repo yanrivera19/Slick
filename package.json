@@ -1,0 +1,25 @@
+{
+  "name": "slick",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "16.16.0"
+  },
+  "scripts": {
+    "build": "npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yanrivera19/Slick.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yanrivera19/Slick/issues"
+  },
+  "homepage": "https://github.com/yanrivera19/Slick#readme"
+}

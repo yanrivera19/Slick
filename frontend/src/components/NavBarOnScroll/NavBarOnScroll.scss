@@ -1,0 +1,70 @@
+.nav-bar-container.scroll {
+  display: none;
+  position: fixed;
+  top: 0;
+  justify-content: center;
+  margin: 0 auto;
+  z-index: 100000;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  padding: 0 1vw;
+  max-width: 1250px;
+  animation: slidein 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.scroll-logo-cont {
+  display: flex;
+  align-items: center;
+}
+
+.scroll-logo-cont h3 {
+  font-size: 26px;
+  color: #000;
+  margin-left: 7px;
+  font-family: Slack-Larsseit, "Helvetica Neue", Helvetica, "Segoe UI", Tahoma,
+    Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1.0625;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.nav-bar.scroll {
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 50px;
+  margin-top: 0.5rem;
+  padding: 2.225rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.sign-btn.scroll {
+  border: 1px solid #611f69;
+  color: #611f69 !important;
+}
+
+.sign-btn.right.scroll {
+  background-color: #611f69;
+  color: #fff !important;
+}
+
+.sign-btn.right.scroll:hover {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.sign-btn.left.scroll:hover {
+  box-shadow: inset 0 0 0 2px #611f69;
+}

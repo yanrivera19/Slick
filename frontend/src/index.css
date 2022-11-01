@@ -1,0 +1,76 @@
+/* TODO Add site wide styles */
+@import "../src/components/NavBar/NavBar.scss";
+@import "../src/components/HomePage/HomePage.scss";
+@import "../src/components/NavBarOnScroll/NavBarOnScroll.scss";
+@import "../src/components/HomePage/TrustedCompanies/TrustedCompanies.scss";
+@import "../src/components/HomePage/HomeVidTextRow/HomeVidTextRow.scss";
+@import "../src/components/SigninPage/SigninPage.scss";
+@import "../src/components/SignupPage/SignupPage.scss";
+@import "../src/components/WelcomePage/WelcomePage.scss";
+@import "../src/components/WelcomePage/NavBarWelcome/navBarWelcome.scss";
+
+header,
+nav,
+h1,
+a,
+ul,
+li,
+strong,
+button,
+i,
+img,
+h2,
+h3,
+p,
+form,
+fieldset,
+label,
+input,
+textarea,
+span,
+article,
+footer,
+time,
+small {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  background: transparent;
+}
+
+html,
+body {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #f1f2f4;
+}
+
+ul {
+  list-style: none;
+}
+
+input[type="password"],
+input[type="email"],
+input[type="text"],
+input[type="submit"],
+textarea,
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+}

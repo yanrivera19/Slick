@@ -1,0 +1,20 @@
+.trusted-companies-cont {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding-top: 48px;
+}
+
+.trusted-companies-cont p {
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.company-logos-cont {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}

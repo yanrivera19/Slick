@@ -1,0 +1,180 @@
+.welcome-container {
+  background-color: #541554;
+  height: 100vh;
+  padding: 0 40px;
+}
+
+.nav-cont {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.welcome-content {
+  max-width: 62.875rem;
+  margin: 0 auto;
+}
+
+.welcome-content img {
+  margin-right: 5px;
+}
+
+.welcome-content header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.welcome-content h1 {
+  font-family: Slack-Larsseit, "Helvetica Neue", Helvetica, "Segoe UI", Tahoma,
+    Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.8px;
+  font-size: 50px;
+  color: #fff;
+  margin-top: 10px;
+}
+
+.workspaces-user {
+  padding: 1rem !important;
+  background-color: #ecdeec;
+  font-size: 16px;
+  border-radius: 5px 5px 0 0;
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+}
+
+.different-team {
+  position: relative;
+  display: flex;
+  background-color: #fff;
+  padding: 16px;
+  align-items: center;
+  justify-content: space-between;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  background-clip: padding-box;
+}
+
+.new-workspace-welcome {
+  border: 1px solid #611f69;
+  color: #611f69 !important;
+  appearance: none;
+  background: 0 0;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1.2857;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  width: min-content;
+  height: min-content;
+  padding: 1rem;
+  white-space: nowrap;
+  transition: box-shadow 420ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    color 420ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    background 420ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.different-team strong {
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+}
+
+.new-workspace-welcome:hover {
+  box-shadow: inset 0 0 0 2px #611f69;
+}
+
+.different-team img {
+  margin: -1.03rem -1rem -48px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.launch-slick-btn {
+  border: 1px solid #611f69;
+  background-color: #611f69;
+  color: #fff !important;
+  appearance: none;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+  font-weight: 700;
+  line-height: 1.2857;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+  width: min-content;
+  height: min-content;
+  padding: 14px;
+  white-space: nowrap;
+  transition: box-shadow 420ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    color 420ms cubic-bezier(0.165, 0.84, 0.44, 1),
+    background 420ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.launch-slick-btn:hover {
+  background-color: #4a154b;
+  color: #fff;
+  fill: #fff;
+  border-color: #4a154b;
+}
+
+.workspace-launch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #fff;
+}
+
+.workspace-launch:hover {
+  background-color: rgba(245, 245, 245, 0.5);
+}
+
+.workspaces {
+  background-color: #fff;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  background-clip: padding-box;
+  margin-bottom: 48px;
+}
+
+.workspace-launch {
+  border-radius: 0 0 5px 5px;
+}
+
+.workspace-details {
+  display: flex;
+  align-items: center;
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+}
+
+.workspace-img {
+  height: 75px;
+  width: 75px;
+  margin-right: 1rem !important;
+  border-radius: 5px;
+  max-width: 100%;
+}
+
+.workspace-launch .workspace-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.workspace-members-count {
+  color: #696969;
+  font-size: 0.875rem;
+  line-height: 20px;
+}
