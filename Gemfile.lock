@@ -89,6 +89,7 @@ GEM
       i18n (>= 1.8.11, < 2)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    hiredis (0.6.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.5)
@@ -177,13 +178,14 @@ DEPENDENCIES
   bootsnap
   byebug
   faker
+  hiredis
   jbuilder
   pg (~> 1.1)
   pry-rails
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.4)
-  redis (~> 4.0)
+  redis
   tzinfo-data
 
 RUBY VERSION
