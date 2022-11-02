@@ -50,21 +50,23 @@ const Workspace = () => {
     //   // });
     // });
 
-    // return () => {
-    // channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
-    // directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
-    // };
+    return () => {
+      channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
+      directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
+    };
   }, [workspaceId]);
 
   const setDatas = (data) => {
     // if (workspace) {
     // channels = Object.values(workspace.channels);
     // directMessages = Object.values(workspace.directMessages);
+    // debugger;
     setChannels(Object.values(data.channels));
     setDirectMessages(Object.values(data.directMessages));
   };
 
   const subscription = (channelName, channelId) => {
+    // debugger;
     return consumer.subscriptions.create(
       // console.log(channelId),
       {
@@ -72,31 +74,29 @@ const Workspace = () => {
         id: channelId,
       },
       {
+        connected: () => {
+          console.log("connected");
+        },
         received: (message) => {
-          // console.log("Received message: ", message);
+          debugger;
+          console.log("Received message: ", message);
         },
       }
     );
   };
 
   const handleChannelClick = (e, channel, channelType) => {
-    // console.log(e.target.textContent);
-    // console.log(channel);
     setShownConversation(channel);
     setConversationType(channelType);
   };
 
-  if (!workspace) return null;
-
-  return (
+  return workspace ? (
     <>
       <h1 style={{ marginBottom: "20px" }}>{workspace.name}</h1>
       <h3 style={{ marginBottom: "5px" }}>Channels:</h3>
       <div style={{ marginBottom: "20px" }}>
         {channels.map((channel) => {
-          // console.log(channel);
           let channelSub = subscription("ChannelsChannel", channel.id);
-          // console.log(channelSub)
           channelSubscriptions.push(channelSub);
 
           return (
@@ -114,7 +114,6 @@ const Workspace = () => {
       <h3 style={{ marginBottom: "5px" }}>Direct Messages:</h3>
       <div style={{ marginBottom: "20px" }}>
         {directMessages.map((directMessage) => {
-          // console.log(directMessage);
           let dmSub = subscription("DirectMessagesChannel", directMessage.id);
           directMessageSubscriptions.push(dmSub);
 
@@ -135,7 +134,7 @@ const Workspace = () => {
         />
       )}
     </>
-  );
+  ) : null;
 };
 
 export default Workspace;

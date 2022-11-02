@@ -1,4 +1,5 @@
 import csrfFetch from "./csrf";
+import { RECEIVE_CHANNEL } from "./channels";
 
 export const RECEIVE_MESSAGE = "messages/RECEIVE_MESSAGE";
 export const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
@@ -70,11 +71,15 @@ export const deleteMessage = (messageId) => async (dispatch) => {
 
 export default function messageReducer(state = {}, action) {
   switch (action.type) {
+    case RECEIVE_CHANNEL:
+      // debugger;
+      return action.channel.messages;
     case RECEIVE_MESSAGE:
-      return { ...state, [action.channel.id]: action.channel };
+      // debugger;
+      return { ...state, [action.message.id]: action.message };
     case REMOVE_MESSAGE:
       const newState = { ...state };
-      delete newState[action.channelId];
+      delete newState[action.messageId];
       return newState;
     default:
       return state;

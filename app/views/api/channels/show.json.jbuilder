@@ -1,5 +1,10 @@
 # json.channel do 
-	json.extract! @channel, :id, :name, :workspace_id, :owner_id, :created_at
+	# json.extract! @channel, :id, :name, :workspace_id, :owner_id, :created_at
+
+	json.channel do
+		json.extract! @channel, :id, :name, :workspace_id, :owner_id
+	end
+
 	json.users do 
 		@channel.users.each do |user|
 			json.set! user.id do 

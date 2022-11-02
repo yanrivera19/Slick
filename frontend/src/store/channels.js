@@ -72,7 +72,8 @@ export const deleteChannel = (channelId) => async (dispatch) => {
 export default function channelReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_CHANNEL:
-      return { ...state, [action.channel.id]: action.channel };
+      // debugger;
+      return { ...state, [action.channel.channel.id]: action.channel.channel };
     case REMOVE_CHANNEL:
       const newState = { ...state };
       delete newState[action.channelId];

@@ -1,5 +1,5 @@
-import consumer from "../../consumer";
-import { NavLink } from "react-router-dom";
+// import consumer from "../../consumer";
+import { NavLink, Redirect } from "react-router-dom";
 import NavBar from "../NavBar";
 import NavBarOnScroll from "../NavBarOnScroll";
 import videoBillboard from "../../assets/vids/team-discussing.mp4";
@@ -18,7 +18,6 @@ const HomePage = () => {
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
-    // console.log(consumer);
     const eventId = document.addEventListener("scroll", checkNavPosition);
 
     return () => {
@@ -36,6 +35,9 @@ const HomePage = () => {
       }
     }
   };
+
+  if (sessionUser)
+    return <Redirect to={`/client/${sessionUser.id}/get-started/landing`} />;
 
   const scrollUp = () => {
     navRef.current.scrollIntoView({

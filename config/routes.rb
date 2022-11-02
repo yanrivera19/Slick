@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 		resources :channels, only: [:show, :create, :destroy, :update]
 		resources :direct_messages, only: [:show, :create, :destroy, :update]
 		resources :messages, only: [:show, :create, :destroy, :update]
+		
+		# mount ActionCable.server => '/cable'
 	end
 
 	get '*path', to: "static_pages#frontend_index"

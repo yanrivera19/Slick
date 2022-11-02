@@ -14,12 +14,14 @@ const Channel = ({ conversation, subs }) => {
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
+  const [lastMessage, setLastMessage] = useState();
 
-  const channel = useSelector(getChannel(conversation.id));
+  // const messages = useSelector(getChannel(conversation.id));
+  const messages = useSelector((state) => state.messages);
 
   useEffect(() => {
     dispatch(fetchChannel(conversation.id));
-  }, [conversation.id]);
+  }, [conversation.id, lastMessage]);
 
   // const enterChannel = () => {
   //   dispatch(fetchChannel(channelId));
@@ -28,35 +30,25 @@ const Channel = ({ conversation, subs }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
+    setLastMessage(messageContent);
+    setMessageContent("");
 
     return dispatch(
       createMessage({
         content: messageContent,
         authorId: sessionUser.id,
         messageableType: "Channel",
-        messageableId: channel.id,
+        messageableId: conversation.id,
       })
-    ).catch(async (res) => {
-      let data;
-      try {
-        data = await res.clone().json();
-      } catch {
-        data = await res.text();
-      }
-      if (data?.errors) setErrors(data.errors);
-      else if (data) setErrors([data]);
-      else setErrors([res.statusText]);
-    });
+    );
   };
 
-  if (!channel) return null;
-
-  // console.log(channel);
+  if (!conversation) return null;
 
   return (
     <>
-      {Object.values(channel.messages).length > 0 &&
-        Object.values(channel.messages).map((message) => {
+      {Object.values(messages).length > 0 &&
+        Object.values(messages).map((message) => {
           // debugger;
           return (
             <>
