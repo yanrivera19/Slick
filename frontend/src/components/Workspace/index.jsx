@@ -11,6 +11,7 @@ import {
   fetchDirectMessage,
   getDirectMessage,
 } from "../../store/directMessages";
+import { receiveMessage, fetchMessage, getMessage } from "../../store/messages";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -29,6 +30,7 @@ const Workspace = () => {
 
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
+  let lastMsg;
 
   useEffect(() => {
     // (async () => {
@@ -38,6 +40,7 @@ const Workspace = () => {
     // })();
     // console.log(channels);
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
+      // debugger
       setDatas(data.workspace);
     });
     //THIS .then is NOT WORKING PROPERLY
@@ -71,8 +74,8 @@ const Workspace = () => {
 
   const subscription = (channelName, channelId) => {
     // debugger;
+    console.log(consumer);
     return consumer.subscriptions.create(
-      // console.log(channelId),
       {
         channel: channelName,
         id: channelId,
@@ -83,7 +86,9 @@ const Workspace = () => {
         },
         received: (message) => {
           debugger;
-          console.log("Received message: ", message);
+          dispatch(receiveMessage(message.message));
+          // lastMsg = message;
+          console.log("received:", message.message.content);
         },
       }
     );
@@ -144,6 +149,7 @@ const Workspace = () => {
               <span>Channels</span>
             </div>
             {channels.map((channel) => {
+              // debugger;
               let channelSub = subscription("ChannelsChannel", channel.id);
               // console.log(channelSub);
               channelSubscriptions.push(channelSub);
@@ -197,6 +203,7 @@ const Workspace = () => {
             channelType="Channel"
             fetchConversation={fetchChannel}
             getConversation={getChannel}
+            lastMsg={lastMsg}
           />
         ) : null}
 
@@ -223,6 +230,7 @@ const Workspace = () => {
             channelType="DirectMessage"
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}
+            lastMsg={lastMsg}
           />
         ) : null}
       </div>

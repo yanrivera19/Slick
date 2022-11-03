@@ -13,6 +13,7 @@ const Chat = ({
   channelType,
   fetchConversation,
   getConversation,
+  lastMsg,
 }) => {
   const [body, setBody] = useState("");
   const [usersInRoom, setUsersInRoom] = useState({});
@@ -21,28 +22,25 @@ const Chat = ({
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
-  const [lastMessage, setLastMessage] = useState();
+  // const [lastMessage, setLastMessage] = useState();
 
   // const messages = useSelector(getChannel(conversation.id));
   const messages = useSelector((state) => state.messages);
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
-  }, [conversation.id, lastMessage]);
+  }, [conversation.id]);
 
   // const enterChannel = () => {
   //   dispatch(fetchChannel(channelId));
   // };
-  console.log(conversation);
-  console.log(fetchConversation);
-  console.log(getConversation);
-  console.log(channelType);
+
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    setLastMessage(messageContent);
+    // setLastMessage(messageContent);
     setMessageContent("");
-
+    // debugger;
     return dispatch(
       createMessage({
         content: messageContent,

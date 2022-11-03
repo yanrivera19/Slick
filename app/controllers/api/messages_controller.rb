@@ -9,21 +9,37 @@ class Api::MessagesController < ApplicationController
 		@author = User.find_by(id: params[:author_id])
 		# debugger
 		type = (params[:messageable_type]).downcase
+		
 
 		#if I end up adding threads, should check for type thread
 		#in conditional below
 		if type == "channel"
 		  @channel = Channel.find_by_id(params[:messageable_id])
-			# @name_of_channel = ChannelsChannel
+			@name_of_channel = ChannelsChannel
 		else 
 			@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-			# @name_of_channel = DirectMessagesChannel
+			@name_of_channel = DirectMessagesChannel
 		end
 
     if @message.save
 			# @name_of_channel.broadcast_to(@message.)
-			ChannelsChannel.broadcast_to(@message.messageable, @message)
-      render "/api/#{type}s/show"
+			# debugger
+			if type == "channel"
+				@channel = Channel.find_by_id(params[:messageable_id])
+
+				ChannelsChannel.broadcast_to @message.messageable, 
+			    **from_template("api/messages/show", message: @message)
+			else 
+				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
+
+				DirectMessagesChannel.broadcast_to @message.messageable, 
+			    from_template("api/messages/show", message: @message)
+			end
+
+			# @name_of_channel.broadcast_to @message.messageable, 
+			#   from_template("api/#{type}s/show", type: @message)
+      # render "/api/#{type}s/show"
+			render json: nil, status: :ok
     else
       render json: {errors: @message.errors.full_messages}, status: 422
     end

@@ -33,6 +33,11 @@ class ApplicationController < ActionController::API
 		end
 	end
 
+	def from_template(template, locals = {})
+	# debugger
+		JSON.parse(self.class.render(:json, template: template, locals: locals))
+	end
+
 	private
 
 	def attach_authenticity_token
