@@ -8,6 +8,8 @@
 @import "../src/components/SignupPage/SignupPage.scss";
 @import "../src/components/WelcomePage/WelcomePage.scss";
 @import "../src/components/WelcomePage/NavBarWelcome/navBarWelcome.scss";
+@import "../src/components/Workspace/Workspace.scss";
+@import "../src/components/Workspace/Chat/Chat.scss";
 
 header,
 nav,
@@ -41,6 +43,11 @@ small {
   text-align: inherit;
   text-decoration: inherit;
   background: transparent;
+}
+
+html {
+  height: 100vh;
+  width: 100vw;
 }
 
 html,

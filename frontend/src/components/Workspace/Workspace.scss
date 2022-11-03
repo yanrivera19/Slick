@@ -1,0 +1,148 @@
+.app-container {
+  font-family: Lato;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.app-nav {
+  background: #350d36;
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 10%);
+  height: 2.5rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  position: relative;
+  z-index: 203;
+}
+
+.nav-right-side {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 128px;
+  padding-left: 16px;
+  padding-right: 20px;
+}
+
+.app-search-cont {
+  display: flex;
+  flex: 2;
+  max-width: 732px;
+  min-width: 0;
+}
+
+.app-search-bar {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  display: flex;
+  flex: 5;
+  flex-direction: row-reverse;
+  height: 24px;
+  justify-content: space-between;
+  max-width: 732px;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+.app-search-bar:hover {
+  background-color: rgba(255, 255, 255, 0.23);
+}
+
+.nav-left-side {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 128px;
+  padding-left: 32px;
+  padding-right: 16px;
+  position: relative;
+}
+
+.app-main-cont {
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+
+.app-side-bar {
+  width: 235px;
+  background-color: #3f0e40;
+  height: 100%;
+}
+
+.workspace-header:hover,
+.channel-item:hover,
+.dm-item:hover {
+  background: #350d36;
+  cursor: pointer;
+}
+
+.workspace-header,
+#extras-section {
+  border-bottom: 1px solid rgb(82, 38, 83);
+}
+
+.workspace-header-cont {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.33334;
+  min-height: 50px;
+}
+
+#works-name {
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+}
+
+.write-btn {
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+}
+
+.write-btn svg {
+  height: 16px;
+  width: 16px;
+}
+
+.workspace-header > div {
+  padding: 0 16px;
+}
+
+#extras-section div,
+#channel-section .channel-item,
+.channel-item-header,
+#dm-section .dm-item,
+.dm-item-header {
+  padding: 0 16px;
+  height: 28px;
+  line-height: 28px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#channel-section,
+#dm-section,
+#extras-section,
+span {
+  color: #ffffffb3;
+}
+
+#channel-section,
+#dm-section,
+#extras-section {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}

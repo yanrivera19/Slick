@@ -25,6 +25,7 @@ class Api::DirectMessagesController < ApplicationController
 
 	def show
 		@direct_message = DirectMessage.find_by_id(params[:id])
+
 		render :show
 	end
 

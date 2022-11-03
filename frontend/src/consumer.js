@@ -1,10 +1,10 @@
 import { createConsumer } from "@rails/actioncable";
-export default createConsumer();
 
-// import actionCable from "actioncable";
+let wsUrl;
+if (process.env.NODE_ENV !== "production") {
+  wsUrl = "ws://localhost:5000/cable";
+} else {
+  wsUrl = "wss://my-chat-app.onrender.com/cable";
+}
 
-// const CableApp = {};
-
-// CableApp.cable = actionCable.createConsumer(`ws://localhost:3000/cable`);
-
-// export default CableApp;
+export default createConsumer(wsUrl);

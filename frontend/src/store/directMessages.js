@@ -1,4 +1,4 @@
-export const RECEIVE_DIRECT_MESSAGE = "direct_messages/RECEIVE_direct_message";
+export const RECEIVE_DIRECT_MESSAGE = "directMessages/RECEIVE_DIRECT_MESSAGE";
 // export const REMOVE_DIRECT_MESSAGE = "direct_messages/REMOVE_direct_message";
 
 export const receiveDirectMessage = (directMessage) => {
@@ -13,16 +13,17 @@ export const getDirectMessage = (directMessageId) => (state) => {
 };
 
 export const fetchDirectMessage = (directMessageId) => async (dispatch) => {
-  const res = await fetch(`/api/directMessages/${directMessageId}`);
+  const res = await fetch(`/api/direct_messages/${directMessageId}`);
 
   if (res.ok) {
     const directMessage = await res.json();
+    console.log(directMessage);
     dispatch(receiveDirectMessage(directMessage));
   }
 };
 
 export const createDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await fetch(`/api/directMessages`, {
+  const res = await fetch(`/api/direct_messages`, {
     method: "POST",
     body: JSON.stringify(directMessage),
     headers: {
@@ -37,7 +38,7 @@ export const createDirectMessage = (directMessage) => async (dispatch) => {
 };
 
 export const updateDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await fetch(`/api/directMessages/${directMessage.id}`, {
+  const res = await fetch(`/api/direct_messages/${directMessage.id}`, {
     method: "PUT",
     body: JSON.stringify(directMessage),
     headers: {
@@ -52,7 +53,7 @@ export const updateDirectMessage = (directMessage) => async (dispatch) => {
 };
 
 // export const deleteDirectMessage = (directMessageId) => async (dispatch) => {
-//   const res = await fetch(`/api/directMessages/${directMessageId}`, {
+//   const res = await fetch(`/api/direct_messages/${directMessageId}`, {
 //     method: "DELETE",
 //   });
 

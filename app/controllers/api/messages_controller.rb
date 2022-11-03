@@ -6,6 +6,7 @@ class Api::MessagesController < ApplicationController
 
   def create
 		@message = Message.new(message_params)
+		@author = User.find_by(id: params[:author_id])
 		# debugger
 		type = (params[:messageable_type]).downcase
 
@@ -21,7 +22,6 @@ class Api::MessagesController < ApplicationController
 
     if @message.save
 			# @name_of_channel.broadcast_to(@message.)
-			# debugger
 			ChannelsChannel.broadcast_to(@message.messageable, @message)
       render "/api/#{type}s/show"
     else
