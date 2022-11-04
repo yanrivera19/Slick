@@ -12,6 +12,62 @@ import {
   getDirectMessage,
 } from "../../store/directMessages";
 import { receiveMessage, fetchMessage, getMessage } from "../../store/messages";
+import {
+  AiFillCaretDown,
+  AiFillCaretRight,
+  AiOutlinePlus,
+} from "react-icons/ai";
+
+//hashtag  icon
+
+{
+  /* <svg
+  data-y5v="true"
+  aria-hidden="true"
+  data-qa="sidebar-channel-icon-prefix"
+  data-sidebar-channel-icon="channel"
+  viewBox="0 0 20 20"
+  class=""
+  style="--s:16px;"
+>
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M9.74 3.877a.75.75 0 1 0-1.48-.254L7.68 7H3.75a.75.75 0 0 0 0 1.5h3.67L6.472 14H2.75a.75.75 0 0 0 0 1.5h3.463l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.228l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.765a.75.75 0 0 0 0-1.5h-3.506l.948-5.5h3.558a.75.75 0 0 0 0-1.5h-3.3l.54-3.123a.75.75 0 0 0-1.48-.254L12.43 7H9.2l.538-3.123ZM11.221 14l.948-5.5H8.942L7.994 14h3.228Z"
+    clip-rule="evenodd"
+  ></path>
+</svg>; */
+}
+
+//send msg svg
+
+{
+  /* <svg
+  data-y5v="true"
+  aria-hidden="true"
+  viewBox="0 0 20 20"
+  class=""
+  style="--s:16px;"
+>
+  <path
+    fill="currentColor"
+    d="M1.5 2.25a.755.755 0 0 1 1-.71l15.596 7.807a.73.73 0 0 1 0 1.306L2.5 18.46l-.076.018a.749.749 0 0 1-.924-.728v-4.54c0-1.21.97-2.229 2.21-2.25l6.54-.17c.27-.01.75-.24.75-.79s-.5-.79-.75-.79l-6.54-.17A2.253 2.253 0 0 1 1.5 6.789v-4.54Z"
+  ></path>
+</svg>; */
+}
+
+//caret outline (send message and see workplace details)
+
+{
+  /* <svg data-y5v="true" aria-hidden="true" viewBox="0 0 20 20" class="">
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M5.72 7.47a.75.75 0 0 1 1.06 0L10 10.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-3.75 3.75a.75.75 0 0 1-1.06 0L5.72 8.53a.75.75 0 0 1 0-1.06Z"
+    clip-rule="evenodd"
+  ></path>
+</svg>; */
+}
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -63,36 +119,61 @@ const Workspace = () => {
     };
   }, [workspaceId]);
 
+  const subscription = (rooms) => {
+    rooms.forEach((room) => {
+      let roomName =
+        room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
+      return consumer.subscriptions.create(
+        {
+          channel: roomName,
+          id: room.id,
+        },
+        {
+          connected: () => {
+            console.log("connected");
+          },
+          received: (message) => {
+            dispatch(receiveMessage(message.message));
+            lastMsg = message;
+            console.log("received:", message.message.content);
+          },
+        }
+      );
+    });
+    // console.log(consumer);
+  };
+
   const setDatas = (data) => {
     // if (workspace) {
     // channels = Object.values(workspace.channels);
     // directMessages = Object.values(workspace.directMessages);
-    // debugger;
     setChannels(Object.values(data.channels));
     setDirectMessages(Object.values(data.directMessages));
+    subscription(Object.values(data.channels));
+    subscription(Object.values(data.directMessages));
   };
 
-  const subscription = (channelName, channelId) => {
-    // debugger;
-    console.log(consumer);
-    return consumer.subscriptions.create(
-      {
-        channel: channelName,
-        id: channelId,
-      },
-      {
-        connected: () => {
-          console.log("connected");
-        },
-        received: (message) => {
-          debugger;
-          dispatch(receiveMessage(message.message));
-          // lastMsg = message;
-          console.log("received:", message.message.content);
-        },
-      }
-    );
-  };
+  // const subscription = (channelName, channelId) => {
+  //   // debugger;
+  //   console.log(consumer);
+  //   return consumer.subscriptions.create(
+  //     {
+  //       channel: channelName,
+  //       id: channelId,
+  //     },
+  //     {
+  //       connected: () => {
+  //         console.log("connected");
+  //       },
+  //       received: (message) => {
+  //         debugger;
+  //         dispatch(receiveMessage(message.message));
+  //         // lastMsg = message;
+  //         console.log("received:", message.message.content);
+  //       },
+  //     }
+  //   );
+  // };
 
   const handleChannelClick = (e, channel, channelType) => {
     setShownConversation(channel);
@@ -149,11 +230,7 @@ const Workspace = () => {
               <span>Channels</span>
             </div>
             {channels.map((channel) => {
-              // debugger;
-              let channelSub = subscription("ChannelsChannel", channel.id);
-              // console.log(channelSub);
-              channelSubscriptions.push(channelSub);
-
+              // debugger
               return (
                 <div
                   className="channel-item"
@@ -171,12 +248,6 @@ const Workspace = () => {
               <span>Direct messages</span>
             </div>
             {directMessages.map((directMessage) => {
-              let dmSub = subscription(
-                "DirectMessagesChannel",
-                directMessage.id
-              );
-              directMessageSubscriptions.push(dmSub);
-
               return (
                 <div
                   className="dm-item"

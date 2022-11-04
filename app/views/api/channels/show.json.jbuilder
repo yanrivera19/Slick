@@ -3,7 +3,13 @@
 
 	json.channel do
 		json.extract! @channel, :id, :name, :workspace_id, :owner_id
+		# json.set! @channel.class_name
+		
 	end
+
+	# json.type do 
+	# 	json.set! @channel.class.name
+	# end
 
 	json.users do 
 		@channel.users.each do |user|

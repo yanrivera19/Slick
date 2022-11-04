@@ -157,6 +157,7 @@ ApplicationRecord.transaction do
 
 	m1 = Message.create!(
 		author_id: u1.id,
+		author_name: u1.username,
 		content: "Are you guys excited for tomorrow?",
 		messageable_id: c1.id,
 		messageable_type: "Channel"
@@ -164,6 +165,7 @@ ApplicationRecord.transaction do
 
 	m2 = Message.create!(
 		author_id: u2.id,
+		author_name: u2.username,
 		content: "Oh yeah!",
 		messageable_id: c1.id,
 		messageable_type: "Channel"
@@ -171,13 +173,15 @@ ApplicationRecord.transaction do
 
 	m3 = Message.create!(
 		author_id: u3.id,
-		content: "You know it",
+		author_name: u3.username,
+		content: u3.username,
 		messageable_id: c1.id,
 		messageable_type: "Channel"
 	)
 
 	m4 = Message.create!(
 		author_id: u4.id,
+		author_name: u4.username,
 		content: "I'm gonna have to pass guys. Something came up.",
 		messageable_id: c1.id,
 		messageable_type: "Channel"
@@ -185,6 +189,7 @@ ApplicationRecord.transaction do
 
 	m5 = Message.create!(
 		author_id: u1.id,
+		author_name: u1.username,
 		content: "Yo guys",
 		messageable_id: dm1.id,
 		messageable_type: "DirectMessage"
@@ -192,6 +197,7 @@ ApplicationRecord.transaction do
 
 	m6 = Message.create!(
 		author_id: u2.id,
+		author_name: u2.username,
 		content: "Wut?",
 		messageable_id: dm1.id,
 		messageable_type: "DirectMessage"
@@ -199,6 +205,7 @@ ApplicationRecord.transaction do
 
 	m7 = Message.create!(
 		author_id: u3.id,
+		author_name: u3.username,
 		content: "Sup",
 		messageable_id: dm1.id,
 		messageable_type: "DirectMessage"

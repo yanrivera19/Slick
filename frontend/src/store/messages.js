@@ -80,7 +80,7 @@ export default function messageReducer(state = {}, action) {
         ? action.directMessage.messages
         : null;
     case RECEIVE_MESSAGE:
-      debugger;
+      // debugger;
       return { ...state, [action.message.id]: action.message };
     case REMOVE_MESSAGE:
       const newState = { ...state };

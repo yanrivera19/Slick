@@ -1,7 +1,7 @@
 # require "byebug"
 
 class Api::MessagesController < ApplicationController
-	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId"]
+	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId", "authorName"]
 	before_action :require_logged_in
 
   def create
@@ -92,6 +92,6 @@ class Api::MessagesController < ApplicationController
 	private 
 
 	def message_params 
-		params.require(:message).permit(:content, :author_id, :messageable_id, :messageable_type)
+		params.require(:message).permit(:content, :author_id, :messageable_id, :messageable_type, :author_name)
 	end
 end

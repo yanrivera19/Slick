@@ -11,6 +11,7 @@
 		@workspace.channels.each do |channel|
 			json.set! channel.id do 
 				json.extract! channel, :id, :name, :description, :created_at
+				json.type channel.class.name
 			end
 		end
 	end

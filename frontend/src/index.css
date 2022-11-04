@@ -28,7 +28,6 @@ form,
 fieldset,
 label,
 input,
-textarea,
 span,
 article,
 footer,
@@ -43,6 +42,12 @@ small {
   text-align: inherit;
   text-decoration: inherit;
   background: transparent;
+}
+
+textarea {
+  outline: 0;
+  font: inherit;
+  color: inherit;
 }
 
 html {

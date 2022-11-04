@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -22,28 +22,41 @@ const Chat = ({
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
-  // const [lastMessage, setLastMessage] = useState();
+  const [lastMessage, setLastMessage] = useState("");
 
   // const messages = useSelector(getChannel(conversation.id));
   const messages = useSelector((state) => state.messages);
+  const messageContRef = useRef();
+  const lastMessageRef = useRef(null);
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
-  }, [conversation.id]);
+  }, [conversation]);
 
   // const enterChannel = () => {
   //   dispatch(fetchChannel(channelId));
   // };
+  // useEffect(() => {
+  //   // scrollToBottomChat();
+  //   // let lastMsgPos = document.querySelector("#last-msg-position");
+  //   // lastMsgPos.current?.scrollIntoView();
+  //   // scrollDown();
+  //   lastMessageRef.current.scrollIntoView({
+  //     block: "end",
+  //   });
+  // }, [lastMessage, conversation.id]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    // setLastMessage(messageContent);
+    setLastMessage(messageContent);
     setMessageContent("");
     // debugger;
-    return dispatch(
+
+    dispatch(
       createMessage({
         content: messageContent,
+        authorName: sessionUser.username,
         authorId: sessionUser.id,
         messageableType: channelType,
         messageableId: conversation.id,
@@ -51,42 +64,65 @@ const Chat = ({
     );
   };
 
+  // const scrollDown = () => {
+  //   lastMessageRef?.current?.scrollIntoView();
+  // };
+
+  // const scrollToBottomChat = () => {
+  //   const scroll = ref.current.scrollHeight - ref.current.clientHeight;
+
+  //   ref.current.scrollTo(0, scroll);
+  // };
+
   if (!conversation) return null;
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div
+      style={{
+        width: "100%",
+        backgroundColor: "#fff",
+        position: "relative",
+      }}
+    >
       <header className="chat-header"></header>
-      <section style={{ height: "100%" }}>
-        <div className="messages-container">
-          {messages
-            ? Object.values(messages).map((message) => {
-                return (
-                  <div className="message-cont">
-                    <div style={{ padding: "8px 20px" }}>
-                      <p style={{ marginBottom: "10px" }}>
-                        {message.author
-                          ? message.author.username
-                          : message.authorId}
-                      </p>
-                      <strong>{message.content}</strong>
-                    </div>
+      <div className="messages-container" ref={messageContRef}>
+        {messages
+          ? Object.values(messages).map((message) => {
+              console.log(message);
+              return (
+                <div className="message-cont">
+                  <div style={{ padding: "8px 20px" }}>
+                    <strong style={{ marginBottom: "10px" }}>
+                      {message.author
+                        ? message.author.username
+                        : message.authorId}
+                    </strong>
+                    <p>{message.content}</p>
                   </div>
-                );
-              })
-            : null}
-        </div>
-      </section>
+                </div>
+              );
+            })
+          : null}
+        <div
+          // id="last-msg-position"
+          ref={lastMessageRef}
+        ></div>
+      </div>
 
       <section id="chat-box">
         <div className="chat-cont">
-          <form onSubmit={onSubmit}>
-            <textarea
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              style={{ border: "2px solid black" }}
-            />
-            <button>Send</button>
-          </form>
+          <div className="top-chat"></div>
+          <div className="textarea-container">
+            <form onSubmit={onSubmit}>
+              <textarea
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+              />
+              <div className="bottom-chat">
+                <button>Send</button>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
       {/* </div> */}
