@@ -13,13 +13,13 @@ class Api::MessagesController < ApplicationController
 
 		#if I end up adding threads, should check for type thread
 		#in conditional below
-		if type == "channel"
-		  @channel = Channel.find_by_id(params[:messageable_id])
-			@name_of_channel = ChannelsChannel
-		else 
-			@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-			@name_of_channel = DirectMessagesChannel
-		end
+		# if type == "channel"
+		#   @channel = Channel.find_by_id(params[:messageable_id])
+		# 	@name_of_channel = ChannelsChannel
+		# else 
+		# 	@direct_message = DirectMessage.find_by_id(params[:messageable_id])
+		# 	@name_of_channel = DirectMessagesChannel
+		# end
 
     if @message.save
 			# @name_of_channel.broadcast_to(@message.)
@@ -28,12 +28,14 @@ class Api::MessagesController < ApplicationController
 				@channel = Channel.find_by_id(params[:messageable_id])
 
 				ChannelsChannel.broadcast_to @message.messageable, 
+				  type: 'RECEIVE_MESSAGE',
 			    **from_template("api/messages/show", message: @message)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
 
 				DirectMessagesChannel.broadcast_to @message.messageable, 
-			    from_template("api/messages/show", message: @message)
+				  type: 'RECEIVE_MESSAGE',
+			    **from_template("api/messages/show", message: @message)
 			end
 
 			# @name_of_channel.broadcast_to @message.messageable, 
@@ -52,14 +54,28 @@ class Api::MessagesController < ApplicationController
 		#if I end up adding threads, should check for type thread
 		#in conditional below
 
-		if @message.messageable_type == "Channel"
-		  @channel = Channel.find_by_id(@message.messageable_id)
-		else 
-			@direct_message = DirectMessage.find_by_id(@message.messageable_id)
-		end
+		# if @message.messageable_type == "Channel"
+		#   @channel = Channel.find_by_id(@message.messageable_id)
+		# else 
+		# 	@direct_message = DirectMessage.find_by_id(@message.messageable_id)
+		# end
 		
 		if @message.update(message_params)
-			render "/api/#{type}s/show"
+			if type == "channel"
+				@channel = Channel.find_by_id(params[:messageable_id])
+
+				ChannelsChannel.broadcast_to @message.messageable, 
+				  type: 'RECEIVE_MESSAGE',
+			    **from_template("api/messages/show", message: @message)
+			else 
+				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
+
+				DirectMessagesChannel.broadcast_to @message.messageable, 
+				  type: 'RECEIVE_MESSAGE',
+			    **from_template("api/messages/show", message: @message)
+			end
+
+			render json: nil, status: :ok
 		else
 			render json: {errors: @message.errors.full_messages}, status: 422
 		end
@@ -70,16 +86,30 @@ class Api::MessagesController < ApplicationController
 		type = (@message.messageable_type).downcase  
 
 		#if I end up adding threads, should check for type thread
-		#in conditional below
+		#in conditional below	
 
-		if @message.messageable_type == "Channel"
-		  @channel = Channel.find_by_id(@message.messageable_id)
-		else 
-			@direct_message = DirectMessage.find_by_id(@message.messageable_id)
-		end
+		# if @message.messageable_type == "Channel"
+		#   @channel = Channel.find_by_id(@message.messageable_id)
+		# else 
+		# 	@direct_message = DirectMessage.find_by_id(@message.messageable_id)
+		# end
 
 		if @message.destroy
-			render "/api/#{type}s/show"
+			if type == "channel"
+				@channel = Channel.find_by_id(params[:messageable_id])
+
+				ChannelsChannel.broadcast_to @message.messageable, 
+				  type: 'REMOVE_MESSAGE',
+          id: @message.id
+			else 
+				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
+
+				DirectMessagesChannel.broadcast_to @message.messageable, 
+				  type: 'REMOVE_MESSAGE',
+          id: @message.id
+			end
+			
+			render json: nil, status: :ok
 		end
 	end
 
@@ -92,6 +122,6 @@ class Api::MessagesController < ApplicationController
 	private 
 
 	def message_params 
-		params.require(:message).permit(:content, :author_id, :messageable_id, :messageable_type, :author_name)
+		params.require(:message).permit(:id, :content, :author_id, :messageable_id, :messageable_type, :author_name)
 	end
 end

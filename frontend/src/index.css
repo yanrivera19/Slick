@@ -10,6 +10,7 @@
 @import "../src/components/WelcomePage/NavBarWelcome/navBarWelcome.scss";
 @import "../src/components/Workspace/Workspace.scss";
 @import "../src/components/Workspace/Chat/Chat.scss";
+@import "../src/components/Workspace/Chat/Message/Message.scss";
 
 header,
 nav,

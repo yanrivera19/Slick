@@ -1,12 +1,16 @@
-import { useEffect, useRef } from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import consumer from "../../../consumer";
 import { fetchChannel, getChannel } from "../../../store/channels";
-import { createMessage } from "../../../store/messages";
+import {
+  createMessage,
+  updateMessage,
+  deleteMessage,
+} from "../../../store/messages";
 import ChatBox from "../ChatBox";
 import getTimeOfMessage from "../../../util";
+import Message from "./Message";
 
 const Chat = ({
   conversation,
@@ -25,15 +29,17 @@ const Chat = ({
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
 
-  // const messages = useSelector(getChannel(conversation.id));
   const messages = useSelector((state) => state.messages);
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
+  let hoveredElement = "";
+  const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     // debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation.id]);
+  }, [conversation]);
 
   // const enterChannel = () => {
   //   dispatch(fetchChannel(channelId));
@@ -42,16 +48,16 @@ const Chat = ({
   //   // scrollToBottomChat();
   //   // let lastMsgPos = document.querySelector("#last-msg-position");
   //   // lastMsgPos.current?.scrollIntoView();
-  //   // scrollDown();
+  //   scrollDown();
   //   lastMessageRef.current.scrollIntoView({
   //     block: "end",
   //   });
-  // }, [lastMessage, conversation.id]);
+  // }, [lastMessage, conversation.name]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    setLastMessage(messageContent);
+    // setLastMessage(messageContent);
     setMessageContent("");
     // debugger;
 
@@ -66,6 +72,14 @@ const Chat = ({
     );
   };
 
+  // const handleMouseOver = (e, messageId) => {
+  //   hoveredElement = messageId;
+  // };
+
+  // const handleMouseOut = (e, messageId) => {
+  //   hoveredElement = undefined;
+  // };
+
   // const scrollDown = () => {
   //   lastMessageRef?.current?.scrollIntoView();
   // };
@@ -76,9 +90,22 @@ const Chat = ({
   //   ref.current.scrollTo(0, scroll);
   // };
 
-  if (!conversation) return null;
-  console.log(conversation);
+  // const handleEditMsg = (e, msgId) => {
+  //   e.preventDefault();
+  //   // setLastMessage(messageContent);
+  //   setMessageContent("");
 
+  //   dispatch(updateMessage(msgId));
+  //   setEditOrDeleteMsg(true);
+  // };
+
+  // const handleDeleteMsg = (e, msgId) => {
+  //   dispatch(deleteMessage(msgId));
+  //   setEditOrDeleteMsg(true);
+  // };
+
+  if (!conversation) return null;
+  console.log(hoveredElement);
   return (
     <div
       style={{
@@ -99,24 +126,83 @@ const Chat = ({
       <div className="messages-container" ref={messageContRef}>
         {messages
           ? Object.values(messages).map((message) => {
-              console.log(message.createdAt);
-              return (
-                <div className="message-cont">
-                  <div style={{ padding: "8px 20px" }}>
-                    <div style={{ marginBottom: "5px" }}>
-                      <strong>
-                        {message.author
-                          ? message.author.username
-                          : message.authorName}
-                      </strong>
-                      <span id="time-of-msg">
-                        {getTimeOfMessage(message.createdAt)}
-                      </span>
-                    </div>
-                    <p>{message.content}</p>
-                  </div>
-                </div>
-              );
+              //   return !editMode ? (
+              //     <div
+              //       className="message-cont"
+              //       onMouseOver={(e) => handleMouseOver(e, message.content)}
+              //       onMouseOut={(e) => handleMouseOut(e, message.content)}
+              //     >
+              //       {/* <div
+              //         className={
+              //           `${hoveredElement === message.content}`
+              //             ? "edit-delete-box"
+              //             : "hide"
+              //         }
+              //       ></div> */}
+              //       <div style={{ padding: "8px 20px" }}>
+              //         <div
+              //           style={{
+              //             marginBottom: "5px",
+              //             display: "flex",
+              //             alignItems: "flex-end",
+              //           }}
+              //         >
+              //           <strong>
+              //             {message.author
+              //               ? message.author.username
+              //               : message.authorName}
+              //           </strong>
+              //           <span id="time-of-msg">
+              //             {getTimeOfMessage(message.createdAt)}
+              //           </span>
+              //           <div
+              //             style={{
+              //               display: `${
+              //                 sessionUser.id === message.authorId
+              //                   ? "flex"
+              //                   : "none"
+              //               }`,
+              //             }}
+              //           >
+              //             <button
+              //               style={{ margin: "0 10px" }}
+              //               onClick={(e) => handleDelete(e, message.id)}
+              //             >
+              //               DELETE
+              //             </button>
+              //             {/* <button onClick={(e) => handleEdit(e, message)}>
+              //               EDIT
+              //             </button> */}
+              //             <button onClick={(e) => setEditMode(!editMode)}>
+              //               EDIT
+              //             </button>
+              //           </div>
+              //         </div>
+              //         <p>{message.content}</p>
+              //       </div>
+              //     </div>
+              //   ) : (
+              //     <div id="edit-textarea">
+              //       <div className="chat-cont">
+              //         <div className="top-chat"></div>
+              //         <div className="textarea-container">
+              //           <form onSubmit={(e) => handleEdit(e, message)}>
+              //             <textarea
+              //               value={messageContent}
+              //               onChange={(e) => setMessageContent(e.target.value)}
+              //             />
+              //             <div className="bottom-chat">
+              //               <button onClick={(e) => setEditMode(!editMode)}>
+              //                 Cancel
+              //               </button>
+              //               <button>Save</button>
+              //             </div>
+              //           </form>
+              //         </div>
+              //       </div>
+              //     </div>
+              //   );
+              return <Message key={message.id} message={message} />;
             })
           : null}
         <div

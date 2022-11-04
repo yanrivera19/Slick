@@ -124,6 +124,26 @@ ApplicationRecord.transaction do
 		channel_id: c1.id
 	)
 
+	cs5 = ChannelSubscription.create!(
+		user_id: u1.id,
+		channel_id: c2.id
+	)
+
+	cs6 = ChannelSubscription.create!(
+		user_id: u2.id,
+		channel_id: c2.id
+	)
+
+	cs7 = ChannelSubscription.create!(
+		user_id: u3.id,
+		channel_id: c2.id
+	)
+
+	cs8 = ChannelSubscription.create!(
+		user_id: u4.id,
+		channel_id: c2.id
+	)
+
 	ApplicationRecord.connection.reset_pk_sequence!('direct_messages')
 
 	puts "creating direct_messages"

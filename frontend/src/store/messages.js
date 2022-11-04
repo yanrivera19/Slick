@@ -74,15 +74,18 @@ export default function messageReducer(state = {}, action) {
   // debugger;
   switch (action.type) {
     case RECEIVE_CHANNEL:
-      // debugger;
-      return action.channel.messages ? action.channel.messages : undefined;
+      return action.channel.messages ? { ...action.channel.messages } : null;
     case RECEIVE_DIRECT_MESSAGE:
       return action.directMessage.messages
-        ? action.directMessage.messages
-        : undefined;
+        ? { ...action.directMessage.messages }
+        : null;
     case RECEIVE_MESSAGE:
-      // debugger;
-      return { ...state, [action.message.id]: action.message };
+      return action.message
+        ? { ...state, [action.message.id]: action.message }
+        : { ...state };
+    // return action.message
+    //   ? { ...state, [action.message.id]: action.message }
+    //   : null;
     case REMOVE_MESSAGE:
       const newState = { ...state };
       delete newState[action.messageId];

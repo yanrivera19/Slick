@@ -11,12 +11,18 @@ import {
   fetchDirectMessage,
   getDirectMessage,
 } from "../../store/directMessages";
-import { receiveMessage, fetchMessage, getMessage } from "../../store/messages";
+import {
+  receiveMessage,
+  removeMessage,
+  fetchMessage,
+  getMessage,
+} from "../../store/messages";
 import {
   AiFillCaretDown,
   AiFillCaretRight,
   AiOutlinePlus,
 } from "react-icons/ai";
+import WriteIcon from "../Svgs&Icons/WriteMsgIcon";
 
 //hashtag  icon
 
@@ -34,36 +40,6 @@ import {
     fill="currentColor"
     fill-rule="evenodd"
     d="M9.74 3.877a.75.75 0 1 0-1.48-.254L7.68 7H3.75a.75.75 0 0 0 0 1.5h3.67L6.472 14H2.75a.75.75 0 0 0 0 1.5h3.463l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.228l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.765a.75.75 0 0 0 0-1.5h-3.506l.948-5.5h3.558a.75.75 0 0 0 0-1.5h-3.3l.54-3.123a.75.75 0 0 0-1.48-.254L12.43 7H9.2l.538-3.123ZM11.221 14l.948-5.5H8.942L7.994 14h3.228Z"
-    clip-rule="evenodd"
-  ></path>
-</svg>; */
-}
-
-//send msg svg
-
-{
-  /* <svg
-  data-y5v="true"
-  aria-hidden="true"
-  viewBox="0 0 20 20"
-  class=""
-  style="--s:16px;"
->
-  <path
-    fill="currentColor"
-    d="M1.5 2.25a.755.755 0 0 1 1-.71l15.596 7.807a.73.73 0 0 1 0 1.306L2.5 18.46l-.076.018a.749.749 0 0 1-.924-.728v-4.54c0-1.21.97-2.229 2.21-2.25l6.54-.17c.27-.01.75-.24.75-.79s-.5-.79-.75-.79l-6.54-.17A2.253 2.253 0 0 1 1.5 6.789v-4.54Z"
-  ></path>
-</svg>; */
-}
-
-//caret outline (send message and see workplace details)
-
-{
-  /* <svg data-y5v="true" aria-hidden="true" viewBox="0 0 20 20" class="">
-  <path
-    fill="currentColor"
-    fill-rule="evenodd"
-    d="M5.72 7.47a.75.75 0 0 1 1.06 0L10 10.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-3.75 3.75a.75.75 0 0 1-1.06 0L5.72 8.53a.75.75 0 0 1 0-1.06Z"
     clip-rule="evenodd"
   ></path>
 </svg>; */
@@ -96,7 +72,6 @@ const Workspace = () => {
     // })();
     // console.log(channels);
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
-      // debugger
       setDatas(data.workspace);
     });
     //THIS .then is NOT WORKING PROPERLY
@@ -136,6 +111,22 @@ const Workspace = () => {
             dispatch(receiveMessage(message.message));
             lastMsg = message;
             console.log("received:", message.message.content);
+          },
+          received: ({ type, message, id }) => {
+            switch (type) {
+              case "RECEIVE_MESSAGE":
+                // debugger;
+                dispatch(receiveMessage(message.message));
+                lastMsg = message;
+                console.log("received:", message.message.content);
+                break;
+              case "REMOVE_MESSAGE":
+                dispatch(removeMessage(id));
+                break;
+              default:
+                console.log("Unhandled broadcast: ", type);
+                break;
+            }
           },
         }
       );
@@ -206,19 +197,7 @@ const Workspace = () => {
                   <span></span>
                 </div>
                 <button className="write-btn">
-                  <svg
-                    data-0zo="true"
-                    aria-hidden="true"
-                    viewBox="0 0 20 20"
-                    class=""
-                  >
-                    <path
-                      fill="#3f0e40"
-                      fill-rule="evenodd"
-                      d="M16.707 3.268a1 1 0 0 0-1.414 0l-.482.482 1.439 1.44.482-.483a1 1 0 0 0 0-1.414l-.025-.025ZM15.19 6.25l-1.44-1.44-5.068 5.069-.431 1.871 1.87-.431L15.19 6.25Zm-.957-4.043a2.5 2.5 0 0 1 3.536 0l.025.025a2.5 2.5 0 0 1 0 3.536L11.03 12.53a.75.75 0 0 1-.361.2l-3.25.75a.75.75 0 0 1-.9-.899l.75-3.25a.75.75 0 0 1 .2-.361l6.763-6.763ZM5.25 4A2.25 2.25 0 0 0 3 6.25v8.5A2.25 2.25 0 0 0 5.25 17h8.5A2.25 2.25 0 0 0 16 14.75v-4.5a.75.75 0 1 1 1.5 0v4.5a3.75 3.75 0 0 1-3.75 3.75h-8.5a3.75 3.75 0 0 1-3.75-3.75v-8.5A3.75 3.75 0 0 1 5.25 2.5h4.5a.75.75 0 0 1 0 1.5h-4.5Z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
+                  <WriteIcon />
                 </button>
               </div>
             </header>
@@ -238,6 +217,7 @@ const Workspace = () => {
                   <div
                     className="channel-item"
                     onClick={(e) => handleChannelClick(e, channel, "channel")}
+                    key={channel.id}
                   >
                     <span></span>
                     <span>{channel.name}</span>
@@ -254,14 +234,15 @@ const Workspace = () => {
                 return (
                   <div
                     className="dm-item"
+                    key={directMessage.id}
                     onClick={(e) => handleChannelClick(e, directMessage, "dm")}
                   >
                     {directMessage.users.map((user) => {
                       return (
-                        <>
+                        <div key={user.id}>
                           <span></span>
                           <span>{`${user.username}, `}</span>
-                        </>
+                        </div>
                       );
                     })}
                   </div>
@@ -282,6 +263,15 @@ const Workspace = () => {
             getConversation={getChannel}
             lastMsg={lastMsg}
           />
+        ) : conversationType === "dm" ? (
+          <Chat
+            conversation={shownConversation}
+            subs={directMessageSubscriptions}
+            channelType="DirectMessage"
+            fetchConversation={fetchDirectMessage}
+            getConversation={getDirectMessage}
+            lastMsg={lastMsg}
+          />
         ) : null}
 
         {/* <h3 style={{ marginBottom: "5px" }}>Direct Messages:</h3> */}
@@ -300,7 +290,7 @@ const Workspace = () => {
 				})}
 			</div> */}
 
-        {conversationType === "dm" ? (
+        {/* {conversationType === "dm" ? (
           <Chat
             conversation={shownConversation}
             subs={directMessageSubscriptions}
@@ -309,7 +299,7 @@ const Workspace = () => {
             getConversation={getDirectMessage}
             lastMsg={lastMsg}
           />
-        ) : null}
+        ) : null} */}
       </div>
       {/* <h1 style={{ marginBottom: "20px" }}>{workspace.name}</h1> */}
       {/* <h3 style={{ marginBottom: "5px" }}>Channels:</h3> */}
