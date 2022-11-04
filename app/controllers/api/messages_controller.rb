@@ -13,14 +13,7 @@ class Api::MessagesController < ApplicationController
 
 		#if I end up adding threads, should check for type thread
 		#in conditional below
-		# if type == "channel"
-		#   @channel = Channel.find_by_id(params[:messageable_id])
-		# 	@name_of_channel = ChannelsChannel
-		# else 
-		# 	@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-		# 	@name_of_channel = DirectMessagesChannel
-		# end
-
+	
     if @message.save
 			# @name_of_channel.broadcast_to(@message.)
 			# debugger
