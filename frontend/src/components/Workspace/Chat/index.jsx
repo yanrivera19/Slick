@@ -6,6 +6,7 @@ import consumer from "../../../consumer";
 import { fetchChannel, getChannel } from "../../../store/channels";
 import { createMessage } from "../../../store/messages";
 import ChatBox from "../ChatBox";
+import getTimeOfMessage from "../../../util";
 
 const Chat = ({
   conversation,
@@ -30,8 +31,9 @@ const Chat = ({
   const lastMessageRef = useRef(null);
 
   useEffect(() => {
+    // debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation]);
+  }, [conversation.id]);
 
   // const enterChannel = () => {
   //   dispatch(fetchChannel(channelId));
@@ -75,6 +77,7 @@ const Chat = ({
   // };
 
   if (!conversation) return null;
+  console.log(conversation);
 
   return (
     <div
@@ -84,19 +87,32 @@ const Chat = ({
         position: "relative",
       }}
     >
-      <header className="chat-header"></header>
+      <header className="chat-header">
+        <div className="chat-header-cont">
+          <span>
+            {channelType === "Channel"
+              ? conversation.name
+              : conversation.users.map((user) => user.username + ", ")}
+          </span>
+        </div>
+      </header>
       <div className="messages-container" ref={messageContRef}>
         {messages
           ? Object.values(messages).map((message) => {
-              console.log(message);
+              console.log(message.createdAt);
               return (
                 <div className="message-cont">
                   <div style={{ padding: "8px 20px" }}>
-                    <strong style={{ marginBottom: "10px" }}>
-                      {message.author
-                        ? message.author.username
-                        : message.authorId}
-                    </strong>
+                    <div style={{ marginBottom: "5px" }}>
+                      <strong>
+                        {message.author
+                          ? message.author.username
+                          : message.authorName}
+                      </strong>
+                      <span id="time-of-msg">
+                        {getTimeOfMessage(message.createdAt)}
+                      </span>
+                    </div>
                     <p>{message.content}</p>
                   </div>
                 </div>

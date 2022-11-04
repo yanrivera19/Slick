@@ -1,7 +1,6 @@
 .app-container {
   font-family: Lato;
-  overflow: hidden;
-  height: 100vh;
+  height: 100%;
 }
 
 .app-nav {
@@ -65,14 +64,15 @@
 
 .app-main-cont {
   display: flex;
-  overflow: hidden;
   height: 100%;
 }
 
 .app-side-bar {
   width: 235px;
   background-color: #3f0e40;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .workspace-header:hover,
@@ -145,4 +145,13 @@ span {
 #extras-section {
   padding-top: 9px;
   padding-bottom: 9px;
+}
+
+#sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  padding-left: 13px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  color: #ffffffb3;
 }

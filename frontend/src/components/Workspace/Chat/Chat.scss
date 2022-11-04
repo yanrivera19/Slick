@@ -45,6 +45,13 @@ textarea {
   background-color: #fff;
 }
 
+.chat-header-cont {
+  display: flex;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.33334;
+}
+
 #chat-box {
   position: absolute;
   bottom: 60px;
@@ -76,4 +83,25 @@ textarea {
   flex-grow: 1;
   position: relative;
   height: 20px;
+  padding: 12px 12px;
+  box-sizing: border-box;
+}
+
+.bottom-chat {
+  padding: 12px 12px;
+  box-sizing: border-box;
+}
+
+#time-of-msg {
+  color: #616061;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.message-cont {
+  font-size: 15px;
+}
+
+.message-cont:hover {
+  background: rgba(248, 248, 248, 1);
 }
