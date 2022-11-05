@@ -7,6 +7,7 @@ export const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
 export const EDIT_MESSAGE = "messages/EDIT_MESSAGE";
 
 export const receiveMessage = (message) => {
+  // debugger;
   return {
     type: RECEIVE_MESSAGE,
     message,
@@ -37,7 +38,6 @@ export const fetchMessage = (messageId) => async (dispatch) => {
 
   if (res.ok) {
     const message = await res.json();
-
     dispatch(receiveMessage(message));
   }
 };
@@ -50,7 +50,8 @@ export const createMessage = (message) => async (dispatch) => {
 
   if (res.ok) {
     const message = await res.json();
-    dispatch(receiveMessage(message));
+    // debugger;
+    // dispatch(receiveMessage(message));
   }
 };
 
@@ -63,11 +64,10 @@ export const updateMessage = (message) => async (dispatch) => {
       "Content-Type": "application/json",
     },
   });
-  debugger;
   if (res.ok) {
     const message = await res.json();
-    // debugger;
-    dispatch(editMessage(message));
+    // // debugger;
+    // dispatch(editMessage(message));
   }
 };
 
@@ -91,11 +91,9 @@ export default function messageReducer(state = {}, action) {
         ? { ...action.directMessage.messages }
         : null;
     case RECEIVE_MESSAGE:
-      return action.message
-        ? { ...state, [action.message.id]: action.message }
-        : { ...state };
+      // debugger;
+      return { ...state, [action.message.id]: action.message };
     case EDIT_MESSAGE:
-      debugger;
       // return { ...state, [action.message.id]: action.message };
       return action.message
         ? { ...state, [action.message.id]: action.message }

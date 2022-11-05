@@ -99,6 +99,7 @@ const Workspace = () => {
     rooms.forEach((room) => {
       let roomName =
         room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
+      // debugger;
       return consumer.subscriptions.create(
         {
           channel: roomName,
@@ -114,7 +115,7 @@ const Workspace = () => {
               case "RECEIVE_MESSAGE":
                 // debugger;
                 dispatch(receiveMessage(message));
-                lastMsg = message;
+                // lastMsg = message;
                 console.log("received:", message.content);
                 break;
               case "EDIT_MESSAGE":
@@ -264,7 +265,6 @@ const Workspace = () => {
             channelType="Channel"
             fetchConversation={fetchChannel}
             getConversation={getChannel}
-            lastMsg={lastMsg}
           />
         ) : conversationType === "dm" ? (
           <Chat
@@ -273,7 +273,6 @@ const Workspace = () => {
             channelType="DirectMessage"
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}
-            lastMsg={lastMsg}
           />
         ) : null}
 

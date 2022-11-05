@@ -7,6 +7,7 @@ import {
   createMessage,
   updateMessage,
   deleteMessage,
+  getMessage,
 } from "../../../store/messages";
 import ChatBox from "../ChatBox";
 import getTimeOfMessage from "../../../util";
@@ -29,7 +30,16 @@ const Chat = ({
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
 
-  const messages = useSelector((state) => state.messages);
+  const messages = useSelector((state) => {
+    return Object.values(state.messages).filter((message) => {
+      if (
+        message.messageableId === conversation.id &&
+        message.messageableType === channelType
+      ) {
+        return message;
+      }
+    });
+  });
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
   let hoveredElement = "";
@@ -58,7 +68,7 @@ const Chat = ({
     e.preventDefault();
     setErrors([]);
     // setLastMessage(messageContent);
-    setMessageContent("");
+
     // debugger;
 
     dispatch(
@@ -70,14 +80,18 @@ const Chat = ({
         messageableId: conversation.id,
       })
     );
+
+    setMessageContent("");
   };
 
+  console.log(messages);
+
   if (!conversation) return null;
-  console.log(hoveredElement);
+  console.log(conversation);
   return (
     <div
       style={{
-        width: "100%",
+        width: "81vw",
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -87,7 +101,13 @@ const Chat = ({
           <span>
             {channelType === "Channel"
               ? conversation.name
-              : conversation.users.map((user) => user.username + ", ")}
+              : conversation.users.map((user, idx) => {
+                  if (idx === conversation.users.length - 1) {
+                    return user.username;
+                  } else {
+                    return user.username + ", ";
+                  }
+                })}
           </span>
         </div>
       </header>

@@ -13,7 +13,6 @@ const Message = ({ message }) => {
   const handleEdit = (e, msg) => {
     e.preventDefault();
     // setLastMessage(messageContent);
-    debugger;
     dispatch(
       updateMessage({
         ...msg,

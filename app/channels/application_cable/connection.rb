@@ -3,7 +3,6 @@ module ApplicationCable
 		identified_by :current_user
 
 		def current_user
-			debugger
 			@current_user ||= User.find_by(
 				session_token: request.session[:session_token]
 			)
