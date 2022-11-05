@@ -1,7 +1,7 @@
 # require "byebug"
 
 class Api::MessagesController < ApplicationController
-	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId", "authorName"]
+	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId", "authorName", "updatedAt"]
 	before_action :require_logged_in
 
   def create
@@ -52,13 +52,13 @@ class Api::MessagesController < ApplicationController
 				@channel = Channel.find_by_id(params[:messageable_id])
 
 				ChannelsChannel.broadcast_to @message.messageable, 
-				  type: 'RECEIVE_MESSAGE',
+				  type: 'EDIT_MESSAGE',
 			    **from_template("api/messages/show", message: @message)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
 
 				DirectMessagesChannel.broadcast_to @message.messageable, 
-				  type: 'RECEIVE_MESSAGE',
+				  type: 'EDIT_MESSAGE',
 			    **from_template("api/messages/show", message: @message)
 			end
 
@@ -109,6 +109,6 @@ class Api::MessagesController < ApplicationController
 	private 
 
 	def message_params 
-		params.require(:message).permit(:id, :content, :author_id, :messageable_id, :messageable_type, :author_name)
+		params.require(:message).permit(:id, :content, :author_id, :messageable_id, :messageable_type, :author_name, :updated_at)
 	end
 end

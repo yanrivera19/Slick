@@ -72,38 +72,6 @@ const Chat = ({
     );
   };
 
-  // const handleMouseOver = (e, messageId) => {
-  //   hoveredElement = messageId;
-  // };
-
-  // const handleMouseOut = (e, messageId) => {
-  //   hoveredElement = undefined;
-  // };
-
-  // const scrollDown = () => {
-  //   lastMessageRef?.current?.scrollIntoView();
-  // };
-
-  // const scrollToBottomChat = () => {
-  //   const scroll = ref.current.scrollHeight - ref.current.clientHeight;
-
-  //   ref.current.scrollTo(0, scroll);
-  // };
-
-  // const handleEditMsg = (e, msgId) => {
-  //   e.preventDefault();
-  //   // setLastMessage(messageContent);
-  //   setMessageContent("");
-
-  //   dispatch(updateMessage(msgId));
-  //   setEditOrDeleteMsg(true);
-  // };
-
-  // const handleDeleteMsg = (e, msgId) => {
-  //   dispatch(deleteMessage(msgId));
-  //   setEditOrDeleteMsg(true);
-  // };
-
   if (!conversation) return null;
   console.log(hoveredElement);
   return (
@@ -126,82 +94,6 @@ const Chat = ({
       <div className="messages-container" ref={messageContRef}>
         {messages
           ? Object.values(messages).map((message) => {
-              //   return !editMode ? (
-              //     <div
-              //       className="message-cont"
-              //       onMouseOver={(e) => handleMouseOver(e, message.content)}
-              //       onMouseOut={(e) => handleMouseOut(e, message.content)}
-              //     >
-              //       {/* <div
-              //         className={
-              //           `${hoveredElement === message.content}`
-              //             ? "edit-delete-box"
-              //             : "hide"
-              //         }
-              //       ></div> */}
-              //       <div style={{ padding: "8px 20px" }}>
-              //         <div
-              //           style={{
-              //             marginBottom: "5px",
-              //             display: "flex",
-              //             alignItems: "flex-end",
-              //           }}
-              //         >
-              //           <strong>
-              //             {message.author
-              //               ? message.author.username
-              //               : message.authorName}
-              //           </strong>
-              //           <span id="time-of-msg">
-              //             {getTimeOfMessage(message.createdAt)}
-              //           </span>
-              //           <div
-              //             style={{
-              //               display: `${
-              //                 sessionUser.id === message.authorId
-              //                   ? "flex"
-              //                   : "none"
-              //               }`,
-              //             }}
-              //           >
-              //             <button
-              //               style={{ margin: "0 10px" }}
-              //               onClick={(e) => handleDelete(e, message.id)}
-              //             >
-              //               DELETE
-              //             </button>
-              //             {/* <button onClick={(e) => handleEdit(e, message)}>
-              //               EDIT
-              //             </button> */}
-              //             <button onClick={(e) => setEditMode(!editMode)}>
-              //               EDIT
-              //             </button>
-              //           </div>
-              //         </div>
-              //         <p>{message.content}</p>
-              //       </div>
-              //     </div>
-              //   ) : (
-              //     <div id="edit-textarea">
-              //       <div className="chat-cont">
-              //         <div className="top-chat"></div>
-              //         <div className="textarea-container">
-              //           <form onSubmit={(e) => handleEdit(e, message)}>
-              //             <textarea
-              //               value={messageContent}
-              //               onChange={(e) => setMessageContent(e.target.value)}
-              //             />
-              //             <div className="bottom-chat">
-              //               <button onClick={(e) => setEditMode(!editMode)}>
-              //                 Cancel
-              //               </button>
-              //               <button>Save</button>
-              //             </div>
-              //           </form>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   );
               return <Message key={message.id} message={message} />;
             })
           : null}

@@ -14,6 +14,7 @@ import {
 import {
   receiveMessage,
   removeMessage,
+  editMessage,
   fetchMessage,
   getMessage,
 } from "../../store/messages";
@@ -107,18 +108,20 @@ const Workspace = () => {
           connected: () => {
             console.log("connected");
           },
-          received: (message) => {
-            dispatch(receiveMessage(message.message));
-            lastMsg = message;
-            console.log("received:", message.message.content);
-          },
           received: ({ type, message, id }) => {
+            // debugger;
             switch (type) {
               case "RECEIVE_MESSAGE":
                 // debugger;
-                dispatch(receiveMessage(message.message));
+                dispatch(receiveMessage(message));
                 lastMsg = message;
-                console.log("received:", message.message.content);
+                console.log("received:", message.content);
+                break;
+              case "EDIT_MESSAGE":
+                // debugger;
+                dispatch(editMessage(message));
+                lastMsg = message;
+                console.log("received:", message.content);
                 break;
               case "REMOVE_MESSAGE":
                 dispatch(removeMessage(id));

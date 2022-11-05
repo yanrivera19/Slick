@@ -4,6 +4,7 @@ import { RECEIVE_DIRECT_MESSAGE } from "./directMessages";
 
 export const RECEIVE_MESSAGE = "messages/RECEIVE_MESSAGE";
 export const REMOVE_MESSAGE = "messages/REMOVE_MESSAGE";
+export const EDIT_MESSAGE = "messages/EDIT_MESSAGE";
 
 export const receiveMessage = (message) => {
   return {
@@ -16,6 +17,14 @@ export const removeMessage = (messageId) => {
   return {
     type: REMOVE_MESSAGE,
     messageId,
+  };
+};
+
+export const editMessage = (message) => {
+  // debugger;
+  return {
+    type: EDIT_MESSAGE,
+    message,
   };
 };
 
@@ -46,6 +55,7 @@ export const createMessage = (message) => async (dispatch) => {
 };
 
 export const updateMessage = (message) => async (dispatch) => {
+  // debugger;
   const res = await csrfFetch(`/api/messages/${message.id}`, {
     method: "PUT",
     body: JSON.stringify(message),
@@ -53,10 +63,11 @@ export const updateMessage = (message) => async (dispatch) => {
       "Content-Type": "application/json",
     },
   });
-
+  debugger;
   if (res.ok) {
     const message = await res.json();
-    dispatch(receiveMessage(message));
+    // debugger;
+    dispatch(editMessage(message));
   }
 };
 
@@ -83,9 +94,12 @@ export default function messageReducer(state = {}, action) {
       return action.message
         ? { ...state, [action.message.id]: action.message }
         : { ...state };
-    // return action.message
-    //   ? { ...state, [action.message.id]: action.message }
-    //   : null;
+    case EDIT_MESSAGE:
+      debugger;
+      // return { ...state, [action.message.id]: action.message };
+      return action.message
+        ? { ...state, [action.message.id]: action.message }
+        : { ...state };
     case REMOVE_MESSAGE:
       const newState = { ...state };
       delete newState[action.messageId];
