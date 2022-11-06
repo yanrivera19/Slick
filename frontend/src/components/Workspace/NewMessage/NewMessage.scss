@@ -22,3 +22,7 @@
   max-height: 130px;
   padding: 0 26px 0 12px;
 }
+
+.search-input::placeholder {
+  overflow: visible;
+}

@@ -27,4 +27,20 @@
   height: 32px;
   display: flex;
   align-items: center;
+  width: 95%;
+}
+
+.search-result-item:hover {
+  background-color: #1264a3;
+  color: #fff;
+}
+
+#no-results-item {
+  padding: 0 24px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.46668;
+  height: 32px;
+  display: flex;
+  align-items: center;
 }

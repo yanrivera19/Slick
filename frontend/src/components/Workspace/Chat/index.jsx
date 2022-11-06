@@ -22,6 +22,7 @@ const Chat = ({
   fetchConversation,
   getConversation,
   lastMsg,
+  // forNewMessage = false
 }) => {
   const [body, setBody] = useState("");
   const [usersInRoom, setUsersInRoom] = useState({});

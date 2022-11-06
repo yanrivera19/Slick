@@ -9,7 +9,14 @@ import {
   getMessage,
 } from "../../../store/messages";
 
-const NewMessage = ({ users, channels }) => {
+const NewMessage = ({
+  users,
+  channels,
+  dms,
+  handleChannelClick,
+  // channelForNewMsg,
+  // channelTypeForNewMsg
+}) => {
   const [body, setBody] = useState("");
   const [usersInRoom, setUsersInRoom] = useState({});
   const dispatch = useDispatch();
@@ -36,7 +43,19 @@ const NewMessage = ({ users, channels }) => {
   const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const data = [...channels, ...Object.values(users)];
+  const data = [...channels, ...users, ...dms];
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  // let data;
+  console.log(users);
+  console.log(dms);
+
+  const checkDmWithUser = () => {
+    dms.map((dm) => {
+      if (dm.dmUsers.length === 1) {
+      }
+    });
+  };
 
   const onSubmit = (e) => {
     //CREATE A DIRECT MESSAGE SUBSCRIPTIONS FOR USERS INVOLVED
@@ -58,6 +77,8 @@ const NewMessage = ({ users, channels }) => {
     setMessageContent("");
   };
 
+  // console.log(dmUsers);
+
   return (
     <div
       style={{
@@ -74,17 +95,24 @@ const NewMessage = ({ users, channels }) => {
       <section className="new-msg-search-container">
         {/* <div ref={lastMessageRef}></div> */}
         <div className="new-msg-search">
-          <span className="to-new-msg">To:</span>
+          <div>
+            <span className="to-new-msg">To:</span>
+          </div>
           <input
             className="search-input"
             type="text"
             value={searchInputValue}
             onChange={(e) => setSearchInputValue(e.target.value)}
+            placeholder="#a-channel or @somebody"
           />
         </div>
       </section>
       {searchInputValue.length > 0 && (
-        <SearchResults inputValue={searchInputValue} data={data} />
+        <SearchResults
+          inputValue={searchInputValue.toLowerCase()}
+          data={data}
+          handleChannelClick={handleChannelClick}
+        />
       )}
 
       <section id="chat-box">

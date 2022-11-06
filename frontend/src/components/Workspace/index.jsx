@@ -47,6 +47,8 @@ const Workspace = () => {
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
   const [newMessage, setNewMessage] = useState(false);
+  const [channelForNewMsg, setChannelForNewMsg] = useState();
+  const [channelTypeForNewMsg, setChannelTypeForNewMsg] = useState();
   let lastMsg;
   let dmUsersString = "";
   const dmUsersArray = [];
@@ -112,7 +114,7 @@ const Workspace = () => {
     subscription(Object.values(data.directMessages));
   };
 
-  const handleChannelClick = (e, channel, channelType) => {
+  const handleChannelClick = (e, channel, channelType, newMsg = false) => {
     setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
@@ -123,31 +125,26 @@ const Workspace = () => {
     setNewMessage(true);
   };
 
-  const checkDmUsers = (users) => {
-    users.map((user, idx) => {
-      idx === users.length - 1
-        ? (dmUsersString += user.username)
-        : (dmUsersString += user.username + ", ");
+  const checkDmUsers = (dm) => {
+    let includesUser = false;
+
+    dm.users.map((user, idx) => {
+      if (user.username === sessionUser.username) {
+        includesUser = true;
+      } else {
+        dmUsersString += user.username + ", ";
+      }
     });
 
-    if (dmUsersString.includes(sessionUser.username)) {
+    if (includesUser) {
       dmUsersArray.push({
-        dmUsers: dmUsersString,
+        dmUsers: dmUsersString.slice(0, dmUsersString.length - 2),
+        dm: dm,
       });
-
-      // return (
-      //   <div key={user.id}>
-      //     <span></span>
-      //     <span>{users}</span>
-      //   </div>
-      // );
     }
-    //  else {
-    //   return null;
-    // }
   };
 
-  console.log(sessionUser);
+  // console.log(sessionUser);
 
   return workspace ? (
     <div className="app-container">
@@ -221,7 +218,7 @@ const Workspace = () => {
                     key={directMessage.id}
                     onClick={(e) => handleChannelClick(e, directMessage, "dm")}
                   >
-                    {checkDmUsers(directMessage.users)}
+                    {checkDmUsers(directMessage)}
 
                     {/* // return ( */}
                     <div className="dm-item" key={directMessage.id}>
@@ -263,9 +260,10 @@ const Workspace = () => {
         ) : null}
         {newMessage ? (
           <NewMessage
-            users={workspace.users}
+            users={Object.values(workspace.users)}
             channels={channels}
-            dmUsers={dmUsersArray}
+            dms={dmUsersArray}
+            handleChannelClick={handleChannelClick}
           />
         ) : null}
 
