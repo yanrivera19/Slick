@@ -1,10 +1,11 @@
-function SendMsgIcon() {
+const SendMsgIcon = () => {
   return (
     <svg
       data-y5v="true"
       aria-hidden="true"
       viewBox="0 0 20 20"
-      style="--s:16px;"
+      width="16"
+      height="16"
     >
       <path
         fill="currentColor"
@@ -12,7 +13,7 @@ function SendMsgIcon() {
       ></path>
     </svg>
   );
-}
+};
 
 export default SendMsgIcon;
 

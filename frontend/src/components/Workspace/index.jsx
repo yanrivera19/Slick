@@ -1,6 +1,7 @@
 import DirectMessage from "./DirectMessage";
 import Channel from "./Channel";
 import Chat from "./Chat";
+import NewMessage from "./NewMessage";
 import { useState, useEffect } from "react";
 import consumer from "../../consumer";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,28 +24,10 @@ import {
   AiFillCaretRight,
   AiOutlinePlus,
 } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa";
+import { BsFillCaretDownFill, BsCaretRightFill } from "react-icons/bs";
 import WriteIcon from "../Svgs&Icons/WriteMsgIcon";
-
-//hashtag  icon
-
-{
-  /* <svg
-  data-y5v="true"
-  aria-hidden="true"
-  data-qa="sidebar-channel-icon-prefix"
-  data-sidebar-channel-icon="channel"
-  viewBox="0 0 20 20"
-  class=""
-  style="--s:16px;"
->
-  <path
-    fill="currentColor"
-    fill-rule="evenodd"
-    d="M9.74 3.877a.75.75 0 1 0-1.48-.254L7.68 7H3.75a.75.75 0 0 0 0 1.5h3.67L6.472 14H2.75a.75.75 0 0 0 0 1.5h3.463l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.228l-.452 2.623a.75.75 0 1 0 1.478.254l.496-2.877h3.765a.75.75 0 0 0 0-1.5h-3.506l.948-5.5h3.558a.75.75 0 0 0 0-1.5h-3.3l.54-3.123a.75.75 0 0 0-1.48-.254L12.43 7H9.2l.538-3.123ZM11.221 14l.948-5.5H8.942L7.994 14h3.228Z"
-    clip-rule="evenodd"
-  ></path>
-</svg>; */
-}
+import HashTagIcon from "../Svgs&Icons/HashTagIcon";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -63,37 +46,19 @@ const Workspace = () => {
 
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
+  const [newMessage, setNewMessage] = useState(false);
   let lastMsg;
 
   useEffect(() => {
-    // (async () => {
-    //   const res = await dispatch(fetchWorkspace(workspaceId));
-    //   setChannels(Object.values(workspace.channels));
-    //   setDirectmessages(Object.values(workspace.directMessages));
-    // })();
-    // console.log(channels);
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
       setDatas(data.workspace);
     });
-    //THIS .then is NOT WORKING PROPERLY
-    // .then(() => {
-    //   console.log(channels);
-    //   channels.forEach((channel) => {
-    //     let channelSub = subscription("ChannelsChannel", channel.id);
-    //     setChannelSubscriptions((prevState) => [...prevState, channelSub]);
-    //   });
-
-    //   // directMessages.forEach((directMessage) => {
-    //   //   let dmSub = subscription("DirectMessagesChannel", directMessage.id);
-    //   //   setDirectMessageSubscriptions((prevState) => [...prevState, dmSub]);
-    //   // });
-    // });
 
     return () => {
       channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
       directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
     };
-  }, [workspaceId]);
+  }, [workspaceId, channels.length, directMessages.length]);
 
   const subscription = (rooms) => {
     rooms.forEach((room) => {
@@ -139,47 +104,22 @@ const Workspace = () => {
   };
 
   const setDatas = (data) => {
-    // if (workspace) {
-    // channels = Object.values(workspace.channels);
-    // directMessages = Object.values(workspace.directMessages);
-    // debugger;
     setChannels(Object.values(data.channels));
     setDirectMessages(Object.values(data.directMessages));
     subscription(Object.values(data.channels));
     subscription(Object.values(data.directMessages));
   };
 
-  // const subscription = (channelName, channelId) => {
-  //   // debugger;
-  //   console.log(consumer);
-  //   return consumer.subscriptions.create(
-  //     {
-  //       channel: channelName,
-  //       id: channelId,
-  //     },
-  //     {
-  //       connected: () => {
-  //         console.log("connected");
-  //       },
-  //       received: (message) => {
-  //         debugger;
-  //         dispatch(receiveMessage(message.message));
-  //         // lastMsg = message;
-  //         console.log("received:", message.message.content);
-  //       },
-  //     }
-  //   );
-  // };
-
   const handleChannelClick = (e, channel, channelType) => {
-    // debugger;
+    setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
   };
-  console.log(channels);
 
-  // console.log(conversationType);
-  // console.log(shownConversation);
+  const handleNewMessageClick = () => {
+    setConversationType(null);
+    setNewMessage(true);
+  };
 
   return workspace ? (
     <div className="app-container">
@@ -200,7 +140,7 @@ const Workspace = () => {
                   <span id="works-name">{workspace.name}</span>
                   <span></span>
                 </div>
-                <button className="write-btn">
+                <button className="write-btn" onClick={handleNewMessageClick}>
                   <WriteIcon />
                 </button>
               </div>
@@ -213,7 +153,9 @@ const Workspace = () => {
             </section>
             <section id="channel-section">
               <div className="channel-item-header">
-                <span></span>
+                <span className="square-btn-sidebar">
+                  <BsFillCaretDownFill size={12} />
+                </span>
                 <span>Channels</span>
               </div>
               {channels.map((channel) => {
@@ -223,15 +165,25 @@ const Workspace = () => {
                     onClick={(e) => handleChannelClick(e, channel, "channel")}
                     key={channel.id}
                   >
-                    <span></span>
+                    <span style={{ marginRight: "11px", paddingTop: "4px" }}>
+                      <HashTagIcon />
+                    </span>
                     <span>{channel.name}</span>
                   </div>
                 );
               })}
+              <div className="channel-item-header">
+                <span className="square-btn-sidebar plus">
+                  <FaPlus size={10} />
+                </span>
+                <span>Add channels</span>
+              </div>
             </section>
             <section id="dm-section">
               <div className="dm-item-header">
-                <span></span>
+                <span className="square-btn-sidebar">
+                  <BsFillCaretDownFill size={12} />
+                </span>
                 <span>Direct messages</span>
               </div>
               {directMessages.map((directMessage) => {
@@ -241,17 +193,27 @@ const Workspace = () => {
                     key={directMessage.id}
                     onClick={(e) => handleChannelClick(e, directMessage, "dm")}
                   >
-                    {directMessage.users.map((user) => {
+                    {directMessage.users.map((user, idx) => {
                       return (
                         <div key={user.id}>
                           <span></span>
-                          <span>{`${user.username}, `}</span>
+                          <span>
+                            {idx === directMessage.users.length - 1
+                              ? user.username
+                              : user.username + ", "}
+                          </span>
                         </div>
                       );
                     })}
                   </div>
                 );
               })}
+              <div className="dm-item-header">
+                <span className="square-btn-sidebar plus">
+                  <FaPlus size={10} />
+                </span>
+                <span>Add teammates</span>
+              </div>
             </section>
           </div>
           <section id="sidebar-footer">
@@ -275,6 +237,7 @@ const Workspace = () => {
             getConversation={getDirectMessage}
           />
         ) : null}
+        {newMessage ? <NewMessage /> : null}
 
         {/* <h3 style={{ marginBottom: "5px" }}>Direct Messages:</h3> */}
         {/* <div style={{ marginBottom: "20px" }}>

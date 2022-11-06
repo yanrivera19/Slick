@@ -12,6 +12,7 @@
   border-radius: 20px;
   height: 100px;
   transform: translateY(224px);
+  opacity: 1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -32,15 +33,15 @@ textarea {
   resize: none;
   border-style: none;
   box-sizing: border-box !important;
-  padding: 12px 12px;
+  padding: 8px 12px 0;
   line-height: 1.46668;
+  font-size: 15px !important;
 }
 
 .chat-header {
   align-items: center;
   border-bottom: 1px solid #e4e3e3;
   display: flex;
-  flex-shrink: 0;
   height: 49px;
   padding: 0 16px 0 20px;
   background-color: #fff;
@@ -62,6 +63,7 @@ textarea {
   font-family: Lato;
   display: flex;
   justify-content: center;
+  margin-top: 2px;
 }
 
 .chat-cont {
@@ -82,52 +84,45 @@ textarea {
   width: 100%;
   flex-grow: 1;
   position: relative;
-  height: 20px;
+  height: 30px;
   padding: 12px 12px;
   box-sizing: border-box;
 }
 
 .bottom-chat {
-  padding: 12px 12px;
+  padding: 0 12px 12px;
   box-sizing: border-box;
   display: flex;
 }
 
-#time-of-msg {
-  color: #616061;
-  font-size: 12px;
-  margin-left: 10px;
+.bottom-chat {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.message-cont {
-  font-size: 15px;
+.send-msg-cont {
+  display: flex;
+  border-radius: 4px;
+  align-items: center;
+  opacity: 0.3;
 }
 
-.message-cont:hover {
-  background: rgba(248, 248, 248, 1);
+.send-msg-cont button {
+  padding: 4px 8px;
 }
 
-.edit-delete-box {
+.send-btn {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(221, 221, 221, 1);
-  border-radius: 5px;
-  height: 20px;
-  position: absolute;
-  background-color: black;
-  width: 20%;
-  top: -40;
-}
-
-.hide {
-  display: none;
-}
-
-#edit-textarea {
-  width: 100%;
-  box-shadow: 1px 0 0 0 rgba(29, 28, 29, 0.13);
-  background: inherit;
-  font-family: Lato;
-  display: flex;
   justify-content: center;
+}
+
+.send-msg-cont.ready {
+  background-color: #007a5a;
+  color: #fff;
+  opacity: 1;
+}
+
+.send-msg-cont.ready:hover {
+  background-color: #148567;
 }

@@ -1,6 +1,13 @@
 const CaretOutlineIcon = () => {
   return (
-    <svg data-y5v="true" aria-hidden="true" viewBox="0 0 20 20" className="">
+    <svg
+      data-y5v="true"
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      className=""
+      width="16"
+      height="16"
+    >
       <path
         fill="currentColor"
         fillRule="evenodd"

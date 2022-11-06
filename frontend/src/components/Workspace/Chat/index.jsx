@@ -12,6 +12,8 @@ import {
 import ChatBox from "../ChatBox";
 import getTimeOfMessage from "../../../util";
 import Message from "./Message";
+import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
+import CaretOutlineIcon from "../../Svgs&Icons/CaretOutlineIcon";
 
 const Chat = ({
   conversation,
@@ -45,31 +47,19 @@ const Chat = ({
   let hoveredElement = "";
   const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
-    // debugger;
     dispatch(fetchConversation(conversation.id));
   }, [conversation]);
 
-  // const enterChannel = () => {
-  //   dispatch(fetchChannel(channelId));
-  // };
-  // useEffect(() => {
-  //   // scrollToBottomChat();
-  //   // let lastMsgPos = document.querySelector("#last-msg-position");
-  //   // lastMsgPos.current?.scrollIntoView();
-  //   scrollDown();
-  //   lastMessageRef.current.scrollIntoView({
-  //     block: "end",
-  //   });
-  // }, [lastMessage, conversation.name]);
+  useEffect(() => {
+    lastMessageRef.current.scrollIntoView();
+  }, [messages.length, conversation.name]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    // setLastMessage(messageContent);
-
-    // debugger;
 
     dispatch(
       createMessage({
@@ -81,10 +71,9 @@ const Chat = ({
       })
     );
 
+    setLastMessage(messageContent);
     setMessageContent("");
   };
-
-  console.log(messages);
 
   if (!conversation) return null;
   console.log(conversation);
@@ -117,10 +106,7 @@ const Chat = ({
               return <Message key={message.id} message={message} />;
             })
           : null}
-        <div
-          // id="last-msg-position"
-          ref={lastMessageRef}
-        ></div>
+        <div ref={lastMessageRef}></div>
       </div>
 
       <section id="chat-box">
@@ -131,9 +117,35 @@ const Chat = ({
               <textarea
                 value={messageContent}
                 onChange={(e) => setMessageContent(e.target.value)}
+                rows="1"
+                placeholder={`Message #${
+                  channelType === "Channel"
+                    ? conversation.name
+                    : conversation.users.map((user, idx) => {
+                        if (idx === conversation.users.length - 1) {
+                          return user.username;
+                        } else {
+                          return user.username + ", ";
+                        }
+                      })
+                }`}
               />
               <div className="bottom-chat">
-                <button>Send</button>
+                <div
+                  className={`send-msg-cont ${
+                    messageContent.trim().length > 0 ? "ready" : ""
+                  }`}
+                >
+                  <button
+                    disabled={messageContent.trim().length < 1}
+                    className="send-btn"
+                  >
+                    <SendMsgIcon />
+                  </button>
+                  {/* <button disabled={messageContent.trim().length < 1}>
+                    <CaretOutlineIcon />
+                  </button> */}
+                </div>
               </div>
             </form>
           </div>

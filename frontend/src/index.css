@@ -11,6 +11,7 @@
 @import "../src/components/Workspace/Workspace.scss";
 @import "../src/components/Workspace/Chat/Chat.scss";
 @import "../src/components/Workspace/Chat/Message/Message.scss";
+@import "../src/components/Workspace/NewMessage/NewMessage.scss";
 
 header,
 nav,
@@ -65,6 +66,7 @@ body,
 
 body {
   background-color: #f1f2f4;
+  overflow: overlay;
 }
 
 ul {
