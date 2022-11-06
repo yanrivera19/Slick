@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
+import SearchResults from "../SearchResults";
 import {
   createMessage,
   updateMessage,
@@ -8,7 +9,7 @@ import {
   getMessage,
 } from "../../../store/messages";
 
-const NewMessage = () => {
+const NewMessage = ({ users, channels }) => {
   const [body, setBody] = useState("");
   const [usersInRoom, setUsersInRoom] = useState({});
   const dispatch = useDispatch();
@@ -34,6 +35,8 @@ const NewMessage = () => {
   const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const data = [...channels, ...Object.values(users)];
 
   const onSubmit = (e) => {
     //CREATE A DIRECT MESSAGE SUBSCRIPTIONS FOR USERS INVOLVED
@@ -72,8 +75,17 @@ const NewMessage = () => {
         {/* <div ref={lastMessageRef}></div> */}
         <div className="new-msg-search">
           <span className="to-new-msg">To:</span>
+          <input
+            className="search-input"
+            type="text"
+            value={searchInputValue}
+            onChange={(e) => setSearchInputValue(e.target.value)}
+          />
         </div>
       </section>
+      {searchInputValue.length > 0 && (
+        <SearchResults inputValue={searchInputValue} data={data} />
+      )}
 
       <section id="chat-box">
         <div className="chat-cont">
@@ -84,7 +96,7 @@ const NewMessage = () => {
                 value={messageContent}
                 onChange={(e) => setMessageContent(e.target.value)}
                 rows="1"
-                placeHolder="Start a new message"
+                placeholder="Start a new message"
               />
               <div className="bottom-chat">
                 <div

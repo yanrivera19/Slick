@@ -48,6 +48,8 @@ const Workspace = () => {
   const [conversationType, setConversationType] = useState(null);
   const [newMessage, setNewMessage] = useState(false);
   let lastMsg;
+  let dmUsersString = "";
+  const dmUsersArray = [];
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
@@ -121,6 +123,32 @@ const Workspace = () => {
     setNewMessage(true);
   };
 
+  const checkDmUsers = (users) => {
+    users.map((user, idx) => {
+      idx === users.length - 1
+        ? (dmUsersString += user.username)
+        : (dmUsersString += user.username + ", ");
+    });
+
+    if (dmUsersString.includes(sessionUser.username)) {
+      dmUsersArray.push({
+        dmUsers: dmUsersString,
+      });
+
+      // return (
+      //   <div key={user.id}>
+      //     <span></span>
+      //     <span>{users}</span>
+      //   </div>
+      // );
+    }
+    //  else {
+    //   return null;
+    // }
+  };
+
+  console.log(sessionUser);
+
   return workspace ? (
     <div className="app-container">
       <nav className="app-nav">
@@ -193,18 +221,14 @@ const Workspace = () => {
                     key={directMessage.id}
                     onClick={(e) => handleChannelClick(e, directMessage, "dm")}
                   >
-                    {directMessage.users.map((user, idx) => {
-                      return (
-                        <div key={user.id}>
-                          <span></span>
-                          <span>
-                            {idx === directMessage.users.length - 1
-                              ? user.username
-                              : user.username + ", "}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    {checkDmUsers(directMessage.users)}
+
+                    {/* // return ( */}
+                    <div className="dm-item" key={directMessage.id}>
+                      <span></span>
+                      <span className="dm-users">{dmUsersString}</span>
+                    </div>
+                    {/* // ); */}
                   </div>
                 );
               })}
@@ -237,7 +261,13 @@ const Workspace = () => {
             getConversation={getDirectMessage}
           />
         ) : null}
-        {newMessage ? <NewMessage /> : null}
+        {newMessage ? (
+          <NewMessage
+            users={workspace.users}
+            channels={channels}
+            dmUsers={dmUsersArray}
+          />
+        ) : null}
 
         {/* <h3 style={{ marginBottom: "5px" }}>Direct Messages:</h3> */}
         {/* <div style={{ marginBottom: "20px" }}>

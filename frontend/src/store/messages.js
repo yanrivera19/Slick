@@ -49,7 +49,8 @@ export const createMessage = (message) => async (dispatch) => {
   });
 
   if (res.ok) {
-    const message = await res.json();
+    //ERROR HANDLING
+    // const message = await res.json();
     // debugger;
     // dispatch(receiveMessage(message));
   }
@@ -65,7 +66,8 @@ export const updateMessage = (message) => async (dispatch) => {
     },
   });
   if (res.ok) {
-    const message = await res.json();
+    //ERROR HANDLING
+    // const message = await res.json();
     // // debugger;
     // dispatch(editMessage(message));
   }

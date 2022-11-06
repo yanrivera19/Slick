@@ -12,6 +12,7 @@
 @import "../src/components/Workspace/Chat/Chat.scss";
 @import "../src/components/Workspace/Chat/Message/Message.scss";
 @import "../src/components/Workspace/NewMessage/NewMessage.scss";
+@import "../src/components/Workspace/SearchResults/SearchResults.scss";
 
 header,
 nav,
