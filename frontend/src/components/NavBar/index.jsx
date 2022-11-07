@@ -6,12 +6,32 @@ import "./NavBar.scss";
 import slackLogoWhite from "../../assets/images/slack_logo_white.svg";
 import slackLogoBlack from "../../assets/images/slack_logo_black.svg";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
+import { useState } from "react";
 
 const NavBar = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-
+  const [errors, setErrors] = useState([]);
   let sessionLinks;
+
+  const handleDemoLogin = () => {
+    return dispatch(
+      sessionActions.loginUser({
+        email: "demo-user@gmail.com",
+        password: "password",
+      })
+    ).catch(async (res) => {
+      let data;
+      try {
+        data = await res.clone().json();
+      } catch {
+        data = await res.text();
+      }
+      if (data?.errors) setErrors(data.errors);
+      else if (data) setErrors([data]);
+      else setErrors([res.statusText]);
+    });
+  };
 
   if (sessionUser) {
     sessionLinks = (
@@ -22,9 +42,20 @@ const NavBar = React.forwardRef((props, ref) => {
   } else {
     sessionLinks = (
       <>
+        <button
+          style={{ textDecoration: "none", color: "#fff" }}
+          className="sign-btn right"
+          onClick={handleDemoLogin}
+        >
+          Demo Login
+        </button>
         <NavLink
           to={"/signin/signin"}
-          style={{ textDecoration: "none", color: "#fff" }}
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+            marginLeft: "1.25rem",
+          }}
           className="sign-btn left"
         >
           Sign In

@@ -35,14 +35,17 @@ const Chat = ({
   const [lastMessage, setLastMessage] = useState("");
 
   const messages = useSelector((state) => {
-    return Object.values(state.messages).filter((message) => {
-      if (
-        message.messageableId === conversation.id &&
-        message.messageableType === channelType
-      ) {
-        return message;
-      }
-    });
+    debugger;
+    return state.messages
+      ? Object.values(state.messages).filter((message) => {
+          if (
+            message.messageableId === conversation.id &&
+            message.messageableType === channelType
+          ) {
+            return message;
+          }
+        })
+      : {};
   });
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
@@ -53,6 +56,7 @@ const Chat = ({
   let usersString = "";
 
   useEffect(() => {
+    debugger;
     dispatch(fetchConversation(conversation.id));
   }, [conversation]);
 
@@ -78,12 +82,12 @@ const Chat = ({
     setMessageContent("");
   };
 
-  if (!conversation) return null;
-  console.log(conversation);
+  if (!conversation || !messages) return null;
+  console.log(messages);
   return (
     <div
       style={{
-        width: "100vw",
+        width: "81vw",
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -91,7 +95,7 @@ const Chat = ({
       <header className="chat-header">
         <div className="chat-header-cont">
           <span>
-            {channelType === "Channel"
+            {channelType && channelType === "Channel"
               ? conversation.name
               : conversation.users
                   .map((user, idx) => {

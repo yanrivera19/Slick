@@ -36,10 +36,10 @@ export const createDirectMessage = (directMessage) => async (dispatch) => {
   if (res.ok) {
     const directMessage = await res.json();
     dispatch(receiveDirectMessage(directMessage));
-    const workspace = await dispatch(
-      getWorkspace(directMessage.directMessage.workspaceId)
-    );
-    dispatch(receiveWorkspace(workspace));
+    // const workspace = await dispatch(
+    //   getWorkspace(directMessage.directMessage.workspaceId)
+    // );
+    // dispatch(receiveWorkspace(workspace));
     return directMessage;
   }
 };

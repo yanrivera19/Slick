@@ -44,8 +44,8 @@ export const createChannel = (channel) => async (dispatch) => {
   if (res.ok) {
     const channel = await res.json();
     dispatch(receiveChannel(channel));
-    const workspace = await dispatch(getWorkspace(channel.channel.workspaceId));
-    dispatch(receiveWorkspace(workspace));
+    // const workspace = await dispatch(getWorkspace(channel.channel.workspaceId));
+    // dispatch(receiveWorkspace(workspace));
   }
 };
 

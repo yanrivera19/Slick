@@ -43,7 +43,7 @@ const Workspace = () => {
   // );
   const channelSubscriptions = [];
   const directMessageSubscriptions = [];
-
+  const [channelSubs, setChannelSubs] = useState([]);
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
   const [newMessage, setNewMessage] = useState(false);
@@ -52,15 +52,18 @@ const Workspace = () => {
   let lastMsg;
   let dmUsersString = "";
   const dmUsersArray = [];
+  let subs = [];
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
       setDatas(data.workspace);
     });
 
+    debugger;
     return () => {
-      channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
-      directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
+      channelSubs.forEach((channelSub) => channelSub.unsubscribe());
+      // channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
+      // directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
     };
   }, [workspaceId]);
 
@@ -69,7 +72,7 @@ const Workspace = () => {
       let roomName =
         room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
       // debugger;
-      return consumer.subscriptions.create(
+      let sub = consumer.subscriptions.create(
         {
           channel: roomName,
           id: room.id,
@@ -103,8 +106,12 @@ const Workspace = () => {
           },
         }
       );
+
+      subs.push(sub);
     });
-    // console.log(consumer);
+
+    // console.log("subs:", subs);
+    // setChannelSubs([...subs]);
   };
 
   const setDatas = (data) => {
@@ -117,12 +124,14 @@ const Workspace = () => {
   const checkUsersDm = (dms) => {};
 
   const handleChannelClick = (e, channel, channelType, newMsg = false) => {
+    debugger;
     setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
   };
 
   const handleNewMessageClick = () => {
+    setShownConversation(null);
     setConversationType(null);
     setNewMessage(true);
   };
@@ -148,7 +157,9 @@ const Workspace = () => {
     }
   };
 
-  console.log(dmUsersString);
+  // console.log(shownConversation);
+  // console.log(conversationType);
+  console.log(channelSubs);
 
   return workspace ? (
     <div className="app-container">
@@ -201,6 +212,8 @@ const Workspace = () => {
                       <span>{channel.name}</span>
                     </div>
                   );
+                } else {
+                  return null;
                 }
               })}
               <div className="channel-item-header">
@@ -237,6 +250,8 @@ const Workspace = () => {
                       {/* // ); */}
                     </div>
                   );
+                } else {
+                  return null;
                 }
               })}
               <div className="dm-item-header">

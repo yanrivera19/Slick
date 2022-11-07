@@ -53,16 +53,21 @@ const NewMessage = ({
   const [searchInputValue, setSearchInputValue] = useState("");
   const data = [...channels, ...users, ...dms];
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const oneToOneDmUsers = [];
 
   // let data;
-  console.log(users);
-  console.log(dms);
+
+  useEffect(() => {
+    checkDmWithUser();
+  }, []);
 
   const checkDmWithUser = () => {
-    dms.map((dm) => {
-      if (dm.dmUsers.length === 1) {
+    dms.forEach((dm) => {
+      if (!dm.dmUsers.includes(",")) {
+        oneToOneDmUsers.push(dm.dmUsers);
       }
     });
+    console.log(oneToOneDmUsers);
   };
 
   const onSubmit = (e) => {
@@ -74,6 +79,19 @@ const NewMessage = ({
         workspaceId: workspaceId,
       })
     ).then((dm) => {
+      dispatch(
+        createMessage(
+          {
+            content: messageContent,
+            authorName: sessionUser.username,
+            authorId: sessionUser.id,
+            messageableType: "DirectMessage",
+            messageableId: dm.directMessage.id,
+          },
+          "newConv"
+        )
+      );
+
       let usersForNewDm = [...selectedUsers, sessionUser];
 
       usersForNewDm.forEach(async (user) => {
@@ -94,24 +112,15 @@ const NewMessage = ({
           //CATCH ERRORS
         }
       });
-      debugger;
 
-      dispatch(
-        createMessage({
-          content: messageContent,
-          authorName: sessionUser.username,
-          authorId: sessionUser.id,
-          messageableType: "DirectMessage",
-          messageableId: dm.directMessage.id,
-        })
-      );
+      debugger;
+      handleChannelClick(e, dm.directMessage, "dm");
+      setLastMessage(messageContent);
+      setMessageContent("");
     });
     // }
     // return dmSubs;
     // });
-
-    setLastMessage(messageContent);
-    setMessageContent("");
   };
 
   const handleResultClick = (e, user) => {
@@ -132,7 +141,7 @@ const NewMessage = ({
   return (
     <div
       style={{
-        width: "100vw",
+        width: "81vw",
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -174,6 +183,7 @@ const NewMessage = ({
           handleChannelClick={handleChannelClick}
           handleResultClick={handleResultClick}
           selectedUsers={selectedUsers}
+          oneToOneDmUsers={oneToOneDmUsers}
         />
       )}
 

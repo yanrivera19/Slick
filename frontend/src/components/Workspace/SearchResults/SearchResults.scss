@@ -1,6 +1,7 @@
 .search-cont {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .search-results-cont {
@@ -12,14 +13,13 @@
   z-index: 1000;
   box-shadow: 0 1px 0 0 rgba(29, 28, 29, 0.13), 0 4px 15px -2px #0000003e;
   background-color: #fff;
-  position: absolute !important;
   width: 95%;
   top: 500;
   right: 20;
 }
 
 .search-result-item {
-  padding: 0 24px;
+  padding-left: 24px;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.46668;
@@ -27,7 +27,7 @@
   height: 32px;
   display: flex;
   align-items: center;
-  width: 95%;
+  width: calc(100% - 24px);
 }
 
 .search-result-item:hover {
