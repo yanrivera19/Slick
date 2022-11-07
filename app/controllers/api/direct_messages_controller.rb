@@ -1,12 +1,13 @@
 class Api::DirectMessagesController < ApplicationController
-   before_action :require_logged_in
+	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId"]
+  before_action :require_logged_in
 
   def create
 		@direct_message = DirectMessage.new(direct_message_params)
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 
     if @direct_message.save
-      render "/api/workspaces/show"
+      render "/api/direct_messages/show"
     else
       render json: {errors: @direct_message.errors.full_messages}, status: 422
     end
@@ -42,6 +43,6 @@ class Api::DirectMessagesController < ApplicationController
 	private 
 
 	def direct_message_params
-		params.require(:direct_message).permit(:name)
+		params.require(:direct_message).permit(:workspace_id)
 	end
 end

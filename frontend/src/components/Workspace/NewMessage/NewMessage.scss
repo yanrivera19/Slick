@@ -10,6 +10,8 @@
 
 .new-msg-search {
   display: flex;
+  width: 100%;
+  align-items: center;
 }
 
 .to-new-msg {
@@ -18,11 +20,24 @@
 }
 
 .search-input {
-  width: 100%;
+  flex: 1 1 100%;
   max-height: 130px;
   padding: 0 26px 0 12px;
 }
 
 .search-input::placeholder {
   overflow: visible;
+}
+
+.selected-user {
+  font-size: 15px;
+  margin-left: 6px;
+  background: #1d9bd11a;
+  border-radius: 4px;
+  font-weight: 700;
+  padding-right: 4px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  line-height: 26px;
 }

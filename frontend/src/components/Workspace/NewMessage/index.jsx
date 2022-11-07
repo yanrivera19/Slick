@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
+import csrfFetch from "../../../store/csrf";
 import SearchResults from "../SearchResults";
 import {
   createMessage,
@@ -8,6 +9,12 @@ import {
   deleteMessage,
   getMessage,
 } from "../../../store/messages";
+
+import {
+  createDirectMessage,
+  fetchDirectMessage,
+} from "../../../store/directMessages";
+import { useParams } from "react-router-dom";
 
 const NewMessage = ({
   users,
@@ -20,6 +27,7 @@ const NewMessage = ({
   const [body, setBody] = useState("");
   const [usersInRoom, setUsersInRoom] = useState({});
   const dispatch = useDispatch();
+  const { workspaceId } = useParams();
   // const { clientId, channelId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
@@ -58,23 +66,65 @@ const NewMessage = ({
   };
 
   const onSubmit = (e) => {
-    //CREATE A DIRECT MESSAGE SUBSCRIPTIONS FOR USERS INVOLVED
-
     e.preventDefault();
     setErrors([]);
 
-    // dispatch(
-    //   createMessage({
-    //     content: messageContent,
-    //     authorName: sessionUser.username,
-    //     authorId: sessionUser.id,
-    //     messageableType: channelType,
-    //     messageableId: conversation.id,
-    //   })
-    // );
+    dispatch(
+      createDirectMessage({
+        workspaceId: workspaceId,
+      })
+    ).then((dm) => {
+      let usersForNewDm = [...selectedUsers, sessionUser];
+
+      usersForNewDm.forEach(async (user) => {
+        let dmSub = {
+          userId: user.id,
+          directMessageId: dm.directMessage.id,
+        };
+        const res = await csrfFetch("/api/direct_message_subscriptions", {
+          method: "POST",
+          body: JSON.stringify(dmSub),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.ok) {
+          const directMessageSub = await res.json();
+          //CATCH ERRORS
+        }
+      });
+      debugger;
+
+      dispatch(
+        createMessage({
+          content: messageContent,
+          authorName: sessionUser.username,
+          authorId: sessionUser.id,
+          messageableType: "DirectMessage",
+          messageableId: dm.directMessage.id,
+        })
+      );
+    });
+    // }
+    // return dmSubs;
+    // });
 
     setLastMessage(messageContent);
     setMessageContent("");
+  };
+
+  const handleResultClick = (e, user) => {
+    // if (!selectedUsers.includes(user)) {
+    setSelectedUsers((users) => [...users, user]);
+    setSearchInputValue("");
+    // }
+  };
+
+  const removeUserFromNewMsg = (e, user) => {
+    setSelectedUsers(
+      selectedUsers.filter((selectedUser) => selectedUser.id !== user.id)
+    );
   };
 
   // console.log(dmUsers);
@@ -82,7 +132,7 @@ const NewMessage = ({
   return (
     <div
       style={{
-        width: "81vw",
+        width: "100vw",
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -95,8 +145,18 @@ const NewMessage = ({
       <section className="new-msg-search-container">
         {/* <div ref={lastMessageRef}></div> */}
         <div className="new-msg-search">
-          <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <span className="to-new-msg">To:</span>
+            {selectedUsers.map((selectedUser) => (
+              <div className="selected-user">
+                <span style={{ marginRight: "8px" }}>
+                  {selectedUser.username}
+                </span>
+                <button onClick={(e) => removeUserFromNewMsg(e, selectedUser)}>
+                  x
+                </button>
+              </div>
+            ))}
           </div>
           <input
             className="search-input"
@@ -112,6 +172,8 @@ const NewMessage = ({
           inputValue={searchInputValue.toLowerCase()}
           data={data}
           handleChannelClick={handleChannelClick}
+          handleResultClick={handleResultClick}
+          selectedUsers={selectedUsers}
         />
       )}
 

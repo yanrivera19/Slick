@@ -1,3 +1,6 @@
+import csrfFetch from "./csrf";
+import { receiveWorkspace, getWorkspace } from "./workspaces";
+
 export const RECEIVE_CHANNEL = "channels/RECEIVE_CHANNEL";
 export const REMOVE_CHANNEL = "channels/REMOVE_CHANNEL";
 
@@ -24,7 +27,7 @@ export const fetchChannel = (channelId) => async (dispatch) => {
 
   if (res.ok) {
     const channel = await res.json();
-
+    console.log(channel);
     dispatch(receiveChannel(channel));
   }
 };
@@ -41,6 +44,8 @@ export const createChannel = (channel) => async (dispatch) => {
   if (res.ok) {
     const channel = await res.json();
     dispatch(receiveChannel(channel));
+    const workspace = await dispatch(getWorkspace(channel.channel.workspaceId));
+    dispatch(receiveWorkspace(workspace));
   }
 };
 

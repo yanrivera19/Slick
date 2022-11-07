@@ -2,7 +2,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-const SearchResults = ({ inputValue, data, handleChannelClick }) => {
+const SearchResults = ({
+  inputValue,
+  data,
+  handleChannelClick,
+  handleResultClick,
+  selectedUsers,
+}) => {
   const [filteredData, setFilteredData] = useState([]);
   const sessionUser = useSelector((state) => state.session.user);
 
@@ -29,6 +35,8 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
   };
 
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
+    let userAlreadyInDms = false;
+
     const filtered = data.filter((object) => {
       if (
         inputValueWithoutSymbol.length === 0 &&
@@ -39,6 +47,7 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
       } else if (
         inputValueWithoutSymbol.length === 0 &&
         object.hasOwnProperty("username") &&
+        !selectedUsers.includes(object) &&
         !hashTagSymbol
       ) {
         return true;
@@ -59,6 +68,7 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
       } else if (
         inputValueWithoutSymbol.length > 0 &&
         object.hasOwnProperty("username") &&
+        !selectedUsers.includes(object) &&
         object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
         !hashTagSymbol
       ) {
@@ -78,8 +88,6 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
     setFilteredData(filtered);
   };
 
-  const handleResultClick = (e, resultObj) => {};
-
   if (filteredData.length === 0) {
     return (
       <div className="search-cont">
@@ -91,6 +99,8 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
       </div>
     );
   }
+
+  console.log(filteredData);
 
   return (
     <div className="search-cont">
@@ -121,7 +131,11 @@ const SearchResults = ({ inputValue, data, handleChannelClick }) => {
             obj.username !== sessionUser.username
           ) {
             return (
-              <span key={obj.id * 7} className="search-result-item">
+              <span
+                onClick={(e) => handleResultClick(e, obj)}
+                key={obj.id * 7}
+                className="search-result-item"
+              >
                 {obj.username}
               </span>
             );

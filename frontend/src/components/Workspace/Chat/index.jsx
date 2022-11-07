@@ -19,6 +19,7 @@ const Chat = ({
   conversation,
   subs,
   channelType,
+  dms,
   fetchConversation,
   getConversation,
   lastMsg,
@@ -49,6 +50,7 @@ const Chat = ({
   const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
+  let usersString = "";
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
@@ -81,7 +83,7 @@ const Chat = ({
   return (
     <div
       style={{
-        width: "81vw",
+        width: "100vw",
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -91,13 +93,21 @@ const Chat = ({
           <span>
             {channelType === "Channel"
               ? conversation.name
-              : conversation.users.map((user, idx) => {
-                  if (idx === conversation.users.length - 1) {
-                    return user.username;
-                  } else {
-                    return user.username + ", ";
-                  }
-                })}
+              : conversation.users
+                  .map((user, idx) => {
+                    if (user.id !== sessionUser.id) {
+                      usersString += user.username + ", ";
+                      return user.username;
+
+                      // if (idx === conversation.users.length - 1) {
+                      //   return user.username;
+                      // } else {
+                      //   return user.username + ", ";
+                      // }
+                    }
+                  })
+                  .join(", ")
+                  .slice(0, usersString.length - 2)}
           </span>
         </div>
       </header>
@@ -122,13 +132,22 @@ const Chat = ({
                 placeholder={`Message #${
                   channelType === "Channel"
                     ? conversation.name
-                    : conversation.users.map((user, idx) => {
-                        if (idx === conversation.users.length - 1) {
-                          return user.username;
-                        } else {
-                          return user.username + ", ";
-                        }
-                      })
+                    : // : conversation.users
+                      //     .map((user, idx) => {
+                      //       if (user.id !== sessionUser.id) {
+                      //         return user.username;
+                      //       }
+                      //       // if (
+                      //       //   idx < conversation.users.length - 1 &&
+                      //       //   user.id !== sessionUser.id
+                      //       // ) {
+                      //       //   return user.username;
+                      //       // } else if (user.id !== sessionUser.id) {
+                      //       //   return user.username;
+                      //       // }
+                      //     })
+                      //     .join(", ")
+                      usersString.slice(0, usersString.length - 2)
                 }`}
               />
               <div className="bottom-chat">

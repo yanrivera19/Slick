@@ -1,3 +1,7 @@
+import { RECEIVE_CHANNEL } from "./channels";
+import { RECEIVE_DIRECT_MESSAGE } from "./directMessages";
+import csrfFetch from "./csrf";
+
 export const RECEIVE_WORKSPACE = "workspaces/RECEIVE_WORKSPACE";
 export const REMOVE_WORKSPACE = "workspaces/REMOVE_WORKSPACE";
 
@@ -73,6 +77,10 @@ export default function workspaceReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_WORKSPACE:
       return { ...state, [action.workspace.id]: action.workspace };
+    // case RECEIVE_DIRECT_MESSAGE:
+    //   return { ...state, [action.directMessage.id]: action.directMessage };
+    // case RECEIVE_CHANNEL:
+    //   return action.channel.messages ? { ...action.channel.messages } : null;
     case REMOVE_WORKSPACE:
       const newState = { ...state };
       delete newState[action.workspaceId];

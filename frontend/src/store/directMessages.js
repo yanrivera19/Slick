@@ -1,3 +1,6 @@
+import csrfFetch from "./csrf";
+import { receiveWorkspace, getWorkspace } from "./workspaces";
+
 export const RECEIVE_DIRECT_MESSAGE = "directMessages/RECEIVE_DIRECT_MESSAGE";
 // export const REMOVE_DIRECT_MESSAGE = "direct_messages/REMOVE_direct_message";
 
@@ -17,13 +20,12 @@ export const fetchDirectMessage = (directMessageId) => async (dispatch) => {
 
   if (res.ok) {
     const directMessage = await res.json();
-    console.log(directMessage);
     dispatch(receiveDirectMessage(directMessage));
   }
 };
 
 export const createDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await fetch(`/api/direct_messages`, {
+  const res = await csrfFetch(`/api/direct_messages`, {
     method: "POST",
     body: JSON.stringify(directMessage),
     headers: {
@@ -34,6 +36,11 @@ export const createDirectMessage = (directMessage) => async (dispatch) => {
   if (res.ok) {
     const directMessage = await res.json();
     dispatch(receiveDirectMessage(directMessage));
+    const workspace = await dispatch(
+      getWorkspace(directMessage.directMessage.workspaceId)
+    );
+    dispatch(receiveWorkspace(workspace));
+    return directMessage;
   }
 };
 
@@ -65,7 +72,11 @@ export const updateDirectMessage = (directMessage) => async (dispatch) => {
 export default function directMessageReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_DIRECT_MESSAGE:
-      return { ...state, [action.directMessage.id]: action.directMessage };
+      return {
+        ...state,
+        [action.directMessage.directMessage.id]:
+          action.directMessage.directMessage,
+      };
     // case REMOVE_DIRECT_MESSAGE:
     //   const newState = { ...state };
     //   delete newState[action.directMessageId];

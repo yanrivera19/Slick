@@ -62,7 +62,7 @@ const Workspace = () => {
       channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
       directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
     };
-  }, [workspaceId, channels.length, directMessages.length]);
+  }, [workspaceId]);
 
   const subscription = (rooms) => {
     rooms.forEach((room) => {
@@ -114,6 +114,8 @@ const Workspace = () => {
     subscription(Object.values(data.directMessages));
   };
 
+  const checkUsersDm = (dms) => {};
+
   const handleChannelClick = (e, channel, channelType, newMsg = false) => {
     setNewMessage(false);
     setShownConversation(channel);
@@ -127,6 +129,7 @@ const Workspace = () => {
 
   const checkDmUsers = (dm) => {
     let includesUser = false;
+    dmUsersString = "";
 
     dm.users.map((user, idx) => {
       if (user.username === sessionUser.username) {
@@ -140,11 +143,12 @@ const Workspace = () => {
       dmUsersArray.push({
         dmUsers: dmUsersString.slice(0, dmUsersString.length - 2),
         dm: dm,
+        id: dm.id,
       });
     }
   };
 
-  // console.log(sessionUser);
+  console.log(dmUsersString);
 
   return workspace ? (
     <div className="app-container">
@@ -184,18 +188,20 @@ const Workspace = () => {
                 <span>Channels</span>
               </div>
               {channels.map((channel) => {
-                return (
-                  <div
-                    className="channel-item"
-                    onClick={(e) => handleChannelClick(e, channel, "channel")}
-                    key={channel.id}
-                  >
-                    <span style={{ marginRight: "11px", paddingTop: "4px" }}>
-                      <HashTagIcon />
-                    </span>
-                    <span>{channel.name}</span>
-                  </div>
-                );
+                if (sessionUser.channels[channel.id]) {
+                  return (
+                    <div
+                      className="channel-item"
+                      onClick={(e) => handleChannelClick(e, channel, "channel")}
+                      key={channel.id}
+                    >
+                      <span style={{ marginRight: "11px", paddingTop: "4px" }}>
+                        <HashTagIcon />
+                      </span>
+                      <span>{channel.name}</span>
+                    </div>
+                  );
+                }
               })}
               <div className="channel-item-header">
                 <span className="square-btn-sidebar plus">
@@ -212,22 +218,26 @@ const Workspace = () => {
                 <span>Direct messages</span>
               </div>
               {directMessages.map((directMessage) => {
-                return (
-                  <div
-                    className="dm-item"
-                    key={directMessage.id}
-                    onClick={(e) => handleChannelClick(e, directMessage, "dm")}
-                  >
-                    {checkDmUsers(directMessage)}
+                if (sessionUser.directMessages[directMessage.id]) {
+                  return (
+                    <div
+                      className="dm-item"
+                      key={directMessage.id}
+                      onClick={(e) =>
+                        handleChannelClick(e, directMessage, "dm")
+                      }
+                    >
+                      {checkDmUsers(directMessage)}
 
-                    {/* // return ( */}
-                    <div className="dm-item" key={directMessage.id}>
-                      <span></span>
-                      <span className="dm-users">{dmUsersString}</span>
+                      {/* // return ( */}
+                      <div className="dm-item" key={directMessage.id}>
+                        <span></span>
+                        <span className="dm-users">{dmUsersString}</span>
+                      </div>
+                      {/* // ); */}
                     </div>
-                    {/* // ); */}
-                  </div>
-                );
+                  );
+                }
               })}
               <div className="dm-item-header">
                 <span className="square-btn-sidebar plus">
@@ -254,6 +264,7 @@ const Workspace = () => {
             conversation={shownConversation}
             subs={directMessageSubscriptions}
             channelType="DirectMessage"
+            dms={dmUsersArray}
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}
           />

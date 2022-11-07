@@ -1,3 +1,4 @@
+	# debugger
 	json.direct_message do
 		json.extract! @direct_message, :id, :workspace_id, :created_at
 	end
