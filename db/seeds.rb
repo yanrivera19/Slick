@@ -61,7 +61,7 @@ ApplicationRecord.transaction do
 
 	w1 = Workspace.create!(
 		name: "Fight Club",
-		owner_id: u1.id
+		owner_id: u5.id
 	)
 
 	ApplicationRecord.connection.reset_pk_sequence!('workspace_subscriptions')

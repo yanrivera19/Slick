@@ -1,0 +1,52 @@
+.input-field:focus {
+  border-color: #0000;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(18, 100, 163, 1), 0 0 0 5px #1d9bd14d;
+  outline: none;
+}
+
+.input-field {
+  margin-top: 20px;
+  border: 1px solid rgba(21, 20, 21, 0.171);
+  border-radius: 4px;
+  padding: 8px 20px;
+}
+
+.create-channel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(21, 20, 21, 0.295);
+  font-size: 15px;
+  font-weight: 700;
+  height: 36px;
+  min-width: 70px;
+  padding: 0 12px 1px;
+  border-radius: 4px;
+}
+
+.create-channel-btn.ready {
+  background-color: #007a5a;
+  color: #fff;
+  opacity: 1;
+  transition: all 80ms linear;
+}
+
+.create-channel-btn.ready:hover {
+  background-color: #148567;
+}
+
+.create-channel-info {
+  padding: 10px 24px;
+  margin-bottom: 24px;
+}
+
+.input-field.name {
+  margin-bottom: 20px;
+}
+
+#about-text {
+  font-size: 13px;
+}

@@ -35,9 +35,17 @@
   background: #1d9bd11a;
   border-radius: 4px;
   font-weight: 700;
-  padding-right: 4px;
+  padding: 4px;
   white-space: nowrap;
   display: flex;
   align-items: center;
   line-height: 26px;
+}
+
+.remove-selected-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+  font-weight: 700;
 }

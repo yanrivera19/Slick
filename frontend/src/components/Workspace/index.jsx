@@ -1,6 +1,5 @@
-import DirectMessage from "./DirectMessage";
-import Channel from "./Channel";
 import Chat from "./Chat";
+import SideBar from "./SideBar";
 import NewMessage from "./NewMessage";
 import { useState, useEffect } from "react";
 import consumer from "../../consumer";
@@ -20,38 +19,29 @@ import {
   getMessage,
 } from "../../store/messages";
 import { getUsers, fetchUsers } from "../../store/user";
-import {
-  AiFillCaretDown,
-  AiFillCaretRight,
-  AiOutlinePlus,
-} from "react-icons/ai";
-import { FaPlus } from "react-icons/fa";
-import { BsFillCaretDownFill, BsCaretRightFill } from "react-icons/bs";
-import WriteIcon from "../Svgs&Icons/WriteMsgIcon";
-import HashTagIcon from "../Svgs&Icons/HashTagIcon";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const workspace = useSelector(getWorkspace(workspaceId));
   const dispatch = useDispatch();
-  const [channels, setChannels] = useState([]);
+  // const [channels, setChannels] = useState([]);
   const [directMessages, setDirectMessages] = useState([]);
   //HOW COULD I USE THE JOIN TABLES TO SAVE THE SUBSCRIPTIONS IN THE DB??
   // const [channelSubscriptions, setChannelSubscriptions] = useState([]);
   // const [directMessageSubscriptions, setDirectMessageSubscriptions] = useState(
   //   []
   // );co
-	// const [dmLength, setDmLength] = useState(0);
+  // const [dmLength, setDmLength] = useState(0);
 
   const dms = useSelector((state) => {
-		// setDmLength(state.directMessages.length)
-		return Object.values(state.directMessages)}
-		);
+    // setDmLength(state.directMessages.length)
+    return Object.values(state.directMessages);
+  });
 
   // const messages = useSelector((state) => Object.values(state.messages));
 
-  const channelss = useSelector((state) => Object.values(state.channels));
+  const channels = useSelector((state) => Object.values(state.channels));
   const dmUsers = useSelector((state) => {
     return state.directMessage ? Object.values(state.directMessage.users) : [];
   });
@@ -66,89 +56,80 @@ const Workspace = () => {
   let lastMsg;
   const dmUsersArray = [];
   let subs = [];
-		let dmLength = 0;
-
+  let dmLength = 0;
 
   useEffect(() => {
-
-    dispatch(fetchWorkspace(workspaceId));
+    dispatch(fetchWorkspace(workspaceId)).then((data) => {
+      createSubscriptions(Object.values(data.workspace.directMessages));
+      createSubscriptions(Object.values(data.workspace.channels));
+    });
 
     //  dispatch(fetchWorkspace(workspaceId)).then((data) => {
-    setDatas();
+    // setDatas();
     //  });
-		dmLength = dms.length;
+    dmLength = dms.length;
 
     return () => {
-      channelSubs.forEach((channelSub) => channelSub.unsubscribe());
+      subs.forEach((channelSub) => channelSub.unsubscribe());
       // channelSubscriptions.forEach((channelSub) => channelSub.unsubscribe());
       // directMessageSubscriptions.forEach((dmSub) => dmSub.unsubscribe());
     };
   }, [workspaceId, dmLength]);
 
-  // useEffect(() => {
-
-  // }, [messages])
-
-  // useEffect(() => {
-  //   dms.forEach((dm) => {
-  //     dispatch(fetchDirectMessage(dm.id));
-  //   });
-  // }, [dms.length]);
-
-  const subscription = (rooms) => {
+  const createSubscriptions = (rooms) => {
     rooms.forEach((room) => {
-      let roomName =
-        room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
-      // debugger;
-      let sub = consumer.subscriptions.create(
-        {
-          channel: roomName,
-          id: room.id,
-        },
-        {
-          connected: () => {
-            console.log("connected");
-          },
-          received: ({ type, message, id }) => {
-            // debugger;
-            switch (type) {
-              case "RECEIVE_MESSAGE":
-                // debugger;
-                dispatch(receiveMessage(message));
-                // lastMsg = message;
-                console.log("received:", message.content);
-                break;
-              case "EDIT_MESSAGE":
-                // debugger;
-                dispatch(editMessage(message));
-                lastMsg = message;
-                console.log("received:", message.content);
-                break;
-              case "REMOVE_MESSAGE":
-                dispatch(removeMessage(id));
-                break;
-              default:
-                console.log("Unhandled broadcast: ", type);
-                break;
-            }
-          },
-        }
-      );
-
-      subs.push(sub);
+      // console.log(room)
+      subscription(room);
     });
+  };
 
-    // console.log("subs:", subs);
-    // setChannelSubs([...subs]);
+  const subscription = (room) => {
+    // rooms.forEach((room) => {
+    // debugger
+    let roomName =
+      room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
+    // debugger;
+    let sub = consumer.subscriptions.create(
+      {
+        channel: roomName,
+        id: room.id,
+      },
+      {
+        connected: () => {
+          console.log("connected");
+        },
+        received: ({ type, message, id }) => {
+          // debugger;
+          switch (type) {
+            case "RECEIVE_MESSAGE":
+              // debugger;
+              dispatch(receiveMessage(message));
+              // lastMsg = message;
+              console.log("received:", message.content);
+              break;
+            case "EDIT_MESSAGE":
+              // debugger;
+              dispatch(editMessage(message));
+              lastMsg = message;
+              console.log("received:", message.content);
+              break;
+            case "REMOVE_MESSAGE":
+              dispatch(removeMessage(id));
+              break;
+            default:
+              console.log("Unhandled broadcast: ", type);
+              break;
+          }
+        },
+      }
+    );
+
+    subs.push(sub);
   };
 
   const setDatas = (data) => {
-    // setChannels(Object.values(data.channels));
-    // setDirectMessages(Object.values(data.directMessages));
-    // subscription(Object.values(data.channels));
-    // subscription(Object.values(data.directMessages));
     subscription(dms);
-    subscription(channelss);
+    subscription(channels);
   };
 
   const checkUsersDm = (dms) => {};
@@ -166,33 +147,21 @@ const Workspace = () => {
     setNewMessage(true);
   };
 
-  const checkDmUsers = (dm) => {
-    let usersString = "";
-    // debugger;
-    dm.users
-      .map((user) => {
-        if (user.id !== sessionUser.id) {
-          usersString += user.username + ", ";
-          return user.username;
-        }
-      })
-      .join(", ")
-      .slice(0, usersString.length - 2);
+  const dmUsersNames = (users) => {
+    let filteredUsers = users.filter(
+      (user) => user.username !== sessionUser.username
+    );
+    let results = filteredUsers.map((user, idx) => {
+      if (idx === filteredUsers.length - 1) {
+        return user.username;
+      } else {
+        return user.username + ", ";
+      }
+    });
 
-    dmUsersArray.push(usersString);
+    dmUsersArray.push([results.join("")]);
+    return results.join("");
   };
-
-  const addDmUsersNames = () => {};
-
-  // const checkDmUsers = (dm) => {
-  // 	dispatch(fetchDirectMessage(dm.id));
-  // }
-
-  console.log(dmUsersArray);
-
-  console.log("dms:", dms);
-  console.log("channels:", channelss);
-  // console.log("dm-users:", dmUsers);
 
   return workspace ? (
     <div className="app-container">
@@ -205,103 +174,15 @@ const Workspace = () => {
         <div className="nav-left-side"></div>
       </nav>
       <div className="app-main-cont">
-        <aside className="app-side-bar">
-          <div>
-            <header className="workspace-header">
-              <div className="workspace-header-cont">
-                <div>
-                  <span id="works-name">{workspace.name}</span>
-                  <span></span>
-                </div>
-                <button className="write-btn" onClick={handleNewMessageClick}>
-                  <WriteIcon />
-                </button>
-              </div>
-            </header>
-            <section id="extras-section">
-              <div>
-                <span>Direct messages</span>
-                <span></span>
-              </div>
-            </section>
-            <section id="channel-section">
-              <div className="channel-item-header">
-                <span className="square-btn-sidebar">
-                  <BsFillCaretDownFill size={12} />
-                </span>
-                <span>Channels</span>
-              </div>
-              {channelss.map((channel) => {
-                if (sessionUser.channels[channel.id]) {
-                  return (
-                    <div
-                      className="channel-item"
-                      onClick={(e) => handleChannelClick(e, channel, "channel")}
-                      key={channel.id}
-                    >
-                      <span style={{ marginRight: "11px", paddingTop: "4px" }}>
-                        <HashTagIcon />
-                      </span>
-                      <span>{channel.name}</span>
-                    </div>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-              <div className="channel-item-header">
-                <span className="square-btn-sidebar plus">
-                  <FaPlus size={10} />
-                </span>
-                <span>Add channels</span>
-              </div>
-            </section>
-            <section id="dm-section">
-              <div className="dm-item-header">
-                <span className="square-btn-sidebar">
-                  <BsFillCaretDownFill size={12} />
-                </span>
-                <span>Direct messages</span>
-              </div>
-              {dms.map((directMessage, idx) => {
-                // if (sessionUser.directMessages[directMessage.id]) {
-                const members = directMessage.users;
-                const names = members.map((member) => {
-                    if (member.username !== sessionUser.username)
-                      return member.username;
-                  })
-                  .join(", ");
-                // debugger;
-                return (
-                  <div
-                    className="dm-item"
-                    key={directMessage.id}
-                    onClick={(e) => handleChannelClick(e, directMessage, "dm")}
-                  >
-                    {/* // return ( */}
-                    <div className="dm-item" key={directMessage.id}>
-                      <span></span>
-                      <span className="dm-users">{names}</span>
-                    </div>
-                    {/* // ); */}
-                  </div>
-                );
-                // } else {
-                //   return null;
-                // }
-              })}
-              <div className="dm-item-header">
-                <span className="square-btn-sidebar plus">
-                  <FaPlus size={10} />
-                </span>
-                <span>Add teammates</span>
-              </div>
-            </section>
-          </div>
-          <section id="sidebar-footer">
-            <p>{sessionUser.username}</p>
-          </section>
-        </aside>
+        <SideBar
+          workspace={workspace}
+          handleNewMessageClick={handleNewMessageClick}
+          channels={channels}
+          dms={dms}
+          sessionUser={sessionUser}
+          handleChannelClick={handleChannelClick}
+          dmUsersNames={dmUsersNames}
+        />
         {conversationType === "channel" ? (
           <Chat
             conversation={shownConversation}
@@ -323,54 +204,12 @@ const Workspace = () => {
         {newMessage ? (
           <NewMessage
             users={Object.values(workspace.users)}
-            channels={channelss}
-            dms={dmUsersArray}
+            channels={channels}
+            dms={dms}
             handleChannelClick={handleChannelClick}
           />
         ) : null}
-
-        {/* <h3 style={{ marginBottom: "5px" }}>Direct Messages:</h3> */}
-        {/* <div style={{ marginBottom: "20px" }}>
-				{directMessages.map((directMessage) => {
-					let dmSub = subscription("DirectMessagesChannel", directMessage.id);
-					directMessageSubscriptions.push(dmSub);
-
-					return (
-						<p onClick={(e) => handleChannelClick(e, directMessage, "dm")}>
-							{directMessage.users.map((user) => {
-								return `${user.username}, `;
-							})}
-						</p>
-					);
-				})}
-			</div> */}
-
-        {/* {conversationType === "dm" ? (
-          <Chat
-            conversation={shownConversation}
-            subs={directMessageSubscriptions}
-            channelType="DirectMessage"
-            fetchConversation={fetchDirectMessage}
-            getConversation={getDirectMessage}
-            lastMsg={lastMsg}
-          />
-        ) : null} */}
       </div>
-      {/* <h1 style={{ marginBottom: "20px" }}>{workspace.name}</h1> */}
-      {/* <h3 style={{ marginBottom: "5px" }}>Channels:</h3> */}
-      {/* <div style={{ marginBottom: "20px" }}>
-        {channels.map((channel) => {
-          let channelSub = subscription("ChannelsChannel", channel.id);
-          console.log(channelSub);
-          channelSubscriptions.push(channelSub);
-
-          return (
-            <p onClick={(e) => handleChannelClick(e, channel, "channel")}>
-              {channel.name}
-            </p>
-          );
-        })}
-      </div> */}
     </div>
   ) : null;
 };

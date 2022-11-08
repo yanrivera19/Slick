@@ -37,6 +37,7 @@ export const fetchWorkspace = (workspaceId) => async (dispatch) => {
   if (res.ok) {
     const workspace = await res.json();
     let data = await dispatch(receiveWorkspace(workspace));
+		// debugger
     return data;
   }
 };

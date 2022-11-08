@@ -92,12 +92,26 @@ const Chat = ({
     setMessageContent("");
   };
 
-  // console.log("dmmess:", dmMessages);
-  // console.log("channmess:", channelMessages);
-	console.log(messages)
+  const dmUsersNames = (users) => {
+    console.log(users);
+    let filteredUsers = users.filter(
+      (user) => user.username !== sessionUser.username
+    );
+    // console.log(filteredUsers);
+    let results = filteredUsers.map((user, idx) => {
+      if (idx === filteredUsers.length - 1) {
+        return user.username;
+      } else {
+        return user.username + ", ";
+      }
+    });
+
+    // console.log(results);
+    return results.join("");
+  };
 
   if (!conversation) return null;
-  console.log(conversation);
+  console.log(conversation.name);
   console.log(channelType);
   return (
     <div
@@ -110,30 +124,18 @@ const Chat = ({
       <header className="chat-header">
         <div className="chat-header-cont">
           <span>
-            {/* {channelType && channelType === "Channel"
+            {channelType === "Channel"
               ? conversation.name
-              : conversation.users
-                  .map((user, idx) => {
-                    if (user.id !== sessionUser.id) {
-                      usersString += user.username + ", ";
-                      return user.username;
-
-                      // if (idx === conversation.users.length - 1) {
-                      //   return user.username;
-                      // } else {
-                      //   return user.username + ", ";
-                      // }
-                    }
-                  })
-                  .join(", ")
-                  .slice(0, usersString.length - 2)} */}
+              : dmUsersNames(conversation.users)}
           </span>
         </div>
       </header>
       <div className="messages-container" ref={messageContRef}>
         {messages
-          ? Object.values(messages).map((message) => {
-              return <Message key={message.id} message={message} />;
+          ? Object.values(messages).map((message, idx) => {
+              return (
+                <Message key={message.id} position={idx} message={message} />
+              );
             })
           : null}
         <div ref={lastMessageRef}></div>
@@ -151,22 +153,7 @@ const Chat = ({
                 placeholder={`Message #${
                   channelType === "Channel"
                     ? conversation.name
-                    : // : conversation.users
-                      //     .map((user, idx) => {
-                      //       if (user.id !== sessionUser.id) {
-                      //         return user.username;
-                      //       }
-                      //       // if (
-                      //       //   idx < conversation.users.length - 1 &&
-                      //       //   user.id !== sessionUser.id
-                      //       // ) {
-                      //       //   return user.username;
-                      //       // } else if (user.id !== sessionUser.id) {
-                      //       //   return user.username;
-                      //       // }
-                      //     })
-                      //     .join(", ")
-                      usersString.slice(0, usersString.length - 2)
+                    : dmUsersNames(conversation.users)
                 }`}
               />
               <div className="bottom-chat">

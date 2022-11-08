@@ -16,13 +16,10 @@ const WelcomePage = () => {
   const workspaces = useSelector((state) => Object.values(state.workspaces));
 
   useEffect(() => {
-    // debugger;
     dispatch(fetchWorkspaces());
   }, [clientId]);
 
   if (!sessionUser) return <Redirect to="/" />;
-
-  console.log(workspaces);
 
   return (
     <div className="welcome-container">

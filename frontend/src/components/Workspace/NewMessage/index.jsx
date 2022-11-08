@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import csrfFetch from "../../../store/csrf";
 import SearchResults from "../SearchResults";
+import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import {
   createMessage,
   updateMessage,
@@ -51,25 +52,34 @@ const NewMessage = ({
   const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
   const [searchInputValue, setSearchInputValue] = useState("");
+  // const data = [...channels, ...users, ...dms];
   const data = [...channels, ...users, ...dms];
   const [selectedUsers, setSelectedUsers] = useState([]);
   const oneToOneDmUsers = [];
+  const [udm, setudm] = useState();
 
   // let data;
 
-  useEffect(() => {
-    checkDmWithUser();
-  }, []);
+  // useEffect(() => {
+  //   checkDmWithUser();
+  // }, []);
 
   const checkDmWithUser = () => {
-    dms.forEach((dm) => {
-      if (!dm.dmUsers.includes(",")) {
-        oneToOneDmUsers.push(dm.dmUsers);
+    let results = dms.filter((dm) => {
+      // debugger;
+      if (!dm.users.join("").includes(",")) {
+        oneToOneDmUsers.push(...dm);
+        return false;
+      } else {
+        return true;
+        // data.push(dm);
       }
     });
-    console.log(oneToOneDmUsers);
-  };
 
+    setudm(results);
+    // console.log(oneToOneDmUsers);
+  };
+  // console.log(udm);
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -123,6 +133,9 @@ const NewMessage = ({
     // });
   };
 
+  // console.log(data);
+  // console.log(oneToOneDmUsers);
+
   const handleResultClick = (e, user) => {
     // if (!selectedUsers.includes(user)) {
     setSelectedUsers((users) => [...users, user]);
@@ -136,7 +149,7 @@ const NewMessage = ({
     );
   };
 
-  // console.log(dmUsers);
+  // console.log(dms);
 
   return (
     <div
@@ -161,8 +174,11 @@ const NewMessage = ({
                 <span style={{ marginRight: "8px" }}>
                   {selectedUser.username}
                 </span>
-                <button onClick={(e) => removeUserFromNewMsg(e, selectedUser)}>
-                  x
+                <button
+                  onClick={(e) => removeUserFromNewMsg(e, selectedUser)}
+                  className="remove-selected-btn"
+                >
+                  <CrossIcon size={16} />
                 </button>
               </div>
             ))}
@@ -180,6 +196,7 @@ const NewMessage = ({
         <SearchResults
           inputValue={searchInputValue.toLowerCase()}
           data={data}
+          dms={dms}
           handleChannelClick={handleChannelClick}
           handleResultClick={handleResultClick}
           selectedUsers={selectedUsers}

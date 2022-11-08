@@ -4,7 +4,6 @@ import SigninPage from "./components/SigninPage";
 import SignupPage from "./components/SignupPage";
 import WelcomePage from "./components/WelcomePage";
 import Workspace from "./components/Workspace";
-import Channel from "./components/Workspace/Channel";
 
 function App() {
   return (
@@ -12,9 +11,6 @@ function App() {
       <Switch>
         <Route path="/client/:clientId/get-started/landing">
           <WelcomePage />
-        </Route>
-        <Route exact path="/client/:clientId/:workspaceId/channel/:channelId">
-          <Channel />
         </Route>
         <Route path="/client/:clientId/:workspaceId/">
           <Workspace />

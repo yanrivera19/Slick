@@ -28,7 +28,7 @@ export const fetchChannel = (channelId) => async (dispatch) => {
 
   if (res.ok) {
     const channel = await res.json();
-    console.log(channel);
+    // console.log(channel);
     dispatch(receiveChannel(channel));
   }
 };
