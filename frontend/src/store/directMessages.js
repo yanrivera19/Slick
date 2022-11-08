@@ -1,5 +1,6 @@
 import csrfFetch from "./csrf";
 import { receiveWorkspace, getWorkspace } from "./workspaces";
+import { RECEIVE_WORKSPACE } from "./workspaces";
 
 export const RECEIVE_DIRECT_MESSAGE = "directMessages/RECEIVE_DIRECT_MESSAGE";
 // export const REMOVE_DIRECT_MESSAGE = "direct_messages/REMOVE_direct_message";
@@ -71,6 +72,9 @@ export const updateDirectMessage = (directMessage) => async (dispatch) => {
 
 export default function directMessageReducer(state = {}, action) {
   switch (action.type) {
+    case RECEIVE_WORKSPACE:
+      // debugger;
+      return { ...action.workspace.directMessages };
     case RECEIVE_DIRECT_MESSAGE:
       return {
         ...state,

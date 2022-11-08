@@ -34,19 +34,25 @@ const Chat = ({
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
 
-  const messages = useSelector((state) => {
-    debugger;
-    return state.messages
-      ? Object.values(state.messages).filter((message) => {
-          if (
-            message.messageableId === conversation.id &&
-            message.messageableType === channelType
-          ) {
-            return message;
-          }
-        })
-      : {};
-  });
+  // const dmMessages = useSelector((state) => {
+  //   // debugger;
+  //   // return state.messages
+  //   //   ? Object.values(state.messages).filter((message) => {
+  //   //       if (
+  //   //         message.messageableId === conversation.id &&
+  //   //         message.messageableType === channelType
+  //   //       ) {
+  //   //         return message;
+  //   //       }
+  //   //     })
+  //   //   : {};
+  //   return state.directMessage
+  //     ? Object.values(state.directMessage.messages)
+  //     : [];
+  // });
+  // const channelMessages = useSelector((state) => {
+  //   return state.channel ? Object.values(state.channel.messages) : [];
+  // });
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
   let hoveredElement = "";
@@ -55,8 +61,12 @@ const Chat = ({
   const [date, setDate] = useState(null);
   let usersString = "";
 
+  let messages = useSelector((state) =>
+    state.messages ? Object.values(state.messages) : []
+  );
+
   useEffect(() => {
-    debugger;
+    // debugger;
     dispatch(fetchConversation(conversation.id));
   }, [conversation]);
 
@@ -82,8 +92,13 @@ const Chat = ({
     setMessageContent("");
   };
 
-  if (!conversation || !messages) return null;
-  console.log(messages);
+  // console.log("dmmess:", dmMessages);
+  // console.log("channmess:", channelMessages);
+	console.log(messages)
+
+  if (!conversation) return null;
+  console.log(conversation);
+  console.log(channelType);
   return (
     <div
       style={{
@@ -95,7 +110,7 @@ const Chat = ({
       <header className="chat-header">
         <div className="chat-header-cont">
           <span>
-            {channelType && channelType === "Channel"
+            {/* {channelType && channelType === "Channel"
               ? conversation.name
               : conversation.users
                   .map((user, idx) => {
@@ -111,7 +126,7 @@ const Chat = ({
                     }
                   })
                   .join(", ")
-                  .slice(0, usersString.length - 2)}
+                  .slice(0, usersString.length - 2)} */}
           </span>
         </div>
       </header>

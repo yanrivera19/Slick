@@ -113,7 +113,7 @@ const NewMessage = ({
         }
       });
 
-      debugger;
+      // debugger;
       handleChannelClick(e, dm.directMessage, "dm");
       setLastMessage(messageContent);
       setMessageContent("");

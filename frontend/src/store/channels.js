@@ -1,5 +1,6 @@
 import csrfFetch from "./csrf";
 import { receiveWorkspace, getWorkspace } from "./workspaces";
+import { RECEIVE_WORKSPACE } from "./workspaces";
 
 export const RECEIVE_CHANNEL = "channels/RECEIVE_CHANNEL";
 export const REMOVE_CHANNEL = "channels/REMOVE_CHANNEL";
@@ -76,6 +77,10 @@ export const deleteChannel = (channelId) => async (dispatch) => {
 
 export default function channelReducer(state = {}, action) {
   switch (action.type) {
+    case RECEIVE_WORKSPACE:
+      return action.workspace.channels
+        ? { ...action.workspace.channels }
+        : null;
     case RECEIVE_CHANNEL:
       // debugger;
       return { ...state, [action.channel.channel.id]: action.channel.channel };

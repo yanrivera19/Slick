@@ -2,6 +2,10 @@ class Api::DirectMessagesController < ApplicationController
 	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId"]
   before_action :require_logged_in
 
+	# def index 
+	# 	@direct_messages = DirectMessage.where({})
+	# end
+
   def create
 		@direct_message = DirectMessage.new(direct_message_params)
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)

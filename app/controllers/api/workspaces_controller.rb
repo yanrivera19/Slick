@@ -10,6 +10,12 @@ class Api::WorkspacesController < ApplicationController
     end
   end
 
+	def index 
+		@workspaces = current_user.workspaces 
+
+		render :index
+	end
+
 	def update 
 		@workspace = Workspace.find_by_id(params[:id]) 
 		#@workspace?updaste or workspace&update????
@@ -22,6 +28,13 @@ class Api::WorkspacesController < ApplicationController
 
 	def show
 		@workspace = Workspace.find_by_id(params[:id])
+		@direct_messages = DirectMessage.joins(:direct_message_subscriptions).where(direct_messages: {workspace_id: params[:id]}).where(direct_message_subscriptions: {user_id: current_user.id})
+		# @messages = []
+		# @direct_messages.each do |direct_message| 
+		# 	direct_message.messages.each do |message| 
+		# 		@message << message
+		# 	end
+		# end
 		render :show
 	end
 
@@ -37,6 +50,6 @@ class Api::WorkspacesController < ApplicationController
 	private 
 
 	def workspace_params
-		params.require(:workspace).permit(:name)
+		params.require(:workspace).permit(:name, :workspace_id)
 	end
 end

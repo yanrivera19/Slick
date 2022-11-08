@@ -3,12 +3,20 @@ import { RECEIVE_DIRECT_MESSAGE } from "./directMessages";
 import csrfFetch from "./csrf";
 
 export const RECEIVE_WORKSPACE = "workspaces/RECEIVE_WORKSPACE";
+export const RECEIVE_WORKSPACES = "workspaces/RECEIVE_WORKSPACES";
 export const REMOVE_WORKSPACE = "workspaces/REMOVE_WORKSPACE";
 
 export const receiveWorkspace = (workspace) => {
   return {
     type: RECEIVE_WORKSPACE,
     workspace,
+  };
+};
+
+export const receiveWorkspaces = (workspaces) => {
+  return {
+    type: RECEIVE_WORKSPACES,
+    workspaces,
   };
 };
 
@@ -30,6 +38,16 @@ export const fetchWorkspace = (workspaceId) => async (dispatch) => {
     const workspace = await res.json();
     let data = await dispatch(receiveWorkspace(workspace));
     return data;
+  }
+};
+
+export const fetchWorkspaces = () => async (dispatch) => {
+  const res = await fetch(`/api/workspaces/`);
+  if (res.ok) {
+    const workspaces = await res.json();
+    // debugger;
+    dispatch(receiveWorkspaces(workspaces));
+    // return data;
   }
 };
 
@@ -77,10 +95,8 @@ export default function workspaceReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_WORKSPACE:
       return { ...state, [action.workspace.id]: action.workspace };
-    // case RECEIVE_DIRECT_MESSAGE:
-    //   return { ...state, [action.directMessage.id]: action.directMessage };
-    // case RECEIVE_CHANNEL:
-    //   return action.channel.messages ? { ...action.channel.messages } : null;
+    case RECEIVE_WORKSPACES:
+      return { ...state, ...action.workspaces };
     case REMOVE_WORKSPACE:
       const newState = { ...state };
       delete newState[action.workspaceId];

@@ -87,11 +87,10 @@ export default function messageReducer(state = {}, action) {
   // debugger;
   switch (action.type) {
     case RECEIVE_CHANNEL:
-      return action.channel.messages ? { ...action.channel.messages } : null;
+      // debugger;
+      return { ...action.channel.messages };
     case RECEIVE_DIRECT_MESSAGE:
-      return action.directMessage.messages
-        ? { ...action.directMessage.messages }
-        : null;
+      return { ...action.directMessage.messages };
     case RECEIVE_MESSAGE:
       // debugger;
       return { ...state, [action.message.id]: action.message };

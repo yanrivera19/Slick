@@ -1,6 +1,9 @@
-	debugger
+	# debugger
 	json.direct_message do
 		json.extract! @direct_message, :id, :workspace_id, :created_at
+		json.users @direct_message.users do |user|
+			json.extract! user, :username
+		end
 	end
 
 	json.users do 

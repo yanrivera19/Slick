@@ -16,14 +16,17 @@
 		end
 	end
 	json.direct_messages do
-		@workspace.direct_messages.each do |direct_message|
+		@direct_messages.each do |direct_message|
 			json.set! direct_message.id do 
 				json.extract! direct_message, :id
 				json.users direct_message.users do |user|
-					json.extract! user, :id, :username
+					# debugger
+					json.extract! user, :username
 				end
 			end
-		end
+		end 
+
+
 		# @workspace.direct_messages do |direct_message|
 		# 	json.set! direct_message.id do 
 		# 		json.extract! direct_message, :id,

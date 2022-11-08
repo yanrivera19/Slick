@@ -13,6 +13,7 @@ const rootReducer = combineReducers({
   channels: channelReducer,
   directMessages: directMessageReducer,
   messages: messageReducer,
+  users: userReducer,
 });
 
 let enhancer;

@@ -103,6 +103,55 @@ const SearchResults = ({
           return false;
         }
       }
+      // if (
+      //   inputValueWithoutSymbol.length === 0 &&
+      //   object.hasOwnProperty("type") &&
+      //   !atSymbol
+      // ) {
+      //   return true;
+      // } else if (
+      //   inputValueWithoutSymbol.length === 0 &&
+      //   object.hasOwnProperty("username") &&
+      //   !selectedUsers.includes(object) &&
+      //   !hashTagSymbol &&
+      //   !oneToOneDmUsers.includes(object.username) &&
+      //   selectedUsers.length < 1
+      // ) {
+      //   return true;
+      // } else if (
+      //   inputValueWithoutSymbol.length === 0 &&
+      //   object.hasOwnProperty("dmUsers") &&
+      //   !hashTagSymbol
+      // ) {
+      //   return true;
+      // } else if (
+      //   inputValueWithoutSymbol.length > 0 &&
+      //   object.hasOwnProperty("type") &&
+      //   object.name.toLowerCase().includes(inputValueWithoutSymbol) &&
+      //   !atSymbol
+      // ) {
+      //   // debugger;
+      //   return true;
+      // } else if (
+      //   inputValueWithoutSymbol.length > 0 &&
+      //   object.hasOwnProperty("username") &&
+      //   !selectedUsers.includes(object) &&
+      //   object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
+      //   !hashTagSymbol &&
+      //   !oneToOneDmUsers.includes(object.username) &&
+      //   selectedUsers.length < 1
+      // ) {
+      //   return true;
+      // } else if (
+      //   inputValueWithoutSymbol.length > 0 &&
+      //   object.hasOwnProperty("dmUsers") &&
+      //   object.dmUsers.toLowerCase().includes(inputValueWithoutSymbol) &&
+      //   !hashTagSymbol
+      // ) {
+      //   return true;
+      // } else {
+      //   return false;
+      // }
     });
 
     setFilteredData(filtered);
@@ -148,8 +197,9 @@ const SearchResults = ({
             );
           } else if (
             obj.hasOwnProperty("username") &&
-            obj.username !== sessionUser.username &&
-            (selectedUsers.length > 1 || oneToOneDmUsers.includes(obj.username))
+            obj.username !== sessionUser.username
+            // &&
+            // (selectedUsers.length > 1 || oneToOneDmUsers.includes(obj.username))
           ) {
             return (
               <span
