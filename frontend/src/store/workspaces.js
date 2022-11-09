@@ -37,7 +37,7 @@ export const fetchWorkspace = (workspaceId) => async (dispatch) => {
   if (res.ok) {
     const workspace = await res.json();
     let data = await dispatch(receiveWorkspace(workspace));
-		// debugger
+    // debugger
     return data;
   }
 };
@@ -98,8 +98,12 @@ export default function workspaceReducer(state = {}, action) {
       return { ...state, [action.workspace.id]: action.workspace };
     case RECEIVE_WORKSPACES:
       return { ...state, ...action.workspaces };
+    // case RECEIVE_DIRECT_MESSAGE:
+    //   // debugger;
+    //   return { ...action.workspace.directMessages };
     case REMOVE_WORKSPACE:
       const newState = { ...state };
+
       delete newState[action.workspaceId];
       return newState;
     default:

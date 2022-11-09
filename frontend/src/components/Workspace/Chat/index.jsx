@@ -33,6 +33,9 @@ const Chat = ({
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
+  //  const dms = useSelector((state) => {
+  //    return Object.values(state.directMessages);
+  //  });
 
   // const dmMessages = useSelector((state) => {
   //   // debugger;
@@ -59,6 +62,7 @@ const Chat = ({
   const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
+
   let usersString = "";
 
   let messages = useSelector((state) =>
@@ -66,8 +70,9 @@ const Chat = ({
   );
 
   useEffect(() => {
+    debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation, channelType]);
+  }, [conversation, channelType, messages.length, dms.length]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -110,8 +115,8 @@ const Chat = ({
   };
 
   if (!conversation) return null;
-  console.log(conversation.name);
-  console.log(channelType);
+  // console.log(conversation.name);
+  // console.log(channelType);
   return (
     <div
       style={{

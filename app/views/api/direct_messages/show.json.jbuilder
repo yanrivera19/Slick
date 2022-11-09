@@ -4,6 +4,7 @@
 		json.users @direct_message.users do |user|
 			json.extract! user, :username
 		end
+		#redundatnt data
 	end
 
 	json.users do 

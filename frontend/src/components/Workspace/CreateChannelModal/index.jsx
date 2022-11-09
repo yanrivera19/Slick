@@ -60,6 +60,7 @@ const CreateChannelModal = ({ handleAddChannel }) => {
         }`}
       > */}
       <button
+        disabled={name.trim().length < 1}
         className={`create-channel-btn ${
           name.trim().length > 0 ? "ready" : ""
         }`}

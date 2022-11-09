@@ -22,11 +22,12 @@ const NewMessage = ({
   channels,
   dms,
   handleChannelClick,
+  dmUsersNames,
   // channelForNewMsg,
   // channelTypeForNewMsg
 }) => {
   const [body, setBody] = useState("");
-  const [usersInRoom, setUsersInRoom] = useState({});
+  const [usersInRoom, setUsersInRoom] = useState([]);
   const dispatch = useDispatch();
   const { workspaceId } = useParams();
   // const { clientId, channelId } = useParams();
@@ -34,17 +35,6 @@ const NewMessage = ({
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
-
-  //  const messages = useSelector((state) => {
-  //    return Object.values(state.messages).filter((message) => {
-  //      if (
-  //        message.messageableId === conversation.id &&
-  //        message.messageableType === channelType
-  //      ) {
-  //        return message;
-  //      }
-  //    });
-  //  });
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
   let hoveredElement = "";
@@ -60,9 +50,7 @@ const NewMessage = ({
 
   // let data;
 
-  // useEffect(() => {
-  //   checkDmWithUser();
-  // }, []);
+  useEffect(() => {}, [usersInRoom]);
 
   const checkDmWithUser = () => {
     let results = dms.filter((dm) => {
@@ -80,77 +68,141 @@ const NewMessage = ({
     // console.log(oneToOneDmUsers);
   };
   // console.log(udm);
-  const onSubmit = async (e) => {
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setErrors([]);
+
+  //   const directM = await dispatch(
+  //     createDirectMessage({
+  //       workspaceId: workspaceId,
+  //     })
+  //   );
+
+  //   const message = await dispatch(
+  //     createMessage(
+  //       {
+  //         content: messageContent,
+  //         authorName: sessionUser.username,
+  //         authorId: sessionUser.id,
+  //         messageableType: "DirectMessage",
+  //         messageableId: directM.directMessage.id,
+  //       },
+  //       "newConv"
+  //     )
+  //   );
+
+  //   let usersForNewDm = [...selectedUsers, sessionUser];
+
+  //   // for (let i = 0; i < usersForNewDm.length - 1; i++) {
+  //   //   let dmSub = {
+  //   //     userId: usersForNewDm[i].id,
+  //   //     directMessageId: directM.directMessage.id,
+  //   //   };
+  //   //   const res = await csrfFetch("/api/direct_message_subscriptions", {
+  //   //     method: "POST",
+  //   //     body: JSON.stringify(dmSub),
+  //   //     headers: {
+  //   //       "Content-Type": "application/json",
+  //   //     },
+  //   //   });
+
+  //   //   if (res.ok) {
+  //   //     let directMessageSub = await res.json();
+  //   //     //CATCH ERRORS
+  //   //   }
+  //   // }
+
+  //   //NEED  TO DO THESE IN A SINGLE REQUEST. MODIFY DIRECT MESSAGE CONTROLLER
+  //   //SO THAT IUT EXPECTS MESSAGES AND USERS WHEN CREATED
+  //   //JUST CREATE A DIRECT MESSAGE AND PASS TO IT THE NECESSARY INFO
+
+  //   usersForNewDm.forEach(async (user) => {
+  //     let dmSub = {
+  //       userId: user.id,
+  //       directMessageId: directM.directMessage.id,
+  //     };
+  //     const res = await csrfFetch("/api/direct_message_subscriptions", {
+  //       method: "POST",
+  //       body: JSON.stringify(dmSub),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (res.ok) {
+  //       const directMessageSub = await res.json();
+  //       //CATCH ERRORS
+  //     }
+  //   });
+
+  //   // debugger;
+  //   handleChannelClick(e, directM.directMessage, "DirectMessage");
+  //   setLastMessage(messageContent);
+  //   setMessageContent("");
+  // };
+
+  const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
+    let usersForNewDm = [...selectedUsers, sessionUser];
+    dmUsersNames(usersForNewDm);
 
-    const directM = await dispatch(
+    dispatch(
       createDirectMessage({
         workspaceId: workspaceId,
       })
-    );
-
-    const message = await dispatch(
-      createMessage(
-        {
+    ).then((dm) => {
+      dispatch(
+        createMessage({
           content: messageContent,
           authorName: sessionUser.username,
           authorId: sessionUser.id,
           messageableType: "DirectMessage",
-          messageableId: directM.directMessage.id,
-        },
-        "newConv"
-      )
-    );
+          messageableId: dm.directMessage.id,
+        })
+      );
 
-    let usersForNewDm = [...selectedUsers, sessionUser];
+      // let usersForNewDm = [...selectedUsers, sessionUser];
 
-    for (let i = 0; i < usersForNewDm.length - 1; i++) {
-      let dmSub = {
-        userId: usersForNewDm[i].id,
-        directMessageId: directM.directMessage.id,
-      };
-      const res = await csrfFetch("/api/direct_message_subscriptions", {
-        method: "POST",
-        body: JSON.stringify(dmSub),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      usersForNewDm.forEach(async (user) => {
+        let dmSub = {
+          userId: user.id,
+          directMessageId: dm.directMessage.id,
+        };
+        const res = await csrfFetch("/api/direct_message_subscriptions", {
+          method: "POST",
+          body: JSON.stringify(dmSub),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then(async (res) => {
+          const data = await res.json();
+          console.log(data);
+          // console.log(res.directMessage)
+          setUsersInRoom(Object.values(data.users));
+          // handleChannelClick(e, dm.directMessage, "DirectMessage");
+          // console.log("res.users:", res.users);
+          // console.log("users STATE:", usersInRoom);
+        });
+
+        debugger;
+        // console.log("body:", res.body);
+        // console.log("res-ok:", res.status);
+        if (res.ok) {
+          const directMessageSub = await res.json();
+          //CATCH ERRORS
+          debugger;
+        }
       });
 
-      if (res.ok) {
-        let directMessageSub = await res.json();
-        //CATCH ERRORS
-      }
-    }
-
-    //NEED  TO DO THESE IN A SINGLE REQUEST. MODIFY DIRECT MESSAGE CONTROLLER
-    //SO THAT IUT EXPECTS MESSAGES AND USERS WHEN CREATED
-    //JUST CREATE A DIRECT MESSAGE AND PASS TO IT THE NECESSARY INFO
-
-    // usersForNewDm.forEach(async (user) => {
-    // let dmSub = {
-    //   userId: user.id,
-    //   directMessageId: directM.directMessage.id,
-    // };
-    // const res = await csrfFetch("/api/direct_message_subscriptions", {
-    //   method: "POST",
-    //   body: JSON.stringify(dmSub),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    // if (res.ok) {
-    //   const directMessageSub = await res.json();
-    //   //CATCH ERRORS
+      debugger;
+      handleChannelClick(e, dm.directMessage, "DirectMessage");
+      // setLastMessage(messageContent);
+      // setMessageContent("");
+    });
     // }
+    // return dmSubs;
     // });
-
-    // debugger;
-    handleChannelClick(e, directM.directMessage, "DirectMessage");
-    setLastMessage(messageContent);
-    setMessageContent("");
   };
   // }
   // return dmSubs;

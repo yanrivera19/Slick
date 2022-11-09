@@ -38,9 +38,9 @@ const Workspace = () => {
   });
 
   const channels = useSelector((state) => Object.values(state.channels));
-  const dmUsers = useSelector((state) => {
-    return state.directMessage ? Object.values(state.directMessage.users) : [];
-  });
+  // const dmUsers = useSelector((state) => {
+  //   return state.directMessage ? Object.values(state.directMessage.users) : [];
+  // });
   const channelSubscriptions = [];
   const directMessageSubscriptions = [];
   const [shownConversation, setShownConversation] = useState(null);
@@ -52,17 +52,18 @@ const Workspace = () => {
   let dmLength = 0;
 
   useEffect(() => {
+    debugger;
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
       createSubscriptions(Object.values(data.workspace.directMessages));
       createSubscriptions(Object.values(data.workspace.channels));
     });
 
-    dmLength = dms.length;
+    // dmLength = dms.length;
 
     return () => {
       subs.forEach((channelSub) => channelSub.unsubscribe());
     };
-  }, [workspaceId, dmLength]);
+  }, [workspaceId, dms.length]);
 
   const createSubscriptions = (rooms) => {
     rooms.forEach((room) => {
@@ -110,8 +111,8 @@ const Workspace = () => {
     subs.push(sub);
   };
 
-  const handleChannelClick = (e, channel, channelType, newMsg = false) => {
-    // debugger;
+  const handleChannelClick = (e, channel, channelType) => {
+    debugger;
     setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
@@ -138,6 +139,8 @@ const Workspace = () => {
     dmUsersArray.push([results.join("")]);
     return results.join("");
   };
+
+  // console.log(dmUsersArray);
 
   return workspace ? (
     <div className="app-container">
@@ -182,6 +185,7 @@ const Workspace = () => {
             users={Object.values(workspace.users)}
             channels={channels}
             dms={dms}
+            dmUsersNames={dmUsersNames}
             handleChannelClick={handleChannelClick}
           />
         ) : null}

@@ -71,7 +71,7 @@ const WelcomePage = () => {
           </div>
           <div className="teamtext-and-btn">
             <NavLink
-              to={"/signin/signin"}
+              to={`/client/${sessionUser.id}/setup-team-name`}
               style={{ textDecoration: "none", color: "#fff" }}
               className="new-workspace-welcome"
             >
