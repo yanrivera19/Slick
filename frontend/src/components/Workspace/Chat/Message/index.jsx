@@ -67,7 +67,7 @@ const Message = ({ message, position }) => {
     // debugger;
     setDeleteAlertModal(!deleteAlertModal);
   };
-  console.log(deleteAlertModal);
+  // console.log(deleteAlertModal);
 
   const handleDelete = (e, msgId) => {
     dispatch(deleteMessage(msgId));

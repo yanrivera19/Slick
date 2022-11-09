@@ -102,7 +102,6 @@ const Workspace = () => {
           // debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
-              // debugger;
               dispatch(receiveMessage(message));
               // lastMsg = message;
               console.log("received:", message.content);
@@ -183,19 +182,19 @@ const Workspace = () => {
           handleChannelClick={handleChannelClick}
           dmUsersNames={dmUsersNames}
         />
-        {conversationType === "channel" ? (
+        {conversationType === "Channel" ? (
           <Chat
             conversation={shownConversation}
             subs={channelSubscriptions}
-            channelType="Channel"
+            channelType={conversationType}
             fetchConversation={fetchChannel}
             getConversation={getChannel}
           />
-        ) : conversationType === "dm" ? (
+        ) : conversationType === "DirectMessage" ? (
           <Chat
             conversation={shownConversation}
             subs={directMessageSubscriptions}
-            channelType="DirectMessage"
+            channelType={conversationType}
             dms={dmUsersArray}
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}

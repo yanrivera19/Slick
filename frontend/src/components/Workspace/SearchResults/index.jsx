@@ -153,7 +153,7 @@ const SearchResults = ({
           } else if (obj.hasOwnProperty("name")) {
             return (
               <span
-                onClick={(e) => handleChannelClick(e, obj, "channel", true)}
+                onClick={(e) => handleChannelClick(e, obj, "Channel", true)}
                 className="search-result-item"
                 key={obj.id * 15}
               >
@@ -177,7 +177,7 @@ const SearchResults = ({
           } else if (obj.hasOwnProperty("users")) {
             return (
               <span
-                onClick={(e) => handleChannelClick(e, obj, "dm", true)}
+                onClick={(e) => handleChannelClick(e, obj, "DirectMessage", true)}
                 className="search-result-item"
                 key={obj.id * 29}
               >

@@ -124,7 +124,7 @@ const NewMessage = ({
       });
 
       // debugger;
-      handleChannelClick(e, dm.directMessage, "dm");
+      handleChannelClick(e, dm.directMessage, "DirectMessage");
       setLastMessage(messageContent);
       setMessageContent("");
     });

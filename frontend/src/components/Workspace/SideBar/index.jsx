@@ -72,7 +72,7 @@ const SideBar = ({
                 return (
                   <div
                     className="channel-item"
-                    onClick={(e) => handleChannelClick(e, channel, "channel")}
+                    onClick={(e) => handleChannelClick(e, channel, "Channel")}
                     key={channel.id}
                   >
                     <span style={{ marginRight: "11px", paddingTop: "4px" }}>
@@ -113,7 +113,7 @@ const SideBar = ({
                 return (
                   <div
                     key={directMessage.id}
-                    onClick={(e) => handleChannelClick(e, directMessage, "dm")}
+                    onClick={(e) => handleChannelClick(e, directMessage, "DirectMessage")}
                   >
                     {/* // return ( */}
                     <div className="dm-item" key={directMessage.id}>

@@ -92,8 +92,16 @@ export default function messageReducer(state = {}, action) {
     case RECEIVE_DIRECT_MESSAGE:
       return { ...action.directMessage.messages };
     case RECEIVE_MESSAGE:
-      // debugger;
-      return { ...state, [action.message.id]: action.message };
+      let checker = state[Object.keys(state)[0]];
+
+      if (
+        checker.messageableId === action.message.messageableId &&
+        checker.messageableType === action.message.messageableType
+      ) {
+        return { ...state, [action.message.id]: action.message };
+      } else {
+        return state;
+      }
     case EDIT_MESSAGE:
       // return { ...state, [action.message.id]: action.message };
       return action.message

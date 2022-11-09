@@ -111,8 +111,8 @@ const Chat = ({
   };
 
   if (!conversation) return null;
-  console.log(conversation.name);
-  console.log(channelType);
+  // console.log(conversation.name);
+  // console.log(channelType);
   return (
     <div
       style={{

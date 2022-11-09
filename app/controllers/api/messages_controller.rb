@@ -5,6 +5,7 @@ class Api::MessagesController < ApplicationController
 	before_action :require_logged_in
 
   def create
+		# debugger
 		@message = Message.new(message_params)
 		@author = User.find_by(id: params[:author_id])
 		# debugger
