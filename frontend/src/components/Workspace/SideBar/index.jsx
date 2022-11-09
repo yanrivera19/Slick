@@ -9,6 +9,7 @@ import { BsFillCaretDownFill, BsCaretRightFill } from "react-icons/bs";
 import WriteIcon from "../../Svgs&Icons/WriteMsgIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import CreateChannelModal from "../CreateChannelModal";
+import AddTeammatesModal from "../AddTeammatesModal";
 
 const SideBar = ({
   workspace,
@@ -22,17 +23,40 @@ const SideBar = ({
   const [hideDms, setHideDms] = useState(false);
   const [hideChannels, setHideChannels] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
 
   const handleAddChannel = () => {
     setShowCreateChannelModal(!showCreateChannelModal);
   };
 
+  const handleOpenAddTeamModal = () => {
+    setShowAddTeammateModal(!showAddTeammateModal);
+  };
+
+  const handleAddUsers = () => {
+    setShowAddTeammateModal(!showAddTeammateModal);
+  };
+
+  // console.log(workspace.ownerId === sessionUser.id);
+
   return (
     <>
       <section
-        className={showCreateChannelModal ? "delete-modal-container" : "hide"}
+        className={
+          showCreateChannelModal ? "create-channel-modal-container" : "hide"
+        }
       >
         <CreateChannelModal handleAddChannel={handleAddChannel} />
+      </section>
+      <section
+        className={
+          showAddTeammateModal ? "add-teammates-modal-container" : "hide"
+        }
+      >
+        <AddTeammatesModal
+          handleOpenAddTeamModal={handleOpenAddTeamModal}
+          handleAddUsers={handleAddUsers}
+        />
       </section>
       <aside className="app-side-bar">
         <div>
@@ -54,11 +78,11 @@ const SideBar = ({
             </div>
           </section>
           <section id="channel-section">
-            <div className="channel-item-header">
-              <span
-                className="square-btn-sidebar"
-                onClick={() => setHideChannels(!hideChannels)}
-              >
+            <div
+              className="channel-item-header"
+              onClick={() => setHideChannels(!hideChannels)}
+            >
+              <span className="square-btn-sidebar">
                 {hideChannels ? (
                   <BsCaretRightFill size={12} />
                 ) : (
@@ -91,13 +115,13 @@ const SideBar = ({
             </div>
           </section>
           <section id="dm-section">
-            <div className="dm-item-header">
-              <span
-                className="square-btn-sidebar"
-                onClick={() => setHideDms(!hideDms)}
-              >
+            <div
+              className="dm-item-header"
+              onClick={() => setHideDms(!hideDms)}
+            >
+              <span className="square-btn-sidebar">
                 {hideDms ? (
-                  <BsFillCaretDownFill size={12} />
+                  <BsCaretRightFill size={12} />
                 ) : (
                   <BsFillCaretDownFill size={12} />
                 )}
@@ -113,7 +137,9 @@ const SideBar = ({
                 return (
                   <div
                     key={directMessage.id}
-                    onClick={(e) => handleChannelClick(e, directMessage, "DirectMessage")}
+                    onClick={(e) =>
+                      handleChannelClick(e, directMessage, "DirectMessage")
+                    }
                   >
                     {/* // return ( */}
                     <div className="dm-item" key={directMessage.id}>
@@ -128,7 +154,7 @@ const SideBar = ({
                 // }
               })}
             </div>
-            <div className="dm-item-header">
+            <div className="dm-item-header" onClick={handleOpenAddTeamModal}>
               <span className="square-btn-sidebar plus">
                 <FaPlus size={10} />
               </span>

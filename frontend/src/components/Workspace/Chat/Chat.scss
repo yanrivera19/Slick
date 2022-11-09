@@ -121,6 +121,7 @@ textarea {
   background-color: #007a5a;
   color: #fff;
   opacity: 1;
+  transition: all 80ms linear;
 }
 
 .send-msg-cont.ready:hover {

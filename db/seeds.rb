@@ -27,7 +27,7 @@ ApplicationRecord.transaction do
 
   u1 = User.create!(
     username: 'Tyler Durden', 
-    email: 'tylerD@gmail.com', 
+    email: 'tylerd@gmail.com', 
     password: 'password'
   )
 
@@ -55,6 +55,18 @@ ApplicationRecord.transaction do
     password: 'password'
   )
 
+	u6 = User.create!(
+    username: 'Geronimo Blass', 
+    email: 'jblass@gmail.com', 
+    password: 'password'
+  )
+
+	u7 = User.create!(
+    username: 'Edwin Lopez', 
+    email: 'elopez@gmail.com', 
+    password: 'password'
+  )
+
 	ApplicationRecord.connection.reset_pk_sequence!('workspaces')
 
 	puts "creating workspaces"
@@ -62,6 +74,11 @@ ApplicationRecord.transaction do
 	w1 = Workspace.create!(
 		name: "Fight Club",
 		owner_id: u5.id
+	)
+
+	w2 = Workspace.create!(
+		name: "Big in japan",
+		owner_id: u6.id
 	)
 
 	ApplicationRecord.connection.reset_pk_sequence!('workspace_subscriptions')
@@ -93,6 +110,16 @@ ApplicationRecord.transaction do
 		workspace_id: w1.id
 	)
 
+	ws6 = WorkspaceSubscription.create!(
+		user_id: u6.id,
+		workspace_id: w2.id
+	)
+
+	ws7 = WorkspaceSubscription.create!(
+		user_id: u7.id,
+		workspace_id: w2.id
+	)
+
 	ApplicationRecord.connection.reset_pk_sequence!('channels')
 
 	puts "creating channels"
@@ -108,6 +135,20 @@ ApplicationRecord.transaction do
 		name: "serious business",
 		workspace_id: w1.id,
 		owner_id: u1.id,
+		description: "wuu"
+	)
+
+	c3 = Channel.create!(
+		name: "general",
+		workspace_id: w2.id,
+		owner_id: u6.id,
+		description: "lol"
+	)
+
+	c4 = Channel.create!(
+		name: "random",
+		workspace_id: w2.id,
+		owner_id: u6.id,
 		description: "wuu"
 	)
 
@@ -168,6 +209,26 @@ ApplicationRecord.transaction do
 	cs10 = ChannelSubscription.create!(
 		user_id: u5.id,
 		channel_id: c1.id
+	)
+
+	cs11 = ChannelSubscription.create!(
+		user_id: u6.id,
+		channel_id: c3.id
+	)
+
+	cs12 = ChannelSubscription.create!(
+		user_id: u7.id,
+		channel_id: c3.id
+	)
+
+	cs13 = ChannelSubscription.create!(
+		user_id: u6.id,
+		channel_id: c4.id
+	)
+
+	cs14 = ChannelSubscription.create!(
+		user_id: u7.id,
+		channel_id: c4.id
 	)
 
 	ApplicationRecord.connection.reset_pk_sequence!('direct_messages')

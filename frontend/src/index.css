@@ -15,6 +15,7 @@
 @import "../src/components/Workspace/SearchResults/SearchResults.scss";
 @import "../src/components/Workspace/SideBar/SideBar.scss";
 @import "../src/components/Workspace/CreateChannelModal/CreateChannelModal.scss";
+@import "../src/components/Workspace/AddTeammatesModal/AddTeammatesModal.scss";
 
 header,
 nav,

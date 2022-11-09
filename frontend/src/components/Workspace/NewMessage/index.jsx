@@ -80,58 +80,81 @@ const NewMessage = ({
     // console.log(oneToOneDmUsers);
   };
   // console.log(udm);
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
 
-    dispatch(
+    const directM = await dispatch(
       createDirectMessage({
         workspaceId: workspaceId,
       })
-    ).then((dm) => {
-      dispatch(
-        createMessage(
-          {
-            content: messageContent,
-            authorName: sessionUser.username,
-            authorId: sessionUser.id,
-            messageableType: "DirectMessage",
-            messageableId: dm.directMessage.id,
-          },
-          "newConv"
-        )
-      );
+    );
 
-      let usersForNewDm = [...selectedUsers, sessionUser];
+    const message = await dispatch(
+      createMessage(
+        {
+          content: messageContent,
+          authorName: sessionUser.username,
+          authorId: sessionUser.id,
+          messageableType: "DirectMessage",
+          messageableId: directM.directMessage.id,
+        },
+        "newConv"
+      )
+    );
 
-      usersForNewDm.forEach(async (user) => {
-        let dmSub = {
-          userId: user.id,
-          directMessageId: dm.directMessage.id,
-        };
-        const res = await csrfFetch("/api/direct_message_subscriptions", {
-          method: "POST",
-          body: JSON.stringify(dmSub),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    let usersForNewDm = [...selectedUsers, sessionUser];
 
-        if (res.ok) {
-          const directMessageSub = await res.json();
-          //CATCH ERRORS
-        }
+    for (let i = 0; i < usersForNewDm.length - 1; i++) {
+      let dmSub = {
+        userId: usersForNewDm[i].id,
+        directMessageId: directM.directMessage.id,
+      };
+      const res = await csrfFetch("/api/direct_message_subscriptions", {
+        method: "POST",
+        body: JSON.stringify(dmSub),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      // debugger;
-      handleChannelClick(e, dm.directMessage, "DirectMessage");
-      setLastMessage(messageContent);
-      setMessageContent("");
-    });
-    // }
-    // return dmSubs;
+      if (res.ok) {
+        let directMessageSub = await res.json();
+        //CATCH ERRORS
+      }
+    }
+
+    //NEED  TO DO THESE IN A SINGLE REQUEST. MODIFY DIRECT MESSAGE CONTROLLER
+    //SO THAT IUT EXPECTS MESSAGES AND USERS WHEN CREATED
+    //JUST CREATE A DIRECT MESSAGE AND PASS TO IT THE NECESSARY INFO
+
+    // usersForNewDm.forEach(async (user) => {
+    // let dmSub = {
+    //   userId: user.id,
+    //   directMessageId: directM.directMessage.id,
+    // };
+    // const res = await csrfFetch("/api/direct_message_subscriptions", {
+    //   method: "POST",
+    //   body: JSON.stringify(dmSub),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
     // });
+
+    // if (res.ok) {
+    //   const directMessageSub = await res.json();
+    //   //CATCH ERRORS
+    // }
+    // });
+
+    // debugger;
+    handleChannelClick(e, directM.directMessage, "DirectMessage");
+    setLastMessage(messageContent);
+    setMessageContent("");
   };
+  // }
+  // return dmSubs;
+  // });
 
   // console.log(data);
   // console.log(oneToOneDmUsers);
@@ -218,11 +241,16 @@ const NewMessage = ({
               <div className="bottom-chat">
                 <div
                   className={`send-msg-cont ${
-                    messageContent.trim().length > 0 ? "ready" : ""
+                    messageContent.trim().length > 0 && selectedUsers.length > 0
+                      ? "ready"
+                      : ""
                   }`}
                 >
                   <button
-                    disabled={messageContent.trim().length < 1}
+                    disabled={
+                      messageContent.trim().length === 0 ||
+                      selectedUsers.length === 0
+                    }
                     className="send-btn"
                   >
                     <SendMsgIcon />

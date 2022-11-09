@@ -66,9 +66,8 @@ const Chat = ({
   );
 
   useEffect(() => {
-    // debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation]);
+  }, [conversation, channelType]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -111,8 +110,8 @@ const Chat = ({
   };
 
   if (!conversation) return null;
-  // console.log(conversation.name);
-  // console.log(channelType);
+  console.log(conversation.name);
+  console.log(channelType);
   return (
     <div
       style={{

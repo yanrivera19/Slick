@@ -32,9 +32,6 @@ class Api::MessagesController < ApplicationController
 			    **from_template("api/messages/show", message: @message)
 			end
 
-			# @name_of_channel.broadcast_to @message.messageable, 
-			#   from_template("api/#{type}s/show", type: @message)
-      # render "/api/#{type}s/show"
 			render json: nil, status: :ok
     else
       render json: {errors: @message.errors.full_messages}, status: 422

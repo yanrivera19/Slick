@@ -16,6 +16,7 @@ const SearchResults = ({
 
   useEffect(() => {
     checkForSymbol();
+    // filterData();
   }, [inputValue]);
 
   const checkForSymbol = () => {
@@ -69,7 +70,6 @@ const SearchResults = ({
 
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
     let filtered = data.filter((object) => {
-      // debugger;
       if (
         inputValueWithoutSymbol.length === 0 &&
         object.hasOwnProperty("name") &&
@@ -80,8 +80,7 @@ const SearchResults = ({
         inputValueWithoutSymbol.length === 0 &&
         object.hasOwnProperty("username") &&
         !selectedUsers.includes(object) &&
-        !hashTagSymbol &&
-        selectedUsers.length < 1
+        !hashTagSymbol
       ) {
         return true;
       } else if (
@@ -102,14 +101,14 @@ const SearchResults = ({
         object.hasOwnProperty("username") &&
         !selectedUsers.includes(object) &&
         object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
-        !hashTagSymbol &&
-        selectedUsers.length < 1
+        !hashTagSymbol
       ) {
         return true;
       } else if (
         inputValueWithoutSymbol.length > 0 &&
         object.hasOwnProperty("users") &&
         object.users
+          .map((user) => user.username)
           .join(" ")
           .toLowerCase()
           .includes(inputValueWithoutSymbol) &&
@@ -117,6 +116,35 @@ const SearchResults = ({
       ) {
         return true;
       }
+      // if (object.hasOwnProperty("name")) {
+      //   if (
+      //     !selectedUsers.includes(object) &&
+      //     object.name.toLowerCase().includes(inputValue)
+      //   ) {
+      //     // channels.push(object);
+      //     return true;
+      //   }
+      // }
+
+      // if (object.hasOwnProperty("users")) {
+      //   if (
+      //     !selectedUsers.includes(object) &&
+      //     object.users.join(" ").toLowerCase().includes(inputValue)
+      //   ) {
+      //     // dms.push(object);
+      //     return true;
+      //   }
+      // }
+
+      // if (object.hasOwnProperty("username")) {
+      //   if (
+      //     !selectedUsers.includes(object) &&
+      //     object.username.toLowerCase().includes(inputValue)
+      //   ) {
+      //     // users.push(object)
+      //     return true;
+      //   }
+      // }
     });
 
     setFilteredData(filtered);
@@ -133,8 +161,6 @@ const SearchResults = ({
       </div>
     );
   }
-
-  console.log(filteredData);
 
   return (
     <div className="search-cont">
@@ -177,7 +203,9 @@ const SearchResults = ({
           } else if (obj.hasOwnProperty("users")) {
             return (
               <span
-                onClick={(e) => handleChannelClick(e, obj, "DirectMessage", true)}
+                onClick={(e) =>
+                  handleChannelClick(e, obj, "DirectMessage", true)
+                }
                 className="search-result-item"
                 key={obj.id * 29}
               >
