@@ -1,5 +1,5 @@
 import { createChannel } from "../../../store/channels";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { fetchUsers } from "../../../store/user";
 import { useParams } from "react-router-dom";
@@ -13,11 +13,19 @@ const CreateChannelModal = ({ handleAddChannel }) => {
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState([]);
   const { workspaceId } = useParams();
+  const sessionUser = useSelector((state) => state.session.user);
 
   const createChannel = (e) => {
     e.preventDefault();
 
-    dispatch(createDirectMessage({}));
+    dispatch(
+      createDirectMessage({
+        name: name,
+        description: description,
+        workspaceId: workspaceId,
+        ownerId: sessionUser.id,
+      })
+    );
 
     handleAddChannel();
   };

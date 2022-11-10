@@ -26,11 +26,15 @@ const SideBar = ({
   const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
 
   const handleAddChannel = () => {
-    setShowCreateChannelModal(!showCreateChannelModal);
+    if (workspace.ownerId === sessionUser.id) {
+      setShowCreateChannelModal(!showCreateChannelModal);
+    }
   };
 
   const handleOpenAddTeamModal = () => {
+    // if (workspace.ownerId === sessionUser.id) {
     setShowAddTeammateModal(!showAddTeammateModal);
+    // }
   };
 
   const handleAddUsers = () => {

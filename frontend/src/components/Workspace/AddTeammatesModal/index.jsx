@@ -17,9 +17,9 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
   const users = useSelector((state) => Object.values(state.users));
   const sessionUser = useSelector((state) => state.session.user);
 
-  // useEffect(() => {
-  //   dispatch(fetchAllUsers());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, []);
 
   const removeUserFromNewMsg = (e, user) => {
     setSelectedUsers(
@@ -30,7 +30,7 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
   const handleResultClick = (e, user) => {
     setSelectedUsers([...selectedUsers, user]);
   };
-
+  console.log(users);
   // console.log(selectedUsers);
 
   return (

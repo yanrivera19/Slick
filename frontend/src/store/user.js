@@ -5,7 +5,7 @@ import { RECEIVE_WORKSPACES } from "./workspaces";
 
 export const RECEIVE_USER = "users/RECEIVE_USER";
 export const RECEIVE_USERS = "users/RECEIVE_USERS";
-// export const RECEIVE_ALL_USERS =
+// export const RECEIVE_ALL_USERS = "users/"
 
 export const receiveUser = (user) => {
   return {

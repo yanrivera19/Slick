@@ -1,4 +1,5 @@
 class Api::ChannelsController < ApplicationController
+	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId", "ownerId"]
   before_action :require_logged_in
 
   def create
@@ -34,7 +35,7 @@ class Api::ChannelsController < ApplicationController
 
 	def show
 		@channel = Channel.find_by_id(params[:id])
-		render :show
+		render "/api/channels/c_show"
 	end
 
 	def destroy
@@ -50,6 +51,6 @@ class Api::ChannelsController < ApplicationController
 	private 
 
 	def channel_params
-		params.require(:channel).permit(:name)
+		params.require(:channel).permit(:name, :description, :workspace_id, :owner_id)
 	end
 end
