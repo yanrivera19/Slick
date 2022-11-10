@@ -25,25 +25,28 @@ export const fetchDirectMessage = (directMessageId) => async (dispatch) => {
   }
 };
 
-export const createDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await csrfFetch(`/api/direct_messages`, {
-    method: "POST",
-    body: JSON.stringify(directMessage),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const createDirectMessage =
+  (directMessage, users, message) => async (dispatch) => {
+    const res = await csrfFetch(`/api/direct_messages`, {
+      method: "POST",
+      body: JSON.stringify(directMessage, users, message),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (res.ok) {
-    const directMessage = await res.json();
-    dispatch(receiveDirectMessage(directMessage));
-    // const workspace = await dispatch(
-    //   getWorkspace(directMessage.directMessage.workspaceId)
-    // );
-    // dispatch(receiveWorkspace(workspace));
-    return directMessage;
-  }
-};
+    // dispatch(receiveDirectMessage(directMessage))
+
+    // if (res.ok) {
+    //   const directMessage = await res.json();
+    //   dispatch(receiveDirectMessage(directMessage));
+    //   // const workspace = await dispatch(
+    //   //   getWorkspace(directMessage.directMessage.workspaceId)
+    //   // );
+    //   // dispatch(receiveWorkspace(workspace));
+    //   return directMessage;
+    // }
+  };
 
 export const updateDirectMessage = (directMessage) => async (dispatch) => {
   const res = await fetch(`/api/direct_messages/${directMessage.id}`, {

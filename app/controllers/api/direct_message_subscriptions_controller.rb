@@ -3,6 +3,7 @@ class Api::DirectMessageSubscriptionsController < ApplicationController
 	before_action :require_logged_in
 
 	def create
+		# debugger
 		@direct_message_subscription = DirectMessageSubscription.new(direct_message_subscription_params);
 
 		if @direct_message_subscription.save 
@@ -17,6 +18,7 @@ class Api::DirectMessageSubscriptionsController < ApplicationController
 		@direct_message_subscription = DirectMessageSubscription.find_by_id(params[:id])
 		@direct_message = DirectMessage.find_by_id(id: params[:direct_message_id]);
 		@user = User.find_by_id(id: params[:user_id]);
+	
 
 		if !@direct_message || !@user 
 			@direct_message_subscription.destroy

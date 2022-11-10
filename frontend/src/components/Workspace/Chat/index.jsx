@@ -20,9 +20,11 @@ const Chat = ({
   subs,
   channelType,
   dms,
+  channels,
   fetchConversation,
   getConversation,
   lastMsg,
+  newMessage,
   // forNewMessage = false
 }) => {
   const [body, setBody] = useState("");
@@ -69,14 +71,22 @@ const Chat = ({
     state.messages ? Object.values(state.messages) : []
   );
 
+  // let directMessages = useSelector((state) => {
+  //   return state.directMessages ? Object.values(state.directMessages) : [];
+  // });
+
+  // let channels = useSelector((state) => {
+  //   return state.channels ? Object.values(state.channels) : [];
+  // });
+
   useEffect(() => {
     debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation, channelType, messages.length, dms.length]);
+  }, [conversation, channelType, newMessage]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
-  }, [messages.length, conversation.name]);
+  }, [messages, conversation.name]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -115,7 +125,7 @@ const Chat = ({
   };
 
   if (!conversation) return null;
-  // console.log(conversation.name);
+  console.log(conversation);
   // console.log(channelType);
   return (
     <div

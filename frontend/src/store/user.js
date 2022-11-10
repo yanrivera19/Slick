@@ -40,7 +40,7 @@ export const fetchUser = (userId) => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   const res = await fetch(`/api/users/`);
-  debugger;
+  // debugger;
   if (res.ok) {
     const users = await res.json();
     dispatch(receiveUsers(users));

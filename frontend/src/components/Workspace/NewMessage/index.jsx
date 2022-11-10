@@ -50,7 +50,7 @@ const NewMessage = ({
 
   // let data;
 
-  useEffect(() => {}, [usersInRoom]);
+  // useEffect(() => {}, [usersInRoom]);
 
   const checkDmWithUser = () => {
     let results = dms.filter((dm) => {
@@ -145,57 +145,31 @@ const NewMessage = ({
     e.preventDefault();
     setErrors([]);
     let usersForNewDm = [...selectedUsers, sessionUser];
-    dmUsersNames(usersForNewDm);
+    // dmUsersNames(usersForNewDm);
 
     dispatch(
       createDirectMessage({
         workspaceId: workspaceId,
-      })
-    ).then((dm) => {
-      dispatch(
-        createMessage({
+        users: usersForNewDm,
+        message: {
           content: messageContent,
           authorName: sessionUser.username,
           authorId: sessionUser.id,
           messageableType: "DirectMessage",
-          messageableId: dm.directMessage.id,
-        })
-      );
+        },
+      })
+    ).then((dm) => {
+      // dispatch(
+      //   createMessage({
+      //     content: messageContent,
+      //     authorName: sessionUser.username,
+      //     authorId: sessionUser.id,
+      //     messageableType: "DirectMessage",
+      //     messageableId: dm.directMessage.id,
+      //   })
+      // );
 
-      // let usersForNewDm = [...selectedUsers, sessionUser];
-
-      usersForNewDm.forEach(async (user) => {
-        let dmSub = {
-          userId: user.id,
-          directMessageId: dm.directMessage.id,
-        };
-        const res = await csrfFetch("/api/direct_message_subscriptions", {
-          method: "POST",
-          body: JSON.stringify(dmSub),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then(async (res) => {
-          const data = await res.json();
-          console.log(data);
-          // console.log(res.directMessage)
-          setUsersInRoom(Object.values(data.users));
-          // handleChannelClick(e, dm.directMessage, "DirectMessage");
-          // console.log("res.users:", res.users);
-          // console.log("users STATE:", usersInRoom);
-        });
-
-        debugger;
-        // console.log("body:", res.body);
-        // console.log("res-ok:", res.status);
-        if (res.ok) {
-          const directMessageSub = await res.json();
-          //CATCH ERRORS
-          debugger;
-        }
-      });
-
-      debugger;
+      // debugger;
       handleChannelClick(e, dm.directMessage, "DirectMessage");
       // setLastMessage(messageContent);
       // setMessageContent("");

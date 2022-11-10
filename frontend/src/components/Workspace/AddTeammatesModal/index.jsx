@@ -85,6 +85,7 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
               ) {
                 return (
                   <span
+                    key={user.id}
                     onClick={(e) => handleResultClick(e, user)}
                     className="search-result-item"
                     // key={obj.id * 29}

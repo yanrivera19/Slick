@@ -101,6 +101,9 @@ export default function workspaceReducer(state = {}, action) {
     // case RECEIVE_DIRECT_MESSAGE:
     //   // debugger;
     //   return { ...action.workspace.directMessages };
+    // case RECEIVE_DIRECT_MESSAGE:
+    //   // debugger;
+    //   return { ...action.directMessage };
     case REMOVE_WORKSPACE:
       const newState = { ...state };
 

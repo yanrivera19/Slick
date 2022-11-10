@@ -19,6 +19,7 @@ import {
   getMessage,
 } from "../../store/messages";
 import { getUsers, fetchUsers } from "../../store/user";
+import { receiveDirectMessage } from "../../store/directMessages";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -58,7 +59,7 @@ const Workspace = () => {
       createSubscriptions(Object.values(data.workspace.channels));
     });
 
-    // dmLength = dms.length;
+    dmLength = dms.length;
 
     return () => {
       subs.forEach((channelSub) => channelSub.unsubscribe());
@@ -84,11 +85,16 @@ const Workspace = () => {
         connected: () => {
           console.log("connected");
         },
-        received: ({ type, message, id }) => {
-          // debugger;
+        received: ({ type, message, id, directMessage }) => {
+          debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
+              console.log("received:", message.content);
+              break;
+            case "RECEIVE_DIRECT_MESSAGE":
+              debugger;
+              dispatch(receiveDirectMessage(directMessage));
               console.log("received:", message.content);
               break;
             case "EDIT_MESSAGE":
@@ -112,7 +118,7 @@ const Workspace = () => {
   };
 
   const handleChannelClick = (e, channel, channelType) => {
-    debugger;
+    // debugger;
     setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
@@ -128,7 +134,10 @@ const Workspace = () => {
     let filteredUsers = users.filter(
       (user) => user.username !== sessionUser.username
     );
-    let results = filteredUsers.map((user, idx) => {
+
+    let uniqueUsers = [...new Set(filteredUsers)];
+
+    let results = uniqueUsers.map((user, idx) => {
       if (idx === filteredUsers.length - 1) {
         return user.username;
       } else {
@@ -169,15 +178,20 @@ const Workspace = () => {
             channelType={conversationType}
             fetchConversation={fetchChannel}
             getConversation={getChannel}
+            dms={dms}
+            channels={channels}
+            newMessage={newMessage}
           />
         ) : conversationType === "DirectMessage" ? (
           <Chat
             conversation={shownConversation}
             subs={directMessageSubscriptions}
             channelType={conversationType}
-            dms={dmUsersArray}
+            dms={dms}
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}
+            channels={channels}
+            newMessage={newMessage}
           />
         ) : null}
         {newMessage ? (
