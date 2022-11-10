@@ -3,7 +3,7 @@ import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SideBar from "../../Workspace/SideBar";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
-// import { fetchUsers } from "../../store/user";
+import { fetchUsers } from "../../../store/user";
 import SelectedNewMembers from "./SelectedNewMembers";
 
 const CreateWorkspaceAddTeammates = () => {
@@ -12,10 +12,12 @@ const CreateWorkspaceAddTeammates = () => {
   const sessionUser = useSelector((state) => state.session.user);
   const name = useLocation();
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(fetchAllUsers());
-  // }, []);
+  useEffect(() => {
+    debugger;
+    dispatch(fetchUsers());
+  }, []);
 
   const removeUserFromNewMsg = (e, user) => {
     setSelectedUsers(

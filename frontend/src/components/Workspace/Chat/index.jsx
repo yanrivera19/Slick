@@ -124,6 +124,9 @@ const Chat = ({
     return results.join("");
   };
 
+  console.log(conversation);
+  console.log(messages);
+
   if (!conversation) return null;
   console.log(conversation);
   // console.log(channelType);

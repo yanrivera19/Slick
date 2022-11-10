@@ -1,4 +1,4 @@
-json.extract! channel, :id
+json.extract! channel, :id, :name, :description
 json.users channel.users do |user|
 	json.extract! user, :id, :username, :email
 end

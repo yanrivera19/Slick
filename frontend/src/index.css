@@ -17,6 +17,7 @@
 @import "../src/components/Workspace/CreateChannelModal/CreateChannelModal.scss";
 @import "../src/components/Workspace/AddTeammatesModal/AddTeammatesModal.scss";
 @import "../src/components/CreateWorkspacePage/CreateWorkspacePage.scss";
+@import "../src/components/CreateWorkspacePage/CreateWorkspaceAddTeammates/CreateWorkspaceAddTeammates.scss";
 
 header,
 nav,

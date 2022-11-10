@@ -19,15 +19,20 @@ const SideBar = ({
   sessionUser,
   handleChannelClick,
   dmUsersNames,
+  closeAddChannelModal,
+  setNewChannel,
+  newChannel,
 }) => {
   const [hideDms, setHideDms] = useState(false);
   const [hideChannels, setHideChannels] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
 
-  const handleAddChannel = () => {
+  const handleAddChannelModal = () => {
     if (workspace.ownerId === sessionUser.id) {
       setShowCreateChannelModal(!showCreateChannelModal);
+      // setNewChannel(!newChannel);
+      closeAddChannelModal();
     }
   };
 
@@ -50,7 +55,7 @@ const SideBar = ({
           showCreateChannelModal ? "create-channel-modal-container" : "hide"
         }
       >
-        <CreateChannelModal handleAddChannel={handleAddChannel} />
+        <CreateChannelModal handleAddChannelModal={handleAddChannelModal} />
       </section>
       <section
         className={
@@ -77,7 +82,7 @@ const SideBar = ({
           </header>
           <section id="extras-section">
             <div>
-              <span>Direct messages</span>
+              {/* <span>Direct messages</span> */}
               <span></span>
             </div>
           </section>
@@ -111,7 +116,10 @@ const SideBar = ({
                 );
               })}
             </div>
-            <div className="channel-item-header" onClick={handleAddChannel}>
+            <div
+              className="channel-item-header"
+              onClick={handleAddChannelModal}
+            >
               <span className="square-btn-sidebar plus">
                 <FaPlus size={10} />
               </span>

@@ -1,9 +1,10 @@
 class Api::ChannelsController < ApplicationController
-	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId", "ownerId"]
+	wrap_parameters :channel, include: Channel.attribute_names + ["workspaceId", "ownerId"]
   before_action :require_logged_in
 
   def create
-		@channel = Channel.new(channel_params)
+		debugger
+		@channel = Channel.create(channel_params)
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
 		@user_ids = @workspace.users.map {|user| user[:id]}
 

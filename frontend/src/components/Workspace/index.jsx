@@ -48,6 +48,7 @@ const Workspace = () => {
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
   const [newMessage, setNewMessage] = useState(false);
+  const [newChannel, setNewChannel] = useState(false);
   let lastMsg;
   const dmUsersArray = [];
   let subs = [];
@@ -93,7 +94,7 @@ const Workspace = () => {
           console.log("connected");
         },
         received: ({ type, message, id, directMessage, channel }) => {
-          // debugger;
+          debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
@@ -113,8 +114,10 @@ const Workspace = () => {
               });
               break;
             case "RECEIVE_NEW_CHANNEL":
+              //  setShownConversation(channel);
+              //  setConversationType("Channel");
               dispatch(receiveNewChannel(channel));
-              console.log("received:", directMessage);
+              console.log("received:", channel);
               break;
             case "EDIT_MESSAGE":
               // debugger;
@@ -147,6 +150,10 @@ const Workspace = () => {
     setShownConversation(null);
     setConversationType(null);
     setNewMessage(true);
+  };
+
+  const closeAddChannelModal = () => {
+    setNewChannel(!newChannel);
   };
 
   const dmUsersNames = (users) => {
@@ -189,6 +196,9 @@ const Workspace = () => {
           sessionUser={sessionUser}
           handleChannelClick={handleChannelClick}
           dmUsersNames={dmUsersNames}
+          closeAddChannelModal={closeAddChannelModal}
+          setNewChannel={setNewChannel}
+          newChannel={newChannel}
         />
         {conversationType === "Channel" ? (
           <Chat

@@ -86,10 +86,10 @@ export default function directMessageReducer(state = {}, action) {
       // debugger;
       return { ...action.workspace.directMessages };
     case RECEIVE_DIRECT_MESSAGE:
+      debugger;
       return {
         ...state,
-        [action.directMessage.directMessage.id]:
-          action.directMessage.directMessage,
+        [action.directMessage.id]: action.directMessage,
       };
 
     case RECEIVE_NEW_DIRECT_MESSAGE:

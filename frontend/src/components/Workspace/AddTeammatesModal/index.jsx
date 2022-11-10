@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import { useEffect } from "react";
+import SearchResults from "../SearchResults";
 
 const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
   const handleResultClick = (e, user) => {
     setSelectedUsers([...selectedUsers, user]);
   };
-  console.log(users);
+  // console.log(users);
   // console.log(selectedUsers);
 
   return (
@@ -72,32 +73,35 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
           </div>
         </section>
 
-        <div className="search-cont">
-          <div className="users-results-cont">
-            {/* {filteredData.map((obj) => { */}
-            {users.map((user) => {
-              // console.log(selectedUsers);
-              if (
-                user.username !== sessionUser.username &&
-                !selectedUsers
-                  .map((selUser) => selUser.username)
-                  .includes(user.username)
-              ) {
-                return (
-                  <span
-                    key={user.id}
-                    onClick={(e) => handleResultClick(e, user)}
-                    className="search-result-item"
-                    // key={obj.id * 29}
-                  >
-                    {/* {filterUserfromUsers(obj.users)} */}
-                    {user.username}
-                  </span>
-                );
-              }
-            })}
+        {inputValue.length > 0 && (
+          <div className="search-cont">
+            <div className="users-results-cont">
+              {/* {filteredData.map((obj) => { */}
+              {users.map((user) => {
+                console.log(users);
+                if (
+                  user.username !== sessionUser.username &&
+                  !selectedUsers
+                    .map((selUser) => selUser.username)
+                    .includes(user.username)
+                ) {
+                  return (
+                    <span
+                      key={user.id}
+                      onClick={(e) => handleResultClick(e, user)}
+                      className="search-result-item"
+                      // key={obj.id * 29}
+                    >
+                      {/* {filterUserfromUsers(obj.users)} */}
+                      {user.username}
+                    </span>
+                  );
+                }
+              })}
+            </div>
           </div>
-        </div>
+        )}
+
         {/* <div className="">
           <form onSubmit={createChannel}>
             <p className="label">Name</p>

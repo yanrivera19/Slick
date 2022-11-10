@@ -5,9 +5,8 @@ import { fetchUsers } from "../../../store/user";
 import { useParams } from "react-router-dom";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
-import { createDirectMessage } from "../../../store/directMessages";
 
-const CreateChannelModal = ({ handleAddChannel }) => {
+const CreateChannelModal = ({ handleAddChannelModal }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -15,26 +14,29 @@ const CreateChannelModal = ({ handleAddChannel }) => {
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
 
-  const createChannel = (e) => {
+  const createNewChannel = (e) => {
     e.preventDefault();
+    debugger;
 
     dispatch(
-      createDirectMessage({
+      createChannel({
         name: name,
         description: description,
         workspaceId: workspaceId,
         ownerId: sessionUser.id,
       })
-    );
-
-    handleAddChannel();
+    ).then(() => {
+      setName("");
+      setDescription("");
+      handleAddChannelModal();
+    });
   };
 
   return (
     <div id="create-channel-modal">
       <div className="create-modal-header">
         <h1 id="create-header">Create a channel</h1>
-        <button onClick={handleAddChannel} className="cross-btn">
+        <button onClick={handleAddChannelModal} className="cross-btn">
           <CrossIcon size={22} />
         </button>
       </div>
@@ -44,7 +46,7 @@ const CreateChannelModal = ({ handleAddChannel }) => {
           around a topic — #marketing, for example.
         </p>
         <div className="">
-          <form onSubmit={createChannel}>
+          <form onSubmit={createNewChannel}>
             <p className="label">Name</p>
             <input
               className="input-field name"
@@ -62,6 +64,17 @@ const CreateChannelModal = ({ handleAddChannel }) => {
             <p id="about-text" className="clear-text">
               What's this channel about?
             </p>
+            <div id="create-channel-btn-container">
+              <button
+                disabled={name.trim().length < 1}
+                className={`create-channel-btn ${
+                  name.trim().length > 0 ? "ready" : ""
+                }`}
+                // onClick={createNewChannel}
+              >
+                Create
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -70,15 +83,7 @@ const CreateChannelModal = ({ handleAddChannel }) => {
           name.trim().length > 0 ? "ready" : ""
         }`}
       > */}
-      <button
-        disabled={name.trim().length < 1}
-        className={`create-channel-btn ${
-          name.trim().length > 0 ? "ready" : ""
-        }`}
-        onClick={handleAddChannel}
-      >
-        Create
-      </button>
+
       {/* </div> */}
     </div>
   );
