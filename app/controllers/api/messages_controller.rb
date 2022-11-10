@@ -5,7 +5,7 @@ class Api::MessagesController < ApplicationController
 	before_action :require_logged_in
 
   def create
-		debugger
+		# debugger
 		@message = Message.new(message_params)
 		@author = User.find_by(id: params[:author_id])
 		# debugger
@@ -26,7 +26,7 @@ class Api::MessagesController < ApplicationController
 			    **from_template("api/messages/show", message: @message)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-				debugger
+				# debugger
 				DirectMessagesChannel.broadcast_to @message.messageable, 
 				  type: 'RECEIVE_MESSAGE',
 			    **from_template("api/messages/show", message: @message)

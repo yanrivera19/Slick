@@ -12,7 +12,7 @@ class Api::DirectMessagesController < ApplicationController
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 		user_ids = params[:users].map {|user| user[:id]} 
 		@message = Message.create(content: params[:message][:content], author_name: params[:message][:author_name], author_id: params[:message][:author_id], messageable_type: params[:message][:messageable_type], messageable_id: @direct_message.id )
-		debugger
+		# debugger
     if @direct_message.save
 			user_ids.each do |user_id|
 				@direct_message_subscription = DirectMessageSubscription.create(user_id: user_id, direct_message_id: @direct_message.id)

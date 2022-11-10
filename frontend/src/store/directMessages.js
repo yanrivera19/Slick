@@ -37,15 +37,15 @@ export const createDirectMessage =
 
     // dispatch(receiveDirectMessage(directMessage))
 
-    // if (res.ok) {
-    //   const directMessage = await res.json();
-    //   dispatch(receiveDirectMessage(directMessage));
-    //   // const workspace = await dispatch(
-    //   //   getWorkspace(directMessage.directMessage.workspaceId)
-    //   // );
-    //   // dispatch(receiveWorkspace(workspace));
-    //   return directMessage;
-    // }
+    if (res.ok) {
+      const directMessage = await res.json();
+      dispatch(receiveDirectMessage(directMessage));
+      //   // const workspace = await dispatch(
+      //   //   getWorkspace(directMessage.directMessage.workspaceId)
+      //   // );
+      //   // dispatch(receiveWorkspace(workspace));
+      return directMessage;
+    }
   };
 
 export const updateDirectMessage = (directMessage) => async (dispatch) => {

@@ -5,6 +5,7 @@ import SignupPage from "./components/SignupPage";
 import WelcomePage from "./components/WelcomePage";
 import Workspace from "./components/Workspace";
 import CreateWorkspacePage from "./components/CreateWorkspacePage";
+import CreateWorkspaceAddTeammates from "./components/CreateWorkspacePage/CreateWorkspaceAddTeammates";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
         </Route>
         <Route path="/client/:clientId/setup-team-name">
           <CreateWorkspacePage />
+        </Route>
+        <Route path="/client/:clientId/setup-add-teammates">
+          <CreateWorkspaceAddTeammates />
         </Route>
         <Route path="/client/:clientId/:workspaceId">
           <Workspace />

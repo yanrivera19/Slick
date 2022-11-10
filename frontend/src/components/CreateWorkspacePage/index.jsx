@@ -6,7 +6,7 @@ import { fetchUsers } from "../../store/user";
 
 const CreateWorkspacePage = () => {
   const sessionUser = useSelector((state) => state.session.user);
-  const [inputValue, setInputValue] = useState("");
+  const [name, setName] = useState("");
 
   return (
     <div className="setup-page-main-cont">
@@ -24,107 +24,9 @@ const CreateWorkspacePage = () => {
             <header className="workspace-header setup">
               <div className="workspace-header-cont setup">
                 <button className=" setup-clear-btn"></button>
-
-                {/* <div>
-                  <span id="works-name">{workspace.name}</span>
-                  <span></span>
-                </div>
-                <button className="write-btn" onClick={handleNewMessageClick}>
-                  <WriteIcon />
-                </button> */}
               </div>
             </header>
-            {/* <section id="extras-section">
-              <div>
-                <span>Direct messages</span>
-                <span></span>
-              </div>
-            </section> */}
-            {/* <section id="channel-section">
-              <div
-                className="channel-item-header"
-                onClick={() => setHideChannels(!hideChannels)}
-              >
-                <span className="square-btn-sidebar">
-                  {hideChannels ? (
-                    <BsCaretRightFill size={12} />
-                  ) : (
-                    <BsFillCaretDownFill size={12} />
-                  )}
-                </span>
-                <span>Channels</span>
-              </div>
-              <div className={hideChannels ? "hide" : ""}>
-                {channels.map((channel) => {
-                  return (
-                    <div
-                      className="channel-item"
-                      onClick={(e) => handleChannelClick(e, channel, "Channel")}
-                      key={channel.id}
-                    >
-                      <span style={{ marginRight: "11px", paddingTop: "4px" }}>
-                        <HashTagIcon />
-                      </span>
-                      <span>{channel.name}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="channel-item-header" onClick={handleAddChannel}>
-                <span className="square-btn-sidebar plus">
-                  <FaPlus size={10} />
-                </span>
-                <span>Add channels</span>
-              </div>
-            </section> */}
-            {/* <section id="dm-section">
-              <div
-                className="dm-item-header"
-                onClick={() => setHideDms(!hideDms)}
-              >
-                <span className="square-btn-sidebar">
-                  {hideDms ? (
-                    <BsCaretRightFill size={12} />
-                  ) : (
-                    <BsFillCaretDownFill size={12} />
-                  )}
-                </span>
-                <span>Direct messages</span>
-              </div>
-              <div className={hideDms ? "hide" : ""}>
-                {dms.map((directMessage, idx) => {
-           
-                  const members = directMessage.users;
-                  const names = dmUsersNames(members);
-              
-                  return (
-                    <div
-                      key={directMessage.id}
-                      onClick={(e) =>
-                        handleChannelClick(e, directMessage, "DirectMessage")
-                      }
-                    >
-            
-                      <div className="dm-item" key={directMessage.id}>
-                        <span></span>
-                        <span className="dm-users">{names}</span>
-                      </div>
-                
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="dm-item-header" onClick={handleOpenAddTeamModal}>
-                <span className="square-btn-sidebar plus">
-                  <FaPlus size={10} />
-                </span>
-                <span>Add teammates</span>
-              </div>
-            </section> */}
           </div>
-          {/* <section id="sidebar-footer">
-            <p>{sessionUser.username}</p>
-          </section> */}
         </aside>
         <section className="setup-page-content">
           <div className="setup-page-step-head">
@@ -142,17 +44,28 @@ const CreateWorkspacePage = () => {
               <input
                 placeholder="Ex: Acme Marketing or Acme Co"
                 className="setup-input-field"
-                onChange={(e) => setInputValue(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <div className="setup-next-btn-cont">
-                <button
-                  disabled={inputValue.trim().length < 1}
-                  className={`setup-next-btn ${
-                    inputValue.trim().length > 0 ? "ready" : ""
-                  }`}
+                <NavLink
+                  to={{
+                    pathname:
+                      name.trim().length > 1
+                        ? `/client/${sessionUser.id}/setup-add-teammates`
+                        : null,
+                    state: { name: name },
+                  }}
                 >
-                  Next
-                </button>
+                  <button
+                    disabled={name.trim().length < 1}
+                    className={`setup-next-btn ${
+                      name.trim().length > 0 ? "ready" : ""
+                    }`}
+                  >
+                    Next
+                  </button>
+                </NavLink>
               </div>
             </form>
           </div>

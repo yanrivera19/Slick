@@ -53,7 +53,7 @@ const Workspace = () => {
   let dmLength = 0;
 
   useEffect(() => {
-    debugger;
+    // debugger;
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
       createSubscriptions(Object.values(data.workspace.directMessages));
       createSubscriptions(Object.values(data.workspace.channels));
@@ -86,17 +86,17 @@ const Workspace = () => {
           console.log("connected");
         },
         received: ({ type, message, id, directMessage }) => {
-          debugger;
+          // debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
               console.log("received:", message.content);
               break;
-            case "RECEIVE_DIRECT_MESSAGE":
-              debugger;
-              dispatch(receiveDirectMessage(directMessage));
-              console.log("received:", message.content);
-              break;
+            // case "RECEIVE_DIRECT_MESSAGE":
+            //   debugger;
+            //   dispatch(receiveDirectMessage(directMessage));
+            //   console.log("received:", message.content);
+            //   break;
             case "EDIT_MESSAGE":
               // debugger;
               dispatch(editMessage(message));
