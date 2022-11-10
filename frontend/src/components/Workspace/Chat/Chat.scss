@@ -127,3 +127,7 @@ textarea {
 .send-msg-cont.ready:hover {
   background-color: #148567;
 }
+
+.send-msg-cont.ready:active {
+  transform: scale(0.95);
+}

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import SideBar from "../../Workspace/SideBar";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
 // import { fetchUsers } from "../../store/user";
+import SelectedNewMembers from "./SelectedNewMembers";
 
 const CreateWorkspaceAddTeammates = () => {
   const [inputValue, setInputValue] = useState("");
@@ -58,7 +59,7 @@ const CreateWorkspaceAddTeammates = () => {
             <section className="new-msg-search-container">
               {/* <div ref={lastMessageRef}></div> */}
               <div className="new-msg-search">
-                <div style={{ display: "flex", alignItems: "center" }}>
+                {/* <div style={{ display: "flex", alignItems: "center" }}>
                   {selectedUsers.map((selectedUser) => (
                     <div className="selected-user">
                       <span style={{ marginRight: "8px" }}>
@@ -72,8 +73,9 @@ const CreateWorkspaceAddTeammates = () => {
                       </button>
                     </div>
                   ))}
-                </div>
+                </div> */}
                 <input
+                  disabled={selectedUsers.length === 4}
                   className="search-input"
                   type="text"
                   value={inputValue}
@@ -94,15 +96,9 @@ const CreateWorkspaceAddTeammates = () => {
                       .includes(user.username)
                   ) {
                     return (
-                      <span
-                        key={user.id}
-                        onClick={(e) => handleResultClick(e, user)}
-                        className="search-result-item"
-                        // key={obj.id * 29}
-                      >
-                        {/* {filterUserfromUsers(obj.users)} */}
-                        {user.username}
-                      </span>
+                      <div onClick={(e) => handleResultClick(e, user)}>
+                        <SelectedNewMembers key={user.id} user={user} />
+                      </div>
                     );
                   }
                 })}

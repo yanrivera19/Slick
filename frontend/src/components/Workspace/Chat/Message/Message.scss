@@ -213,6 +213,10 @@
   transition: all 80ms linear;
 }
 
+#delete-btn:active {
+  transform: scale(0.95);
+}
+
 #delete-btn:hover {
   background: #e23067;
   box-shadow: 0 1px 4px #0000004d;

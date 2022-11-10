@@ -19,7 +19,10 @@ import {
   getMessage,
 } from "../../store/messages";
 import { getUsers, fetchUsers } from "../../store/user";
-import { receiveDirectMessage } from "../../store/directMessages";
+import {
+  receiveDirectMessage,
+  receiveNewDirectMessage,
+} from "../../store/directMessages";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -39,9 +42,6 @@ const Workspace = () => {
   });
 
   const channels = useSelector((state) => Object.values(state.channels));
-  // const dmUsers = useSelector((state) => {
-  //   return state.directMessage ? Object.values(state.directMessage.users) : [];
-  // });
   const channelSubscriptions = [];
   const directMessageSubscriptions = [];
   const [shownConversation, setShownConversation] = useState(null);
@@ -55,8 +55,15 @@ const Workspace = () => {
   useEffect(() => {
     // debugger;
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
-      createSubscriptions(Object.values(data.workspace.directMessages));
-      createSubscriptions(Object.values(data.workspace.channels));
+      subscription(data.workspace, "WorkspacesChannel");
+      createSubscriptions(
+        Object.values(data.workspace.directMessages),
+        "DirectMessagesChannel"
+      );
+      createSubscriptions(
+        Object.values(data.workspace.channels),
+        "ChannelsChannel"
+      );
     });
 
     dmLength = dms.length;
@@ -66,15 +73,14 @@ const Workspace = () => {
     };
   }, [workspaceId, dms.length]);
 
-  const createSubscriptions = (rooms) => {
+  const createSubscriptions = (rooms, roomName) => {
     rooms.forEach((room) => {
-      subscription(room);
+      subscription(room, roomName);
     });
   };
 
-  const subscription = (room) => {
-    let roomName =
-      room.type === "Channel" ? "ChannelsChannel" : "DirectMessagesChannel";
+  const subscription = (room, name) => {
+    let roomName = name;
 
     let sub = consumer.subscriptions.create(
       {
@@ -92,11 +98,19 @@ const Workspace = () => {
               dispatch(receiveMessage(message));
               console.log("received:", message.content);
               break;
-            // case "RECEIVE_DIRECT_MESSAGE":
-            //   debugger;
-            //   dispatch(receiveDirectMessage(directMessage));
-            //   console.log("received:", message.content);
-            //   break;
+            case "RECEIVE_NEW_DIRECT_MESSAGE":
+              directMessage.users.forEach((user) => {
+                if (user.id === sessionUser.id) {
+                  // setNewCreatedMessage(directMessage);
+                  setNewMessage(false);
+                  setShownConversation(directMessage);
+                  setConversationType("DirectMessage");
+
+                  dispatch(receiveNewDirectMessage(directMessage));
+                  console.log("received:", directMessage);
+                }
+              });
+              break;
             case "EDIT_MESSAGE":
               // debugger;
               dispatch(editMessage(message));
@@ -149,7 +163,7 @@ const Workspace = () => {
     return results.join("");
   };
 
-  // console.log(dmUsersArray);
+  console.log(subs);
 
   return workspace ? (
     <div className="app-container">

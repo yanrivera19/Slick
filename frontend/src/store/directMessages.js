@@ -3,11 +3,20 @@ import { receiveWorkspace, getWorkspace } from "./workspaces";
 import { RECEIVE_WORKSPACE } from "./workspaces";
 
 export const RECEIVE_DIRECT_MESSAGE = "directMessages/RECEIVE_DIRECT_MESSAGE";
+export const RECEIVE_NEW_DIRECT_MESSAGE =
+  "directMessages/RECEIVE_DIRECT_MESSAGE";
 // export const REMOVE_DIRECT_MESSAGE = "direct_messages/REMOVE_direct_message";
 
 export const receiveDirectMessage = (directMessage) => {
   return {
     type: RECEIVE_DIRECT_MESSAGE,
+    directMessage,
+  };
+};
+
+export const receiveNewDirectMessage = (directMessage) => {
+  return {
+    type: RECEIVE_NEW_DIRECT_MESSAGE,
     directMessage,
   };
 };
@@ -35,16 +44,14 @@ export const createDirectMessage =
       },
     });
 
-    // dispatch(receiveDirectMessage(directMessage))
-
     if (res.ok) {
-      const directMessage = await res.json();
-      dispatch(receiveDirectMessage(directMessage));
+      // const directMessage = await res.json();
+      // dispatch(receiveDirectMessage(directMessage));
       //   // const workspace = await dispatch(
       //   //   getWorkspace(directMessage.directMessage.workspaceId)
       //   // );
       //   // dispatch(receiveWorkspace(workspace));
-      return directMessage;
+      // return directMessage;
     }
   };
 
@@ -84,6 +91,13 @@ export default function directMessageReducer(state = {}, action) {
         [action.directMessage.directMessage.id]:
           action.directMessage.directMessage,
       };
+
+    case RECEIVE_NEW_DIRECT_MESSAGE:
+      return {
+        ...state,
+        [action.directMessage.id]: action.directMessage,
+      };
+
     // case REMOVE_DIRECT_MESSAGE:
     //   const newState = { ...state };
     //   delete newState[action.directMessageId];
