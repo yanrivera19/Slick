@@ -23,6 +23,7 @@ import {
   receiveDirectMessage,
   receiveNewDirectMessage,
 } from "../../store/directMessages";
+import { receiveNewChannel } from "../../store/channels";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -91,7 +92,7 @@ const Workspace = () => {
         connected: () => {
           console.log("connected");
         },
-        received: ({ type, message, id, directMessage }) => {
+        received: ({ type, message, id, directMessage, channel }) => {
           // debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
@@ -110,6 +111,10 @@ const Workspace = () => {
                   console.log("received:", directMessage);
                 }
               });
+              break;
+            case "RECEIVE_NEW_CHANNEL":
+              dispatch(receiveNewChannel(channel));
+              console.log("received:", directMessage);
               break;
             case "EDIT_MESSAGE":
               // debugger;

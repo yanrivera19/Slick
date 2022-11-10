@@ -4,10 +4,19 @@ class Api::ChannelsController < ApplicationController
   def create
 		@channel = Channel.new(channel_params)
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
+		@user_ids = @workspace.users.map {|user| user[:id]}
 
     if @channel.save
-      render "/api/workspaces/show"
-	else
+			@user_ids.each do |user_id|
+				@channel_subscription = ChannelSubscription.create(user_id: user_id, channel_id: @channel.id)
+			end
+
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'RECEIVE_NEW_CHANNEL',
+				**from_template('api/channels/show', channel: @channel)
+      # render "/api/workspaces/show"
+			render json: nil, status: :ok
+		else
       render json: {errors: @channel.errors.full_messages}, status: 422
     end
   end

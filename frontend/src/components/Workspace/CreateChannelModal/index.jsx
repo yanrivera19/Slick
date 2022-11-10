@@ -5,6 +5,7 @@ import { fetchUsers } from "../../../store/user";
 import { useParams } from "react-router-dom";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
+import { createDirectMessage } from "../../../store/directMessages";
 
 const CreateChannelModal = ({ handleAddChannel }) => {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const CreateChannelModal = ({ handleAddChannel }) => {
 
   const createChannel = (e) => {
     e.preventDefault();
+
+    dispatch(createDirectMessage({}));
 
     handleAddChannel();
   };
@@ -46,7 +49,7 @@ const CreateChannelModal = ({ handleAddChannel }) => {
             </div>
             <input
               className="input-field"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <p id="about-text" className="clear-text">
               What's this channel about?
