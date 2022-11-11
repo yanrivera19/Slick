@@ -9,7 +9,6 @@ import {
   deleteMessage,
   getMessage,
 } from "../../../store/messages";
-import ChatBox from "../ChatBox";
 import getTimeOfMessage from "../../../util";
 import Message from "./Message";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
