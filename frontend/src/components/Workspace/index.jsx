@@ -86,12 +86,11 @@ const Workspace = () => {
       },
       {
         connected: () => {
-          console.log("connected");
+          // console.log("connected");
         },
         received: ({ type, message, id, directMessage, channel }) => {
           switch (type) {
             case "RECEIVE_MESSAGE":
-              console.log(shownConversation);
               dispatch(receiveMessage(message));
               console.log("received:", message.content);
               break;
@@ -134,7 +133,6 @@ const Workspace = () => {
     );
 
     subs.push(sub);
-    console.log(subs);
   };
 
   const handleChannelClick = (e, channel, channelType) => {
@@ -173,8 +171,6 @@ const Workspace = () => {
     dmUsersArray.push([results.join("")]);
     return results.join("");
   };
-
-  console.log(subs);
 
   return workspace ? (
     <div className="app-container">

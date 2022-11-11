@@ -78,7 +78,6 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
             <div className="users-results-cont">
               {/* {filteredData.map((obj) => { */}
               {users.map((user) => {
-                console.log(users);
                 if (
                   user.username !== sessionUser.username &&
                   !selectedUsers

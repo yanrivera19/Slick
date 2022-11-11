@@ -81,7 +81,6 @@ const Chat = ({
   };
 
   const dmUsersNames = (users) => {
-    console.log(users);
     let filteredUsers = users.filter(
       (user) => user.username !== sessionUser.username
     );
@@ -98,8 +97,6 @@ const Chat = ({
   };
 
   if (!conversation) return null;
-  console.log(conversation);
-  console.log(users);
 
   return (
     <div

@@ -21,8 +21,6 @@ const WelcomePage = () => {
 
   if (!sessionUser) return <Redirect to="/" />;
 
-  console.log(workspaces);
-
   return (
     <div className="welcome-container">
       <div className="nav-cont">
