@@ -96,3 +96,18 @@
   background-color: #4a154b;
   color: #fff;
 }
+
+.search-user-cont {
+  display: flex;
+  justify-content: center;
+}
+
+.search-cont.users {
+  max-height: 200px;
+}
+
+.users-results-cont.users {
+  max-height: 200px;
+
+  overflow-y: scroll;
+}

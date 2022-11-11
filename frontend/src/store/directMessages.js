@@ -56,7 +56,7 @@ export const createDirectMessage =
   };
 
 export const updateDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await fetch(`/api/direct_messages/${directMessage.id}`, {
+  const res = await csrfFetch(`/api/direct_messages/${directMessage.id}`, {
     method: "PUT",
     body: JSON.stringify(directMessage),
     headers: {
@@ -71,7 +71,7 @@ export const updateDirectMessage = (directMessage) => async (dispatch) => {
 };
 
 // export const deleteDirectMessage = (directMessageId) => async (dispatch) => {
-//   const res = await fetch(`/api/direct_messages/${directMessageId}`, {
+//   const res = await csrfFetch(`/api/direct_messages/${directMessageId}`, {
 //     method: "DELETE",
 //   });
 
@@ -83,10 +83,8 @@ export const updateDirectMessage = (directMessage) => async (dispatch) => {
 export default function directMessageReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_WORKSPACE:
-      // debugger;
       return { ...action.workspace.directMessages };
     case RECEIVE_DIRECT_MESSAGE:
-      debugger;
       return {
         ...state,
         [action.directMessage.id]: action.directMessage,

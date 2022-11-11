@@ -3,42 +3,21 @@ class Api::DirectMessagesController < ApplicationController
   before_action :require_logged_in
 
   def create
-		# debugger
 		@direct_message = DirectMessage.create(direct_message_params)
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 		@user_ids = params[:users].map {|user| user[:id]}
 		@users =  params[:users]
 		@message = Message.create(content: params[:message][:content], author_name: params[:message][:author_name], author_id: params[:message][:author_id], messageable_type: params[:message][:messageable_type], messageable_id: @direct_message.id )
-		# debugger
+
     if @direct_message.save
 			@user_ids.each do |user_id|
 				@direct_message_subscription = DirectMessageSubscription.create(user_id: user_id, direct_message_id: @direct_message.id)
 
 			end
-			# @users.each do |user|
-				# debugger
-				# @direct_message_subscription = DirectMessageSubscription.create(user_id: user.id, direct_message_id: @direct_message.id)
-
-				WorkspacesChannel.broadcast_to @workspace,
-				  type: 'RECEIVE_NEW_DIRECT_MESSAGE',
-					**from_template('api/direct_messages/show', direct_message: @direct_message)
-			# end
-
-			
-			# @direct_message_subscription = DirectMessageSubscription.create(user_id: user.id, direct_message_id: @direct_message.id)
-
-			# WorkspacesChannel.broadcast_to @users,
-			# 	type: 'RECEIVE_DIRECT_MESSAGE',
-			# 	**from_template('api/direct_messages/show', dm: @direct_message)
-
-
-
-			# DirectMessagesChannel.broadcast_to @direct_message, 
-			# 	type: 'RECEIVE_DIRECT_MESSAGE',
-			# 	**from_template("api/direct_messages/message", direct_message: @direct_message)
-
-
-      # render "/api/direct_messages/show"
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'RECEIVE_NEW_DIRECT_MESSAGE',
+				**from_template('api/direct_messages/show', direct_message: @direct_message)
+	
 			render json: nil, status: :ok
 
     else
@@ -60,7 +39,6 @@ class Api::DirectMessagesController < ApplicationController
 	def show
 		@direct_message = DirectMessage.find_by_id(params[:id])
 
-		# render :show
 		render "/api/direct_messages/d_show"
 	end
 

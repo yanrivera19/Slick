@@ -3,7 +3,6 @@ class Api::ChannelsController < ApplicationController
   before_action :require_logged_in
 
   def create
-		debugger
 		@channel = Channel.create(channel_params)
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
 		@user_ids = @workspace.users.map {|user| user[:id]}

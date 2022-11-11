@@ -37,7 +37,7 @@ export const fetchWorkspace = (workspaceId) => async (dispatch) => {
   if (res.ok) {
     const workspace = await res.json();
     let data = await dispatch(receiveWorkspace(workspace));
-    // debugger
+
     return data;
   }
 };
@@ -46,16 +46,15 @@ export const fetchWorkspaces = () => async (dispatch) => {
   const res = await fetch(`/api/workspaces/`);
   if (res.ok) {
     const workspaces = await res.json();
-    // debugger;
+
     dispatch(receiveWorkspaces(workspaces));
-    // return data;
   }
 };
 
-export const createWorkspace = (workspace) => async (dispatch) => {
-  const res = await fetch(`/api/workspaces`, {
+export const createWorkspace = (workspace, users) => async (dispatch) => {
+  const res = await csrfFetch(`/api/workspaces`, {
     method: "POST",
-    body: JSON.stringify(workspace),
+    body: JSON.stringify(workspace, users),
     headers: {
       "Content-Type": "application/json",
     },
@@ -64,11 +63,12 @@ export const createWorkspace = (workspace) => async (dispatch) => {
   if (res.ok) {
     const workspace = await res.json();
     dispatch(receiveWorkspace(workspace));
+    return workspace;
   }
 };
 
 export const updateWorkspace = (workspace) => async (dispatch) => {
-  const res = await fetch(`/api/workspaces/${workspace.id}`, {
+  const res = await csrfFetch(`/api/workspaces/${workspace.id}`, {
     method: "PUT",
     body: JSON.stringify(workspace),
     headers: {
@@ -83,7 +83,7 @@ export const updateWorkspace = (workspace) => async (dispatch) => {
 };
 
 export const deleteWorkspace = (workspaceId) => async (dispatch) => {
-  const res = await fetch(`/api/workspaces/${workspaceId}`, {
+  const res = await csrfFetch(`/api/workspaces/${workspaceId}`, {
     method: "DELETE",
   });
 
@@ -98,12 +98,6 @@ export default function workspaceReducer(state = {}, action) {
       return { ...state, [action.workspace.id]: action.workspace };
     case RECEIVE_WORKSPACES:
       return { ...state, ...action.workspaces };
-    // case RECEIVE_DIRECT_MESSAGE:
-    //   // debugger;
-    //   return { ...action.workspace.directMessages };
-    // case RECEIVE_DIRECT_MESSAGE:
-    //   // debugger;
-    //   return { ...action.directMessage };
     case REMOVE_WORKSPACE:
       const newState = { ...state };
 

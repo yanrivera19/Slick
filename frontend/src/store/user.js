@@ -40,10 +40,9 @@ export const fetchUser = (userId) => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   const res = await fetch(`/api/users/`);
-  // debugger;
+
   if (res.ok) {
     const data = await res.json();
-    debugger;
     dispatch(receiveUsers(data.users));
   }
 };
@@ -59,7 +58,6 @@ export default function userReducer(state = {}, action) {
     case RECEIVE_USER:
       return action.user ? { ...state, [action.user.id]: action.user } : null;
     case RECEIVE_USERS:
-      debugger;
       return { ...state, ...action.users };
     default:
       return state;

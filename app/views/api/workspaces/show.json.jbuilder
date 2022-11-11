@@ -1,5 +1,4 @@
-# json.workspace do
-  json.extract! @workspace, :id, :name, :owner_id, :created_at
+json.extract! @workspace, :id, :name, :owner_id, :created_at
 	json.users do 
 		@workspace.users.each do |user|
 			json.set! user.id do 
@@ -16,29 +15,13 @@
 		end
 	end
 	json.direct_messages do
-		@direct_messages.each do |direct_message|
+		@workspace.direct_messages.each do |direct_message|
 			json.set! direct_message.id do 
 				json.extract! direct_message, :id
-				# debugger
 				json.users direct_message.users do |user|
-					# debugger
 					json.extract! user, :username
 				end
 			end
 		end 
 
-
-		# @workspace.direct_messages do |direct_message|
-		# 	json.set! direct_message.id do 
-		# 		json.extract! direct_message, :id,
-		# 		json.users do 
-		# 			direct_message.users.each do |user|
-		# 				json.set! user.id do 
-		# 					json.extract! user, :id, :username
-		# 				end
-		# 			end
-		# 		end
-		# 	end
-		# end
 	end
-# end

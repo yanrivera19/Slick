@@ -50,9 +50,9 @@ export const createChannel = (channel) => async (dispatch) => {
     },
   });
 
-  debugger;
 
   if (res.ok) {
+		//CATCH ERRORS
     // const channel = await res.json();
     // dispatch(receiveChannel(channel));
     // const workspace = await dispatch(getWorkspace(channel.channel.workspaceId));
@@ -61,7 +61,7 @@ export const createChannel = (channel) => async (dispatch) => {
 };
 
 export const updateChannel = (channel) => async (dispatch) => {
-  const res = await fetch(`/api/channels/${channel.id}`, {
+  const res = await csrfFetch(`/api/channels/${channel.id}`, {
     method: "PUT",
     body: JSON.stringify(channel),
     headers: {
@@ -76,7 +76,7 @@ export const updateChannel = (channel) => async (dispatch) => {
 };
 
 export const deleteChannel = (channelId) => async (dispatch) => {
-  const res = await fetch(`/api/channels/${channelId}`, {
+  const res = await csrfFetch(`/api/channels/${channelId}`, {
     method: "DELETE",
   });
 
@@ -88,14 +88,10 @@ export const deleteChannel = (channelId) => async (dispatch) => {
 export default function channelReducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_WORKSPACE:
-      return action.workspace.channels
-        ? { ...action.workspace.channels }
-        : null;
+      return action.workspace.channels ? { ...action.workspace.channels } : {};
     case RECEIVE_CHANNEL:
-      // debugger;
       return { ...state, [action.channel.id]: action.channel };
     case RECEIVE_NEW_CHANNEL:
-      // debugger;
       return { ...state, [action.channel.id]: action.channel };
     case REMOVE_CHANNEL:
       const newState = { ...state };

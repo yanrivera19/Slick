@@ -1,6 +1,6 @@
 import { createChannel } from "../../../store/channels";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchUsers } from "../../../store/user";
 import { useParams } from "react-router-dom";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
@@ -16,7 +16,6 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
 
   const createNewChannel = (e) => {
     e.preventDefault();
-    debugger;
 
     dispatch(
       createChannel({
@@ -25,18 +24,23 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
         workspaceId: workspaceId,
         ownerId: sessionUser.id,
       })
-    ).then(() => {
-      setName("");
-      setDescription("");
-      handleAddChannelModal();
-    });
+    );
+    setName("");
+    setDescription("");
+    handleAddChannelModal();
+  };
+
+  const handleCloseModal = () => {
+    setName("");
+    setDescription("");
+    handleAddChannelModal();
   };
 
   return (
     <div id="create-channel-modal">
       <div className="create-modal-header">
         <h1 id="create-header">Create a channel</h1>
-        <button onClick={handleAddChannelModal} className="cross-btn">
+        <button onClick={handleCloseModal} className="cross-btn">
           <CrossIcon size={22} />
         </button>
       </div>
@@ -49,6 +53,7 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
           <form onSubmit={createNewChannel}>
             <p className="label">Name</p>
             <input
+              value={name}
               className="input-field name"
               placeholder="# e.g. plan-budget"
               onChange={(e) => setName(e.target.value)}
@@ -58,6 +63,7 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
               <span className="clear-text">{"(optional)"}</span>
             </div>
             <input
+              value={description}
               className="input-field"
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -70,7 +76,6 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
                 className={`create-channel-btn ${
                   name.trim().length > 0 ? "ready" : ""
                 }`}
-                // onClick={createNewChannel}
               >
                 Create
               </button>
@@ -78,13 +83,6 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
           </form>
         </div>
       </div>
-      {/* <div
-        className={`create-channel-btn ${
-          name.trim().length > 0 ? "ready" : ""
-        }`}
-      > */}
-
-      {/* </div> */}
     </div>
   );
 };

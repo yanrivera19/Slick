@@ -1,6 +1,13 @@
 class Workspace < ApplicationRecord
 	validates :name, presence: true, uniqueness: {scope: :owner_id}
 
+	# after_initialize :generate_default_channels
+	
+
+	# def generate_default_channels
+	# 	Channel.create(name: "general", workspace_id: self.id)
+	# end
+
 	has_many :workspace_subscriptions,
 	dependent: :destroy
 

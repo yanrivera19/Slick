@@ -21,6 +21,8 @@ const WelcomePage = () => {
 
   if (!sessionUser) return <Redirect to="/" />;
 
+  console.log(workspaces);
+
   return (
     <div className="welcome-container">
       <div className="nav-cont">
@@ -71,7 +73,7 @@ const WelcomePage = () => {
           </div>
           <div className="teamtext-and-btn">
             <NavLink
-              to={`/client/${sessionUser.id}/setup-team-name`}
+              to={`/client/${sessionUser.id}/setup-team`}
               style={{ textDecoration: "none", color: "#fff" }}
               className="new-workspace-welcome"
             >

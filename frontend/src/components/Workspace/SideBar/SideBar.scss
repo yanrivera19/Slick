@@ -37,7 +37,7 @@
 
 #works-name {
   font-weight: 900;
-  font-size: 17px;
+  font-size: 18px;
   color: #fff;
 }
 
@@ -76,6 +76,16 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.dm-item.side-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 12px !important;
+}
+
+.dm-users.side-bar {
+  margin-left: 6px;
 }
 
 .channel-item-header,

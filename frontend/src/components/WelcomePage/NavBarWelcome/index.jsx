@@ -23,7 +23,7 @@ const NavBarWelcome = () => {
             SIGN OUT
           </button>
           <NavLink
-            to={"/get-started/createnew"}
+            to={`/client/${sessionUser.id}/setup-team`}
             style={{
               textDecoration: "none",
               color: "#fff",

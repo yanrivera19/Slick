@@ -91,3 +91,18 @@
   background-color: #4a154b;
   color: #fff;
 }
+
+.work-name-side {
+  font-weight: 900;
+  font-size: 17px;
+  color: #fff;
+  font-family: Lato;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.new-msg-search-container {
+  border-radius: 4px;
+}

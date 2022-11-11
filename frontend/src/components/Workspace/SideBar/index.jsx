@@ -10,6 +10,7 @@ import WriteIcon from "../../Svgs&Icons/WriteMsgIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import CreateChannelModal from "../CreateChannelModal";
 import AddTeammatesModal from "../AddTeammatesModal";
+import userImg4 from "../../../assets/images/default-user-img4.png";
 
 const SideBar = ({
   workspace,
@@ -142,10 +143,9 @@ const SideBar = ({
             </div>
             <div className={hideDms ? "hide" : ""}>
               {dms.map((directMessage, idx) => {
-                // if (sessionUser.directMessages[directMessage.id]) {
                 const members = directMessage.users;
                 const names = dmUsersNames(members);
-                // debugger;
+
                 return (
                   <div
                     key={directMessage.id}
@@ -153,17 +153,18 @@ const SideBar = ({
                       handleChannelClick(e, directMessage, "DirectMessage")
                     }
                   >
-                    {/* // return ( */}
-                    <div className="dm-item" key={directMessage.id}>
-                      <span></span>
-                      <span className="dm-users">{names}</span>
+                    <div className="dm-item side-bar" key={directMessage.id}>
+                      <img
+                        className="user-img-default"
+                        height={21}
+                        width={21}
+                        src={userImg4}
+                        alt="user-img"
+                      />
+                      <span className="dm-users side-bar">{names}</span>
                     </div>
-                    {/* // ); */}
                   </div>
                 );
-                // } else {
-                //   return null;
-                // }
               })}
             </div>
             <div className="dm-item-header" onClick={handleOpenAddTeamModal}>

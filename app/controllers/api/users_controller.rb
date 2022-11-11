@@ -6,9 +6,7 @@ class Api::UsersController < ApplicationController
   before_action :require_logged_out, only: [:create]
 
 	def index
-		debugger
 		@users = User.all 
-		debugger
 		render :index
 	end
 

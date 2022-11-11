@@ -14,6 +14,11 @@ import getTimeOfMessage from "../../../util";
 import Message from "./Message";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import CaretOutlineIcon from "../../Svgs&Icons/CaretOutlineIcon";
+import userImg1 from "../../../assets/images/default-user-img.png";
+import userImg2 from "../../../assets/images/default-user-img2.png";
+import userImg3 from "../../../assets/images/default-user-img3png.png";
+import userImg4 from "../../../assets/images/default-user-img4.png";
+import userImg5 from "../../../assets/images/default-user-img-5.png";
 
 const Chat = ({
   conversation,
@@ -25,45 +30,20 @@ const Chat = ({
   getConversation,
   lastMsg,
   newMessage,
-  // forNewMessage = false
+  newChannel,
+  setNewChannel,
 }) => {
-  const [body, setBody] = useState("");
-  const [usersInRoom, setUsersInRoom] = useState({});
   const dispatch = useDispatch();
-  // const { clientId, channelId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
-  //  const dms = useSelector((state) => {
-  //    return Object.values(state.directMessages);
-  //  });
-
-  // const dmMessages = useSelector((state) => {
-  //   // debugger;
-  //   // return state.messages
-  //   //   ? Object.values(state.messages).filter((message) => {
-  //   //       if (
-  //   //         message.messageableId === conversation.id &&
-  //   //         message.messageableType === channelType
-  //   //       ) {
-  //   //         return message;
-  //   //       }
-  //   //     })
-  //   //   : {};
-  //   return state.directMessage
-  //     ? Object.values(state.directMessage.messages)
-  //     : [];
-  // });
-  // const channelMessages = useSelector((state) => {
-  //   return state.channel ? Object.values(state.channel.messages) : [];
-  // });
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
   let hoveredElement = "";
-  const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [date, setDate] = useState(null);
+  const userImages = [userImg1, userImg2, userImg3, userImg4, userImg5];
+  const users = useSelector((state) => Object.values(state.users));
 
   let usersString = "";
 
@@ -71,18 +51,9 @@ const Chat = ({
     state.messages ? Object.values(state.messages) : []
   );
 
-  // let directMessages = useSelector((state) => {
-  //   return state.directMessages ? Object.values(state.directMessages) : [];
-  // });
-
-  // let channels = useSelector((state) => {
-  //   return state.channels ? Object.values(state.channels) : [];
-  // });
-
   useEffect(() => {
-    debugger;
     dispatch(fetchConversation(conversation.id));
-  }, [conversation, channelType, newMessage]);
+  }, [conversation, channelType, lastMessage, newMessage, newChannel]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -91,6 +62,11 @@ const Chat = ({
   const onSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
+    setLastMessage(messageContent);
+
+    if (newChannel) {
+      setNewChannel(false);
+    }
 
     dispatch(
       createMessage({
@@ -102,7 +78,6 @@ const Chat = ({
       })
     );
 
-    setLastMessage(messageContent);
     setMessageContent("");
   };
 
@@ -111,7 +86,7 @@ const Chat = ({
     let filteredUsers = users.filter(
       (user) => user.username !== sessionUser.username
     );
-    // console.log(filteredUsers);
+
     let results = filteredUsers.map((user, idx) => {
       if (idx === filteredUsers.length - 1) {
         return user.username;
@@ -120,16 +95,13 @@ const Chat = ({
       }
     });
 
-    // console.log(results);
     return results.join("");
   };
 
-  console.log(conversation);
-  console.log(messages);
-
   if (!conversation) return null;
   console.log(conversation);
-  // console.log(channelType);
+  console.log(users);
+
   return (
     <div
       style={{
@@ -146,6 +118,24 @@ const Chat = ({
               : dmUsersNames(conversation.users)}
           </span>
         </div>
+        {channelType === "Channel" || users.length > 2 ? (
+          <div className="members-container">
+            {users.length > 1 && users.length < 3 ? (
+              <>
+                <img height={21} width={21} src={userImg1} alt="user-img" />
+                <img height={21} width={21} src={userImg3} alt="user-img" />
+                <span style={{ paddingLeft: "5px" }}>{users.length}</span>
+              </>
+            ) : users.length >= 3 ? (
+              <>
+                <img height={21} width={21} src={userImg1} alt="user-img" />
+                <img height={21} width={21} src={userImg3} alt="user-img" />
+                <img height={21} width={21} src={userImg5} alt="user-img" />
+                <span style={{ paddingLeft: "7px" }}>{users.length}</span>
+              </>
+            ) : null}
+          </div>
+        ) : null}
       </header>
       <div className="messages-container" ref={messageContRef}>
         {messages
@@ -185,16 +175,12 @@ const Chat = ({
                   >
                     <SendMsgIcon />
                   </button>
-                  {/* <button disabled={messageContent.trim().length < 1}>
-                    <CaretOutlineIcon />
-                  </button> */}
                 </div>
               </div>
             </form>
           </div>
         </div>
       </section>
-      {/* </div> */}
     </div>
   );
 };

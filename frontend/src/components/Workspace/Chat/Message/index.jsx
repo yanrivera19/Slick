@@ -6,6 +6,7 @@ import ThreeDotsVert from "../../../Svgs&Icons/ThreeDotsVert";
 import { BsTrash } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
 import CrossIcon from "../../../Svgs&Icons/CrossIcon";
+import userImg2 from "../../../../assets/images/default-user-img2.png";
 
 const Message = ({ message, position }) => {
   const [editMode, setEditMode] = useState(false);
@@ -19,39 +20,10 @@ const Message = ({ message, position }) => {
   const [actionsBox, setActionsBox] = useState(null);
   const [moreActionsBox, setMoreActionsBox] = useState(null);
   const [deleteAlertModal, setDeleteAlertModal] = useState(false);
-  // const menuPop = usePopper(messageContainer, actionsBox, {
-  //   placement: "top",
-  //   modifiers: [
-  //     {
-  //       name: "flip",
-  //     },
-  //     {
-  //       name: "offset",
-  //       options: {
-  //         offset: [-10, 50],
-  //       },
-  //     },
-  //   ],
-  // });
-
-  // const fullMenuPop = usePopper(actionsBox, moreActionsBox, {
-  //   placement: "left",
-  //   modifiers: [
-  //     {
-  //       name: "flip",
-  //     },
-  //     {
-  //       name: "offset",
-  //       options: {
-  //         offset: [30, -50],
-  //       },
-  //     },
-  //   ],
-  // });
 
   const handleEdit = (e, msg) => {
     e.preventDefault();
-    // setLastMessage(messageContent);
+
     dispatch(
       updateMessage({
         ...msg,
@@ -59,38 +31,19 @@ const Message = ({ message, position }) => {
       })
     );
     setMessageContent("");
-    // setEditOrDeleteMsg(true);
     setEditMode(!editMode);
   };
 
   const handleTrashClick = () => {
-    // debugger;
     setDeleteAlertModal(!deleteAlertModal);
   };
-  // console.log(deleteAlertModal);
 
   const handleDelete = (e, msgId) => {
     dispatch(deleteMessage(msgId));
-    // setEditOrDeleteMsg(true);
   };
 
   const handleMouseOver = () => {
     setIsHovered(true);
-
-    // createPopper(messageContainer, actionsBox, {
-    //   placement: "top",
-    //   modifiers: [
-    //     {
-    //       name: "flip",
-    //     },
-    //     {
-    //       name: "offset",
-    //       options: {
-    //         offset: [-10, 50],
-    //       },
-    //     },
-    //   ],
-    // });
   };
 
   const handleMouseOut = () => {
@@ -99,21 +52,6 @@ const Message = ({ message, position }) => {
 
   const showMoreActionsPopUp = () => {
     setMoreActionsClicked(!moreActionsClicked);
-
-    // createPopper(actionsBox, moreActionsBox, {
-    //   placement: "left",
-    //   modifiers: [
-    //     {
-    //       name: "flip",
-    //     },
-    //     {
-    //       name: "offset",
-    //       options: {
-    //         offset: [30, -50],
-    //       },
-    //     },
-    //   ],
-    // });
   };
 
   useEffect(() => {
@@ -124,11 +62,6 @@ const Message = ({ message, position }) => {
 
   return !editMode ? (
     <>
-      {/* <div className="big-overlayed-div">
-        <div id="more-actions-menu">
-          <p>hello</p>
-        </div>
-      </div> */}
       <section className={deleteAlertModal ? "delete-modal-container" : "hide"}>
         <div id="delete-modal">
           <div className="delete-modal-header">
@@ -142,25 +75,37 @@ const Message = ({ message, position }) => {
               Are you sure you want to delete this message? This cannot be
               undone.
             </p>
-            <div className="message-container-modal">
-              <div
-                style={{
-                  marginBottom: "5px",
-                  display: "flex",
-                  alignItems: "flex-end",
-                }}
-              >
-                {/* font-family: Slack-Lato,Slack-Fractions,appleLogo,sans-serif; */}
-                <strong>
-                  {message.author
-                    ? message.author.username
-                    : message.authorName}
-                </strong>
-                <span id="time-of-msg">
-                  {getTimeOfMessage(message.createdAt)}
-                </span>
+            <div
+              className="message-container-modal"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <img
+                className="user-img-default"
+                height={38}
+                width={38}
+                src={userImg2}
+                alt="user-img"
+              />
+
+              <div style={{ marginLeft: "10px" }}>
+                <div
+                  style={{
+                    marginBottom: "5px",
+                    display: "flex",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <strong>
+                    {message.author
+                      ? message.author.username
+                      : message.authorName}
+                  </strong>
+                  <span id="time-of-msg">
+                    {getTimeOfMessage(message.createdAt)}
+                  </span>
+                </div>
+                <p>{message.content}</p>
               </div>
-              <p>{message.content}</p>
             </div>
           </div>
           <div className="cancel-delete-btn-container">
@@ -180,42 +125,16 @@ const Message = ({ message, position }) => {
         className="message-cont"
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
-        // ={messageContainer}
         ref={messageContainer}
       >
-        {/* <Portal> */}
-
-        {/* <div
-          style={{
-            display: `${sessionUser.id === message.authorId ? "flex" : "none"}`,
-          }}
-        >
-          <button
-            style={{ margin: "0 10px" }}
-            onClick={(e) => handleDelete(e, message.id)}
-          >
-            DELETE
-          </button>
-          <button
-            onClick={(e) => {
-              setMessageContent(message.content);
-              setEditMode(!editMode);
-            }}
-          >
-            EDIT
-          </button>
-        </div> */}
-
         <div
           className={
             isHovered && sessionUser.id === message.authorId
               ? "edit-delete-box"
               : "hide"
           }
-          // ={actionsBox}
           ref={actionsBox}
           style={position === 0 ? { top: "10px" } : { top: "-15px" }}
-          // {...menuPop.attributes.popper}
         >
           {/* onClick={showMoreActionsPopUp} */}
           <button
@@ -231,34 +150,38 @@ const Message = ({ message, position }) => {
             <BsTrash />
           </button>
         </div>
-        {/* </Portal>
-        <Portal> */}
         <div
           className={moreActionsClicked ? "big-overlayed-div" : "hide"}
           // ={moreActionsBox}
           ref={moreActionsBox}
-          // style={fullMenuPop.styles.popper}
-          // {...fullMenuPop.attributes.popper}
+        ></div>
+        <div
+          style={{ padding: "8px 20px", display: "flex", alignItems: "center" }}
         >
-          <div id="more-actions-menu">
-            <p>hello</p>
+          <img
+            className="user-img-default"
+            height={36}
+            width={36}
+            src={userImg2}
+            alt="user-img"
+          />
+          <div style={{ marginLeft: "10px" }}>
+            <div
+              style={{
+                marginBottom: "5px",
+                display: "flex",
+                alignItems: "flex-end",
+              }}
+            >
+              <strong>
+                {message.author ? message.author.username : message.authorName}
+              </strong>
+              <span id="time-of-msg">
+                {getTimeOfMessage(message.createdAt)}
+              </span>
+            </div>
+            <p>{message.content}</p>
           </div>
-        </div>
-        {/* </Portal> */}
-        <div style={{ padding: "8px 20px" }}>
-          <div
-            style={{
-              marginBottom: "5px",
-              display: "flex",
-              alignItems: "flex-end",
-            }}
-          >
-            <strong>
-              {message.author ? message.author.username : message.authorName}
-            </strong>
-            <span id="time-of-msg">{getTimeOfMessage(message.createdAt)}</span>
-          </div>
-          <p>{message.content}</p>
         </div>
       </div>
     </>

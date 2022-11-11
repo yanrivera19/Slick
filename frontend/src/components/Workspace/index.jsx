@@ -31,13 +31,6 @@ const Workspace = () => {
   const workspace = useSelector(getWorkspace(workspaceId));
   const dispatch = useDispatch();
   const [directMessages, setDirectMessages] = useState([]);
-  //HOW COULD I USE THE JOIN TABLES TO SAVE THE SUBSCRIPTIONS IN THE DB??
-  // const [channelSubscriptions, setChannelSubscriptions] = useState([]);
-  // const [directMessageSubscriptions, setDirectMessageSubscriptions] = useState(
-  //   []
-  // );co
-  // const [dmLength, setDmLength] = useState(0);
-
   const dms = useSelector((state) => {
     return Object.values(state.directMessages);
   });
@@ -55,13 +48,15 @@ const Workspace = () => {
   let dmLength = 0;
 
   useEffect(() => {
-    // debugger;
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
       subscription(data.workspace, "WorkspacesChannel");
-      createSubscriptions(
-        Object.values(data.workspace.directMessages),
-        "DirectMessagesChannel"
-      );
+      if (data.workspace.directMessages) {
+        createSubscriptions(
+          Object.values(data.workspace.directMessages),
+          "DirectMessagesChannel"
+        );
+      }
+
       createSubscriptions(
         Object.values(data.workspace.channels),
         "ChannelsChannel"
@@ -73,7 +68,7 @@ const Workspace = () => {
     return () => {
       subs.forEach((channelSub) => channelSub.unsubscribe());
     };
-  }, [workspaceId, dms.length]);
+  }, [workspaceId, dms.length, channels.length]);
 
   const createSubscriptions = (rooms, roomName) => {
     rooms.forEach((room) => {
@@ -94,9 +89,9 @@ const Workspace = () => {
           console.log("connected");
         },
         received: ({ type, message, id, directMessage, channel }) => {
-          debugger;
           switch (type) {
             case "RECEIVE_MESSAGE":
+              console.log(shownConversation);
               dispatch(receiveMessage(message));
               console.log("received:", message.content);
               break;
@@ -114,13 +109,15 @@ const Workspace = () => {
               });
               break;
             case "RECEIVE_NEW_CHANNEL":
-              //  setShownConversation(channel);
-              //  setConversationType("Channel");
+              if (channel.ownerId === sessionUser.id) {
+                setNewChannel(true);
+                setShownConversation(channel);
+                setConversationType("Channel");
+              }
               dispatch(receiveNewChannel(channel));
               console.log("received:", channel);
               break;
             case "EDIT_MESSAGE":
-              // debugger;
               dispatch(editMessage(message));
               lastMsg = message;
               console.log("received:", message.content);
@@ -137,16 +134,18 @@ const Workspace = () => {
     );
 
     subs.push(sub);
+    console.log(subs);
   };
 
   const handleChannelClick = (e, channel, channelType) => {
-    // debugger;
+    setNewChannel(false);
     setNewMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
   };
 
   const handleNewMessageClick = () => {
+    setNewChannel(false);
     setShownConversation(null);
     setConversationType(null);
     setNewMessage(true);
@@ -210,6 +209,8 @@ const Workspace = () => {
             dms={dms}
             channels={channels}
             newMessage={newMessage}
+            newChannel={newChannel}
+            setNewChannel={setNewChannel}
           />
         ) : conversationType === "DirectMessage" ? (
           <Chat

@@ -1,9 +1,21 @@
 class Api::WorkspacesController < ApplicationController
+	wrap_parameters :workspace, include: Workspace.attribute_names + ["workspaceId", "ownerId"]
 	before_action :require_logged_in
 
   def create
-		@workspace = Workspace.new(workspace_params)
+		@workspace = Workspace.create(workspace_params)
+		@users = params[:users]
+		@user_ids = params[:users].map {|user| user[:id]}
+		@channel_1 = Channel.create(name: "general", workspace_id: @workspace.id, owner_id: params[:owner_id])
+		@channel_2 = Channel.create(name: "random", workspace_id: @workspace.id, owner_id: params[:owner_id])
+
     if @workspace.save
+			@user_ids.each do |user_id|
+				@workspace_subscription = WorkspaceSubscription.create(user_id: user_id, workspace_id: @workspace.id)
+				@channel_subscription_1 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_1.id)
+				@channel_subscription_2 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_2.id)
+			end
+
       render :show
     else
       render json: {errors: @workspace.errors.full_messages}, status: 422
@@ -50,6 +62,6 @@ class Api::WorkspacesController < ApplicationController
 	private 
 
 	def workspace_params
-		params.require(:workspace).permit(:name, :workspace_id)
+		params.require(:workspace).permit(:name, :workspace_id, :users, :owner_id)
 	end
 end

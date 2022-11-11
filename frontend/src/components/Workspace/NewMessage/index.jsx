@@ -106,7 +106,7 @@ const NewMessage = ({
           <div style={{ display: "flex", alignItems: "center" }}>
             <span className="to-new-msg">To:</span>
             {selectedUsers.map((selectedUser) => (
-              <div className="selected-user">
+              <div className="selected-user" key={selectedUser.id}>
                 <span style={{ marginRight: "8px" }}>
                   {selectedUser.username}
                 </span>

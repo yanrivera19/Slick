@@ -1,14 +1,11 @@
-# require "byebug"
-
 class Api::MessagesController < ApplicationController
 	wrap_parameters :message, include: Message.attribute_names + ["authorId", "messageableType", "messageableId", "authorName", "updatedAt"]
 	before_action :require_logged_in
 
   def create
-		# debugger
 		@message = Message.new(message_params)
 		@author = User.find_by(id: params[:author_id])
-		# debugger
+
 		type = (params[:messageable_type]).downcase
 		
 
@@ -16,17 +13,16 @@ class Api::MessagesController < ApplicationController
 		#in conditional below
 	
     if @message.save
-			# @name_of_channel.broadcast_to(@message.)
-			# debugger
 			if type == "channel"
 				@channel = Channel.find_by_id(params[:messageable_id])
+				@channel_messages = @channel.messages
 
 				ChannelsChannel.broadcast_to @message.messageable, 
 				  type: 'RECEIVE_MESSAGE',
-			    **from_template("api/messages/show", message: @message)
+			    **from_template("api/messages/show", message: @message, channel_messages: @channel_messages)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-				# debugger
+				
 				DirectMessagesChannel.broadcast_to @message.messageable, 
 				  type: 'RECEIVE_MESSAGE',
 			    **from_template("api/messages/show", message: @message)

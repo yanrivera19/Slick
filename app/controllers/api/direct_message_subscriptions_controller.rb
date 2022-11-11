@@ -3,7 +3,6 @@ class Api::DirectMessageSubscriptionsController < ApplicationController
 	before_action :require_logged_in
 
 	def create
-		# debugger
 		@direct_message_subscription = DirectMessageSubscription.new(direct_message_subscription_params);
 
 		if @direct_message_subscription.save 
