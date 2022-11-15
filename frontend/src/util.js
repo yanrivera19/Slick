@@ -8,7 +8,7 @@ export default function getTimeOfMessage(date) {
     minute: "2-digit",
   });
 
-  if (hours < 10 || hours < 22) {
+  if (hours < 10 || (hours > 12 && hours < 22)) {
     timeWithPmAm = timeWithPmAm.slice(1);
   }
 
