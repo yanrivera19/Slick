@@ -86,11 +86,14 @@
 
 .dm-users.side-bar {
   margin-left: 6px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .channel-item-header,
 .dm-item-header {
-  padding: 0 12px 1px;
+  padding: 0 12px 2px;
 }
 
 .square-btn-sidebar {

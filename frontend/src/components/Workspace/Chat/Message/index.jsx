@@ -95,7 +95,7 @@ const Message = ({ message, position }) => {
                     alignItems: "flex-end",
                   }}
                 >
-                  <strong>
+                  <strong id="name-author">
                     {message.author
                       ? message.author.username
                       : message.authorName}
@@ -156,7 +156,11 @@ const Message = ({ message, position }) => {
           ref={moreActionsBox}
         ></div>
         <div
-          style={{ padding: "8px 20px", display: "flex", alignItems: "center" }}
+          style={{
+            padding: "10px 20px",
+            display: "flex",
+            alignItems: "center",
+          }}
         >
           <img
             className="user-img-default"

@@ -1,6 +1,6 @@
 export default function getTimeOfMessage(date) {
   const time = new Date(date);
-  let hours = 24 - time.getHours();
+  let hours = time.getHours();
   let minutes = time.getMinutes();
 
   let timeWithPmAm = time.toLocaleTimeString("en-US", {
@@ -8,8 +8,8 @@ export default function getTimeOfMessage(date) {
     minute: "2-digit",
   });
 
-  if (hours < 10) {
-    return timeWithPmAm.substring(1);
+  if (hours < 10 || hours < 22) {
+    timeWithPmAm = timeWithPmAm.slice(1);
   }
 
   return timeWithPmAm;
