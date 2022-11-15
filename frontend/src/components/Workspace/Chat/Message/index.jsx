@@ -173,7 +173,7 @@ const Message = ({ message, position }) => {
                 alignItems: "flex-end",
               }}
             >
-              <strong>
+              <strong id="name-author">
                 {message.author ? message.author.username : message.authorName}
               </strong>
               <span id="time-of-msg">

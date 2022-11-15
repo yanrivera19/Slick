@@ -1,12 +1,16 @@
 #time-of-msg {
   color: #616061;
-  font-size: 12px;
+  font-size: 12.5px;
   margin-left: 10px;
 }
 
 .message-cont {
   font-size: 15px;
   position: relative;
+}
+
+#name-author {
+  line-height: 0;
 }
 
 .message-cont:hover {
