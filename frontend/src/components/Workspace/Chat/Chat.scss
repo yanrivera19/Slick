@@ -57,11 +57,11 @@ textarea {
 
 #chat-box {
   position: absolute;
-  bottom: 24px;
+  bottom: 30px;
   width: 100%;
   box-shadow: 1px 0 0 0 rgba(29, 28, 29, 0.13);
   background: inherit;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   display: flex;
   justify-content: center;
   margin-top: 2px;
@@ -143,4 +143,21 @@ textarea {
   background-color: #fff;
   padding: 2px 10px;
   font-size: 14px;
+}
+
+#shift-enter-cont {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 16px;
+  font-size: 11px;
+  color: #1d1c1db3;
+  right: 5px;
+}
+
+#shift-enter-span {
+  font-weight: 700;
 }
