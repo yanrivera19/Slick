@@ -44,18 +44,23 @@ const NewMessage = ({
   const [selectedUsers, setSelectedUsers] = useState([]);
   const oneToOneDmUsers = [];
   const [udm, setudm] = useState();
+  const inputRef = useRef();
+  const searchResultsRef = useRef();
 
-  const checkDmWithUser = () => {
-    let results = dms.filter((dm) => {
-      if (!dm.users.join("").includes(",")) {
-        oneToOneDmUsers.push(...dm);
-        return false;
-      } else {
-        return true;
-      }
-    });
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
 
-    setudm(results);
+  const handleClickOutside = (e) => {
+    if (
+      searchResultsRef.current &&
+      !searchResultsRef.current.contains(e.target)
+    ) {
+      setSearchInputValue("");
+    }
   };
 
   const onSubmit = (e) => {
@@ -125,20 +130,23 @@ const NewMessage = ({
             value={searchInputValue}
             onChange={(e) => setSearchInputValue(e.target.value)}
             placeholder="#a-channel or @somebody"
+            onFocus={(e) => setSearchInputValue("")}
           />
         </div>
       </section>
-      {searchInputValue.length > 0 && (
-        <SearchResults
-          inputValue={searchInputValue.toLowerCase()}
-          data={data}
-          dms={dms}
-          handleChannelClick={handleChannelClick}
-          handleResultClick={handleResultClick}
-          selectedUsers={selectedUsers}
-          oneToOneDmUsers={oneToOneDmUsers}
-        />
-      )}
+      <div ref={searchResultsRef}>
+        {searchInputValue.length > 0 && (
+          <SearchResults
+            inputValue={searchInputValue.toLowerCase()}
+            data={data}
+            dms={dms}
+            handleChannelClick={handleChannelClick}
+            handleResultClick={handleResultClick}
+            selectedUsers={selectedUsers}
+            oneToOneDmUsers={oneToOneDmUsers}
+          />
+        )}
+      </div>
 
       <section id="chat-box">
         <div className="chat-cont">

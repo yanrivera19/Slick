@@ -104,7 +104,7 @@ const Message = ({ message, position }) => {
                     {getTimeOfMessage(message.createdAt)}
                   </span>
                 </div>
-                <p>{message.content}</p>
+                <p className="message-text-content">{message.content}</p>
               </div>
             </div>
           </div>
@@ -159,16 +159,17 @@ const Message = ({ message, position }) => {
           style={{
             padding: "10px 20px",
             display: "flex",
-            alignItems: "center",
           }}
         >
-          <img
-            className="user-img-default"
-            height={36}
-            width={36}
-            src={userImg2}
-            alt="user-img"
-          />
+          <div className="msg-img-container">
+            <img
+              className="user-img-default"
+              height={36}
+              width={36}
+              src={userImg2}
+              alt="user-img"
+            />
+          </div>
           <div style={{ marginLeft: "10px" }}>
             <div
               style={{
@@ -184,7 +185,7 @@ const Message = ({ message, position }) => {
                 {getTimeOfMessage(message.createdAt)}
               </span>
             </div>
-            <p>{message.content}</p>
+            <p className="message-text-content">{message.content}</p>
           </div>
         </div>
       </div>

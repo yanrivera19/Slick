@@ -80,6 +80,12 @@ const Chat = ({
     setMessageContent("");
   };
 
+  const handleEnterKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      onSubmit(e);
+    }
+  };
+
   const dmUsersNames = (users) => {
     let filteredUsers = users.filter(
       (user) => user.username !== sessionUser.username
@@ -151,13 +157,17 @@ const Chat = ({
             <form onSubmit={onSubmit}>
               <textarea
                 value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
+                onChange={(e) => {
+                  // console.log(JSON.stringify(e.target.value));
+                  setMessageContent(e.target.value);
+                }}
                 rows="1"
                 placeholder={`Message #${
                   channelType === "Channel"
                     ? conversation.name
                     : dmUsersNames(conversation.users)
                 }`}
+                onKeyPress={handleEnterKeyPress}
               />
               <div className="bottom-chat">
                 <div
@@ -177,6 +187,14 @@ const Chat = ({
           </div>
         </div>
       </section>
+      <div id="shift-enter-cont">
+        {messageContent.length > 0 && (
+          <p className="shift-enter-message">
+            <span id="shift-enter-span">Shift + Enter </span>
+            to add a new line
+          </p>
+        )}
+      </div>
     </div>
   );
 };

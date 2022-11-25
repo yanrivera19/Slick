@@ -1,7 +1,7 @@
 import Chat from "./Chat";
 import SideBar from "./SideBar";
 import NewMessage from "./NewMessage";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import consumer from "../../consumer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWorkspace, getWorkspace } from "../../store/workspaces";
@@ -24,6 +24,7 @@ import {
   receiveNewDirectMessage,
 } from "../../store/directMessages";
 import { receiveNewChannel } from "../../store/channels";
+import userProfileImg from "../../assets/images/default-user-img.png";
 
 const Workspace = () => {
   const { workspaceId } = useParams();
@@ -42,10 +43,12 @@ const Workspace = () => {
   const [conversationType, setConversationType] = useState(null);
   const [newMessage, setNewMessage] = useState(false);
   const [newChannel, setNewChannel] = useState(false);
+  const [userProfilePop, setUserProfilePop] = useState(false);
   let lastMsg;
   const dmUsersArray = [];
   let subs = [];
   let dmLength = 0;
+  const profilePopRef = useRef();
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
@@ -172,15 +175,36 @@ const Workspace = () => {
     return results.join("");
   };
 
+  const handleClosingUserPop = (e) => {
+    if (userProfilePop && e.target.offsetParent !== profilePopRef.current) {
+      setUserProfilePop(false);
+    }
+  };
+
   return workspace ? (
-    <div className="app-container">
+    <div className="app-container" onClick={handleClosingUserPop}>
       <nav className="app-nav">
-        <div className="nav-right-side"></div>
+        <div className="nav-left-side"></div>
         <div className="app-search-cont">
           <button className="app-search-bar"></button>
           <button></button>
         </div>
-        <div className="nav-left-side"></div>
+        <div className="nav-right-side">
+          <div className="profile-img-cont" ref={profilePopRef}>
+            <span
+              className="profile-img"
+              onClick={() => setUserProfilePop(true)}
+            >
+              <img src={userProfileImg} alt="user-profile" />
+              <div id="online-sign"></div>
+            </span>
+            {userProfilePop && (
+              <div className="profile-popup">
+                <div>hhh</div>
+              </div>
+            )}
+          </div>
+        </div>
       </nav>
       <div className="app-main-cont">
         <SideBar
