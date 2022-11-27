@@ -47,8 +47,6 @@ const SideBar = ({
     setShowAddTeammateModal(!showAddTeammateModal);
   };
 
-  // console.log(workspace.ownerId === sessionUser.id);
-
   return (
     <>
       <section

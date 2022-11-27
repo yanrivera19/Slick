@@ -33,7 +33,7 @@ textarea {
   resize: none;
   border-style: none;
   box-sizing: border-box !important;
-  padding: 8px 12px 0;
+  padding: 12px;
   line-height: 1.46668;
   font-size: 15px !important;
 }
@@ -91,14 +91,11 @@ textarea {
 }
 
 .bottom-chat {
-  padding: 0 12px 12px;
+  padding: 4px 12px 6px;
   box-sizing: border-box;
   display: flex;
-}
-
-.bottom-chat {
-  display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  position: relative;
 }
 
 .send-msg-cont {
@@ -160,4 +157,13 @@ textarea {
 
 #shift-enter-span {
   font-weight: 700;
+}
+
+.emoji-icon {
+  cursor: pointer;
+}
+
+.emoji-picker-box {
+  position: absolute;
+  bottom: 75px;
 }
