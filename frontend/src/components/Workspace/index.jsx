@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import consumer from "../../consumer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWorkspace, getWorkspace } from "../../store/workspaces";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useHistory, useParams } from "react-router-dom";
 import { fetchChannel, getChannel } from "../../store/channels";
 import {
   fetchDirectMessage,
@@ -49,6 +49,7 @@ const Workspace = () => {
   let subs = [];
   let dmLength = 0;
   const profilePopRef = useRef();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
@@ -176,7 +177,7 @@ const Workspace = () => {
   };
 
   const handleClosingUserPop = (e) => {
-    if (userProfilePop && e.target.offsetParent !== profilePopRef.current) {
+    if (userProfilePop && !profilePopRef.current.contains(e.target)) {
       setUserProfilePop(false);
     }
   };
@@ -196,11 +197,32 @@ const Workspace = () => {
               onClick={() => setUserProfilePop(true)}
             >
               <img src={userProfileImg} alt="user-profile" />
-              <div id="online-sign"></div>
+              <div className="online-sign"></div>
             </span>
             {userProfilePop && (
               <div className="profile-popup">
-                <div>hhh</div>
+                <div className="user-status-container">
+                  <img src={userProfileImg} alt="user-profile" />
+                  <div>
+                    <p className="username-in-popup">{sessionUser.username}</p>
+                    <div id="status-info">
+                      <div className="online-sign-inside"></div>
+                      <span>Active</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="separator">
+                  <hr className="separator-line" />
+                </div>
+                <div
+                  onClick={() =>
+                    history.push(
+                      `/client/${sessionUser.id}/get-started/landing`
+                    )
+                  }
+                >
+                  <span className="profile-popup-items">{`Sign out of ${workspace.name}`}</span>
+                </div>
               </div>
             )}
           </div>

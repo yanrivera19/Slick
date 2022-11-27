@@ -47,9 +47,13 @@ const WelcomePage = () => {
                   />
                   <div>
                     <p className="workspace-name">{workspace.name}</p>
-                    <p className="workspace-members-count">{`${
-                      workspace.members
-                    } member${workspace.members > 1 ? "s" : ""}`}</p>
+                    <p className="workspace-members-count">
+                      {!workspace.members
+                        ? "..."
+                        : `${workspace.members} member${
+                            workspace.members > 1 ? "s" : ""
+                          }`}
+                    </p>
                   </div>
                 </div>
                 <div>

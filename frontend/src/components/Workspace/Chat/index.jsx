@@ -18,6 +18,8 @@ import userImg2 from "../../../assets/images/default-user-img2.png";
 import userImg3 from "../../../assets/images/default-user-img3png.png";
 import userImg4 from "../../../assets/images/default-user-img4.png";
 import userImg5 from "../../../assets/images/default-user-img-5.png";
+import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
+import EmojiOutlineIcon from "../../Svgs&Icons/EmojiOutlineIcon";
 
 const Chat = ({
   conversation,
@@ -43,9 +45,9 @@ const Chat = ({
   const [date, setDate] = useState(null);
   const userImages = [userImg1, userImg2, userImg3, userImg4, userImg5];
   const users = useSelector((state) => Object.values(state.users));
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef();
   let usersString = "";
-
   let messages = useSelector((state) =>
     state.messages ? Object.values(state.messages) : []
   );
@@ -57,6 +59,19 @@ const Chat = ({
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
   }, [messages, conversation.name]);
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
+
+  const handleClickOutside = (e) => {
+    if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
+      setShowEmojiPicker(false);
+    }
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -100,6 +115,11 @@ const Chat = ({
     });
 
     return results.join("");
+  };
+
+  const handleEmojiPick = (emojiObj, e) => {
+    setMessageContent(messageContent + emojiObj.emoji);
+    setShowEmojiPicker(false);
   };
 
   if (!conversation) return null;
@@ -158,7 +178,6 @@ const Chat = ({
               <textarea
                 value={messageContent}
                 onChange={(e) => {
-                  // console.log(JSON.stringify(e.target.value));
                   setMessageContent(e.target.value);
                 }}
                 rows="1"
@@ -170,6 +189,22 @@ const Chat = ({
                 onKeyPress={handleEnterKeyPress}
               />
               <div className="bottom-chat">
+                {showEmojiPicker && (
+                  <div className="emoji-picker-box" ref={emojiPickerRef}>
+                    <EmojiPicker
+                      height={380}
+                      width={355}
+                      onEmojiClick={handleEmojiPick}
+                      emojiStyle={EmojiStyle.NATIVE}
+                    />
+                  </div>
+                )}
+                <div
+                  className="emoji-icon"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                >
+                  <EmojiOutlineIcon />
+                </div>
                 <div
                   className={`send-msg-cont ${
                     messageContent.trim().length > 0 ? "ready" : ""

@@ -116,35 +116,6 @@ const SearchResults = ({
       ) {
         return true;
       }
-      // if (object.hasOwnProperty("name")) {
-      //   if (
-      //     !selectedUsers.includes(object) &&
-      //     object.name.toLowerCase().includes(inputValue)
-      //   ) {
-      //     // channels.push(object);
-      //     return true;
-      //   }
-      // }
-
-      // if (object.hasOwnProperty("users")) {
-      //   if (
-      //     !selectedUsers.includes(object) &&
-      //     object.users.join(" ").toLowerCase().includes(inputValue)
-      //   ) {
-      //     // dms.push(object);
-      //     return true;
-      //   }
-      // }
-
-      // if (object.hasOwnProperty("username")) {
-      //   if (
-      //     !selectedUsers.includes(object) &&
-      //     object.username.toLowerCase().includes(inputValue)
-      //   ) {
-      //     // users.push(object)
-      //     return true;
-      //   }
-      // }
     });
 
     setFilteredData(filtered);
