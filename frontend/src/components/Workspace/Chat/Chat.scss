@@ -183,6 +183,7 @@ textarea {
 .emoji-picker-box {
   position: absolute;
   bottom: 75px;
+  z-index: 999;
 }
 
 .emoji-smile-icon,

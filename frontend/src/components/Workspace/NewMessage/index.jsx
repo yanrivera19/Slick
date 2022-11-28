@@ -16,6 +16,8 @@ import {
   fetchDirectMessage,
 } from "../../../store/directMessages";
 import { useParams } from "react-router-dom";
+import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
+import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 
 const NewMessage = ({
   users,
@@ -42,6 +44,11 @@ const NewMessage = ({
   const [searchInputValue, setSearchInputValue] = useState("");
   const data = [...channels, ...users, ...dms];
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef();
+  const emojiIconRef = useRef();
+  const textAreaRef = useRef();
   const oneToOneDmUsers = [];
   const [udm, setudm] = useState();
   const inputRef = useRef();
@@ -91,6 +98,18 @@ const NewMessage = ({
     setSelectedUsers(
       selectedUsers.filter((selectedUser) => selectedUser.id !== user.id)
     );
+  };
+
+  const handleEnterKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      onSubmit(e);
+    }
+  };
+
+  const handleEmojiPick = (emojiObj, e) => {
+    setMessageContent(messageContent + emojiObj.emoji);
+    setShowEmojiPicker(false);
+    textAreaRef.current.focus();
   };
 
   return (
@@ -158,8 +177,34 @@ const NewMessage = ({
                 onChange={(e) => setMessageContent(e.target.value)}
                 rows="1"
                 placeholder="Start a new message"
+                onKeyPress={handleEnterKeyPress}
+                ref={textAreaRef}
               />
               <div className="bottom-chat">
+                {showEmojiPicker && (
+                  <div className="emoji-picker-box" ref={emojiPickerRef}>
+                    <EmojiPicker
+                      height={380}
+                      width={355}
+                      onEmojiClick={handleEmojiPick}
+                      emojiStyle={EmojiStyle.NATIVE}
+                    />
+                  </div>
+                )}
+                <div
+                  className="emoji-icon"
+                  ref={emojiIconRef}
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  onMouseEnter={() => setShowLaughingEmoji(true)}
+                  onMouseLeave={() => setShowLaughingEmoji(false)}
+                >
+                  {/* <EmojiOutlineIcon /> */}
+                  {showLaughingEmoji ? (
+                    <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
+                  ) : (
+                    <BsEmojiSmile size={18} className="emoji-smile-icon" />
+                  )}
+                </div>
                 <div
                   className={`send-msg-cont ${
                     messageContent.trim().length > 0 && selectedUsers.length > 0

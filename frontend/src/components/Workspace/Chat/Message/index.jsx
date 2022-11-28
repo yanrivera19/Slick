@@ -7,6 +7,8 @@ import { BsTrash } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
 import CrossIcon from "../../../Svgs&Icons/CrossIcon";
 import userImg2 from "../../../../assets/images/default-user-img2.png";
+import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
+import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 
 const Message = ({ message, position }) => {
   const [editMode, setEditMode] = useState(false);
@@ -20,17 +22,30 @@ const Message = ({ message, position }) => {
   const [actionsBox, setActionsBox] = useState(null);
   const [moreActionsBox, setMoreActionsBox] = useState(null);
   const [deleteAlertModal, setDeleteAlertModal] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef();
+  const emojiIconRef = useRef();
+  const textAreaRef = useRef();
 
-  const handleEdit = (e, msg) => {
+  useEffect(() => {
+    if (editMode === true) {
+      editTextRef.current.scrollIntoView();
+    }
+  }, [editMode]);
+
+  const handleEdit = (e) => {
     e.preventDefault();
 
     dispatch(
       updateMessage({
-        ...msg,
+        ...message,
         content: messageContent,
       })
     );
     setMessageContent("");
+    setShowEmojiPicker(false);
     setEditMode(!editMode);
   };
 
@@ -54,11 +69,17 @@ const Message = ({ message, position }) => {
     setMoreActionsClicked(!moreActionsClicked);
   };
 
-  useEffect(() => {
-    if (editMode === true) {
-      editTextRef.current.scrollIntoView();
+  const handleEnterKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      handleEdit(e);
     }
-  }, [editMode]);
+  };
+
+  const handleEmojiPick = (emojiObj, e) => {
+    setMessageContent(messageContent + emojiObj.emoji);
+    setShowEmojiPicker(false);
+    textAreaRef.current.focus();
+  };
 
   return !editMode ? (
     <>
@@ -195,17 +216,50 @@ const Message = ({ message, position }) => {
       <div className="chat-cont">
         <div className="top-chat"></div>
         <div className="textarea-container">
-          <form onSubmit={(e) => handleEdit(e, message)}>
+          <form onSubmit={handleEdit}>
             <textarea
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               rows="1"
+              onKeyPress={handleEnterKeyPress}
+              ref={textAreaRef}
             />
             <div className="bottom-chat edit">
+              {showEmojiPicker && (
+                <div
+                  className="emoji-picker-box"
+                  ref={emojiPickerRef}
+                  style={position < 6 ? { top: "35px" } : { bottom: "80px" }}
+                >
+                  <EmojiPicker
+                    height={350}
+                    width={340}
+                    onEmojiClick={handleEmojiPick}
+                    emojiStyle={EmojiStyle.NATIVE}
+                  />
+                </div>
+              )}
+              <div
+                className="emoji-icon"
+                ref={emojiIconRef}
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                onMouseEnter={() => setShowLaughingEmoji(true)}
+                onMouseLeave={() => setShowLaughingEmoji(false)}
+              >
+                {/* <EmojiOutlineIcon /> */}
+                {showLaughingEmoji ? (
+                  <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
+                ) : (
+                  <BsEmojiSmile size={18} className="emoji-smile-icon" />
+                )}
+              </div>
               <div className="msg-edit-btns">
                 <button
                   id="cancel-edit-btn"
-                  onClick={(e) => setEditMode(!editMode)}
+                  onClick={(e) => {
+                    setShowEmojiPicker(false);
+                    setEditMode(!editMode);
+                  }}
                 >
                   Cancel
                 </button>
