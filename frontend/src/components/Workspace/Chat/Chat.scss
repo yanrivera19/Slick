@@ -161,9 +161,32 @@ textarea {
 
 .emoji-icon {
   cursor: pointer;
+  padding: 2px;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.emoji-icon:hover {
+  background: rgb(236, 236, 236);
+}
+
+.emoji-icon:hover .emoji-laugh-icon {
+  color: #1d1c1dee;
+  background-color: gold;
+  transform: rotate(30deg);
 }
 
 .emoji-picker-box {
   position: absolute;
   bottom: 75px;
+}
+
+.emoji-smile-icon,
+.emoji-laugh-icon {
+  color: #1d1c1db3;
+  border-radius: 50%;
 }

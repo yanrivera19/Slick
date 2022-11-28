@@ -20,6 +20,7 @@ import userImg4 from "../../../assets/images/default-user-img4.png";
 import userImg5 from "../../../assets/images/default-user-img-5.png";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import EmojiOutlineIcon from "../../Svgs&Icons/EmojiOutlineIcon";
+import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 
 const Chat = ({
   conversation,
@@ -47,10 +48,13 @@ const Chat = ({
   const users = useSelector((state) => Object.values(state.users));
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef();
+  const emojiIconRef = useRef();
+  const textAreaRef = useRef();
   let usersString = "";
   let messages = useSelector((state) =>
     state.messages ? Object.values(state.messages) : []
   );
+  const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
@@ -60,18 +64,23 @@ const Chat = ({
     lastMessageRef.current.scrollIntoView();
   }, [messages, conversation.name]);
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener("click", handleClickOutside, true);
+  //   return () => {
+  //     document.removeEventListener("click", handleClickOutside, true);
+  //   };
+  // }, []);
 
-  const handleClickOutside = (e) => {
-    if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
-      setShowEmojiPicker(false);
-    }
-  };
+  // const handleClickOutside = (e) => {
+  //   if (emojiIconRef.current && emojiIconRef.current.contains(e.target)) {
+  //     setShowEmojiPicker(!showEmojiPicker);
+  //   } else if (
+  //     emojiPickerRef.current &&
+  //     !emojiPickerRef.current.contains(e.target)
+  //   ) {
+  //     setShowEmojiPicker(false);
+  //   }
+  // };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -120,6 +129,7 @@ const Chat = ({
   const handleEmojiPick = (emojiObj, e) => {
     setMessageContent(messageContent + emojiObj.emoji);
     setShowEmojiPicker(false);
+    textAreaRef.current.focus();
   };
 
   if (!conversation) return null;
@@ -187,6 +197,7 @@ const Chat = ({
                     : dmUsersNames(conversation.users)
                 }`}
                 onKeyPress={handleEnterKeyPress}
+                ref={textAreaRef}
               />
               <div className="bottom-chat">
                 {showEmojiPicker && (
@@ -201,9 +212,17 @@ const Chat = ({
                 )}
                 <div
                   className="emoji-icon"
+                  ref={emojiIconRef}
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  onMouseEnter={() => setShowLaughingEmoji(true)}
+                  onMouseLeave={() => setShowLaughingEmoji(false)}
                 >
-                  <EmojiOutlineIcon />
+                  {/* <EmojiOutlineIcon /> */}
+                  {showLaughingEmoji ? (
+                    <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
+                  ) : (
+                    <BsEmojiSmile size={18} className="emoji-smile-icon" />
+                  )}
                 </div>
                 <div
                   className={`send-msg-cont ${
