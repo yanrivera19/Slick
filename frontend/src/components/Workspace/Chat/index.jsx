@@ -9,7 +9,7 @@ import {
   deleteMessage,
   getMessage,
 } from "../../../store/messages";
-import getTimeOfMessage from "../../../util";
+import { getTimeOfMessage, getDate } from "../../../util";
 import Message from "./Message";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import CaretOutlineIcon from "../../Svgs&Icons/CaretOutlineIcon";
@@ -64,23 +64,49 @@ const Chat = ({
     lastMessageRef.current.scrollIntoView();
   }, [messages, conversation.name]);
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleClickOutside, true);
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside, true);
-  //   };
-  // }, []);
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
 
-  // const handleClickOutside = (e) => {
-  //   if (emojiIconRef.current && emojiIconRef.current.contains(e.target)) {
-  //     setShowEmojiPicker(!showEmojiPicker);
-  //   } else if (
-  //     emojiPickerRef.current &&
-  //     !emojiPickerRef.current.contains(e.target)
-  //   ) {
-  //     setShowEmojiPicker(false);
-  //   }
-  // };
+  const handleClickOutside = (e) => {
+    if (emojiIconRef.current && emojiIconRef.current.contains(e.target)) {
+      setShowEmojiPicker(!showEmojiPicker);
+    } else if (
+      emojiPickerRef.current &&
+      !emojiPickerRef.current.contains(e.target)
+    ) {
+      setShowEmojiPicker(false);
+    }
+  };
+  const checkDate = (message, idx) => {
+    const today = new Date().toLocaleDateString();
+    let messageDate = new Date(message.createdAt).toLocaleDateString();
+    let prevMessageDate = null;
+    if (idx > 0) {
+      prevMessageDate = new Date(
+        Object.values(messages)[idx - 1].createdAt
+      ).toLocaleDateString();
+    }
+
+    if (prevMessageDate) {
+      if (messageDate > prevMessageDate && messageDate === today) {
+        return "Today";
+      } else if (messageDate > prevMessageDate && messageDate !== today) {
+        messageDate = getDate(messageDate);
+        return messageDate;
+      } else {
+        return null;
+      }
+    } else if (messageDate === today) {
+      return "Today";
+    } else {
+      messageDate = getDate(messageDate);
+      return messageDate;
+    }
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -172,8 +198,15 @@ const Chat = ({
       <div className="messages-container" ref={messageContRef}>
         {messages
           ? Object.values(messages).map((message, idx) => {
+              let date = checkDate(message, idx);
+              console.log(date);
               return (
-                <Message key={message.id} position={idx} message={message} />
+                <Message
+                  key={message.id}
+                  position={idx}
+                  message={message}
+                  dateText={date}
+                />
               );
             })
           : null}
@@ -213,7 +246,7 @@ const Chat = ({
                 <div
                   className="emoji-icon"
                   ref={emojiIconRef}
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  onClick={() => setShowEmojiPicker(true)}
                   onMouseEnter={() => setShowLaughingEmoji(true)}
                   onMouseLeave={() => setShowLaughingEmoji(false)}
                 >

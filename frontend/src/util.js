@@ -1,4 +1,4 @@
-export default function getTimeOfMessage(date) {
+export function getTimeOfMessage(date) {
   const time = new Date(date);
   let hours = time.getHours();
   let minutes = time.getMinutes();
@@ -13,4 +13,59 @@ export default function getTimeOfMessage(date) {
   }
 
   return timeWithPmAm;
+}
+
+export function getDate(date) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  let dateObj = {
+    dayOfWeek: new Date(date).getDay(),
+    dayNumber: 0,
+    month: 0,
+    year: 0,
+  };
+
+  date.split("/").forEach((num, idx) => {
+    switch (idx) {
+      case 0:
+        dateObj["month"] = Number(num) - 1;
+        break;
+      case 1:
+        dateObj["dayNumber"] = Number(num);
+        break;
+      case 2:
+        dateObj["year"] = Number(num);
+        break;
+      default:
+        break;
+    }
+  });
+
+  let year =
+    new Date().getFullYear() === dateObj["year"] ? "" : `, ${dateObj["year"]}`;
+  let weekDay = year === "" ? `${days[dateObj["dayOfWeek"]]}, ` : "";
+
+  return `${weekDay}${months[dateObj["month"]]}${year}`;
 }

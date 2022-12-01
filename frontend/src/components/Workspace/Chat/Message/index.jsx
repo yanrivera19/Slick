@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import getTimeOfMessage from "../../../../util";
+import { getTimeOfMessage } from "../../../../util";
 import { updateMessage, deleteMessage } from "../../../../store/messages";
 import ThreeDotsVert from "../../../Svgs&Icons/ThreeDotsVert";
 import { BsTrash } from "react-icons/bs";
@@ -10,7 +10,7 @@ import userImg2 from "../../../../assets/images/default-user-img2.png";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 
-const Message = ({ message, position }) => {
+const Message = ({ message, position, dateText }) => {
   const [editMode, setEditMode] = useState(false);
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
@@ -42,6 +42,7 @@ const Message = ({ message, position }) => {
       updateMessage({
         ...message,
         content: messageContent,
+        edited: true,
       })
     );
     setMessageContent("");
@@ -125,7 +126,10 @@ const Message = ({ message, position }) => {
                     {getTimeOfMessage(message.createdAt)}
                   </span>
                 </div>
-                <p className="message-text-content">{message.content}</p>
+                <p className="message-text-content">
+                  {message.content}
+                  {message.edited && <span id="edited-msg">(edited)</span>}
+                </p>
               </div>
             </div>
           </div>
@@ -142,6 +146,13 @@ const Message = ({ message, position }) => {
           </div>
         </div>
       </section>
+      {dateText && (
+        <div className="message-divider-container">
+          <div className="divider-line">
+            <div className="date-text">{dateText}</div>
+          </div>
+        </div>
+      )}
       <div
         className="message-cont"
         onMouseOver={handleMouseOver}
@@ -206,7 +217,10 @@ const Message = ({ message, position }) => {
                 {getTimeOfMessage(message.createdAt)}
               </span>
             </div>
-            <p className="message-text-content">{message.content}</p>
+            <p className="message-text-content">
+              {message.content}
+              {message.edited && <span id="edited-msg">(edited)</span>}
+            </p>
           </div>
         </div>
       </div>

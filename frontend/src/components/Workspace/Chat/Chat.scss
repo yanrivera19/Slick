@@ -22,10 +22,20 @@
 .messages-container {
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: calc(70%);
   background-color: #fff;
   position: relative;
+}
+
+.messages-container:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -8px;
+  width: 8px;
+  height: 1px;
 }
 
 textarea {
@@ -40,7 +50,7 @@ textarea {
 
 .chat-header {
   align-items: center;
-  border-bottom: 1px solid #e4e3e3;
+  border-bottom: 1px solid rgba(29, 28, 29, 0.164);
   display: flex;
   height: 49px;
   padding: 0 16px 0 20px;
