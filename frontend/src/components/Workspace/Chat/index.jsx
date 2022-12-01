@@ -21,6 +21,7 @@ import userImg5 from "../../../assets/images/default-user-img-5.png";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import EmojiOutlineIcon from "../../Svgs&Icons/EmojiOutlineIcon";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
+import HashTagIconBold from "../../Svgs&Icons/HashTagIconBold";
 
 const Chat = ({
   conversation,
@@ -171,9 +172,16 @@ const Chat = ({
       <header className="chat-header">
         <div className="chat-header-cont">
           <span>
-            {channelType === "Channel"
-              ? conversation.name
-              : dmUsersNames(conversation.users)}
+            {channelType === "Channel" ? (
+              <>
+                <span className="hash-tag-chat-room">
+                  <HashTagIconBold />
+                </span>
+                {conversation.name}
+              </>
+            ) : (
+              dmUsersNames(conversation.users)
+            )}
           </span>
         </div>
         {channelType === "Channel" || users.length > 2 ? (
