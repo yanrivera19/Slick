@@ -127,28 +127,28 @@ ApplicationRecord.transaction do
 	c1 = Channel.create!(
 		name: "general",
 		workspace_id: w1.id,
-		owner_id: u1.id,
+		owner_id: w1.owner_id,
 		description: "lol"
 	)
 
 	c2 = Channel.create!(
 		name: "serious business",
 		workspace_id: w1.id,
-		owner_id: u1.id,
+		owner_id: w1.owner_id,
 		description: "wuu"
 	)
 
 	c3 = Channel.create!(
 		name: "general",
 		workspace_id: w2.id,
-		owner_id: u6.id,
+		owner_id: w2.owner_id,
 		description: "lol"
 	)
 
 	c4 = Channel.create!(
 		name: "random",
 		workspace_id: w2.id,
-		owner_id: u6.id,
+		owner_id: w2.owner_id,
 		description: "wuu"
 	)
 

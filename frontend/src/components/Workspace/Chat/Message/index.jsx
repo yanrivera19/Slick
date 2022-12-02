@@ -269,7 +269,7 @@ const Message = ({ message, position, dateText }) => {
               </div>
               <div className="msg-edit-btns">
                 <button
-                  id="cancel-edit-btn"
+                  className="cancel-edit-btn"
                   onClick={(e) => {
                     setShowEmojiPicker(false);
                     setEditMode(!editMode);

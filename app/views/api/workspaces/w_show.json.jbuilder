@@ -9,8 +9,15 @@ json.extract! @workspace, :id, :name, :owner_id, :created_at
 	json.channels do 
 		@workspace.channels.each do |channel|
 			json.set! channel.id do 
-				json.extract! channel, :id, :name, :description, :created_at
+				json.extract! channel, :id, :name, :description, :created_at, :owner_id
 				json.type channel.class.name
+				json.users do
+					channel.users.each do |user|
+						json.set! user.id do 
+							json.extract! user, :id, :username, :email
+						end
+					end
+				end				
 			end
 		end
 	end

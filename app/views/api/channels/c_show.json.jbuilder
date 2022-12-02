@@ -1,6 +1,10 @@
-json.extract! @channel, :id, :name, :description
-json.users @channel.users do |user|
-	json.extract! user, :id, :username, :email
+json.extract! @channel, :id, :name, :description, :owner_id
+json.users do 
+	@channel.users.each do |user|
+		json.set! user.id do 
+			json.extract! user, :id, :username, :email
+		end
+	end
 end
 json.messages do
 	@channel.messages.each do |message|

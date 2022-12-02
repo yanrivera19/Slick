@@ -207,3 +207,17 @@ textarea {
   line-height: 27px;
   padding-right: 2px;
 }
+
+.channel-name {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.channel-name:hover {
+  background: rgb(241, 241, 241);
+}
+
+.channel-name:active {
+  background: rgb(223, 223, 223);
+}

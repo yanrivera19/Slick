@@ -22,6 +22,7 @@ import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import EmojiOutlineIcon from "../../Svgs&Icons/EmojiOutlineIcon";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 import HashTagIconBold from "../../Svgs&Icons/HashTagIconBold";
+import ChannelInfoModal from "./ChannelInfoModal";
 
 const Chat = ({
   conversation,
@@ -56,12 +57,11 @@ const Chat = ({
     state.messages ? Object.values(state.messages) : []
   );
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
-  const [conversationUsers, setConversationUsers] = useState();
+  const [showChannelInfoModal, setShowChannelInfoModal] = useState(false);
+  const conversationUsers = Object.values(conversation.users);
 
   useEffect(() => {
-    dispatch(fetchConversation(conversation.id)).then((conv) =>
-      setConversationUsers(conv.users)
-    );
+    dispatch(fetchConversation(conversation.id));
   }, [
     conversation,
     channelType,
@@ -169,6 +169,10 @@ const Chat = ({
     textAreaRef.current.focus();
   };
 
+  const handleChannelNameClick = (e) => {
+    setShowChannelInfoModal(!showChannelInfoModal);
+  };
+
   if (!conversation) return null;
 
   return (
@@ -183,12 +187,15 @@ const Chat = ({
         <div className="chat-header-cont">
           <span>
             {channelType === "Channel" ? (
-              <>
+              <div className="channel-name" onClick={handleChannelNameClick}>
                 <span className="hash-tag-chat-room">
                   <HashTagIconBold />
                 </span>
                 {conversation.name}
-              </>
+                <span>
+                  <CaretOutlineIcon />
+                </span>
+              </div>
             ) : (
               dmUsersNames(conversation.users)
             )}
@@ -218,6 +225,14 @@ const Chat = ({
           </div>
         ) : null}
       </header>
+      {showChannelInfoModal && (
+        <section className="channel-info-modal-container">
+          <ChannelInfoModal
+            channel={conversation}
+            handleChannelNameClick={handleChannelNameClick}
+          />
+        </section>
+      )}
       <div className="messages-container" ref={messageContRef}>
         {messages
           ? Object.values(messages).map((message, idx) => {
