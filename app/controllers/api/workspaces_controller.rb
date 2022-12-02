@@ -16,7 +16,7 @@ class Api::WorkspacesController < ApplicationController
 				@channel_subscription_2 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_2.id)
 			end
 
-      render :show
+      render "/api/workspaces/w_show"
     else
       render json: {errors: @workspace.errors.full_messages}, status: 422
     end
@@ -30,9 +30,27 @@ class Api::WorkspacesController < ApplicationController
 
 	def update 
 		@workspace = Workspace.find_by_id(params[:id]) 
-		#@workspace?updaste or workspace&update????
+		@users = ActiveSupport::JSON.decode(params[:new_users])
+		debugger
+
+		if @users.length > 0
+			@user_ids = @users.map {|user| user["id"]} 
+			@channels = @workspace.channels
+
+			@user_ids.each do |id|
+				WorkspaceSubscription.create(user_id: id, workspace_id: @workspace.id)
+				@channels.each do |channel|
+					ChannelSubscription.create(user_id: id, channel_id: channel.id)
+				end
+			end
+		end
+
 		if @workspace.update(workspace_params)
-			render :show
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'EDIT_WORKSPACE',
+				**from_template('api/workspaces/show', workspace: @workspace)
+
+			render json: nil, status: :ok
 		else
 			render json: {errors: @workspace.errors.full_messages}, status: 422
 		end
@@ -41,13 +59,9 @@ class Api::WorkspacesController < ApplicationController
 	def show
 		@workspace = Workspace.find_by_id(params[:id])
 		@direct_messages = DirectMessage.joins(:direct_message_subscriptions).where(direct_messages: {workspace_id: params[:id]}).where(direct_message_subscriptions: {user_id: current_user.id})
-		# @messages = []
-		# @direct_messages.each do |direct_message| 
-		# 	direct_message.messages.each do |message| 
-		# 		@message << message
-		# 	end
-		# end
-		render :show
+
+		render "/api/workspaces/w_show"
+
 	end
 
 	def destroy

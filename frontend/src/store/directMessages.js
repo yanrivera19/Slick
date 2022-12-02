@@ -31,6 +31,7 @@ export const fetchDirectMessage = (directMessageId) => async (dispatch) => {
   if (res.ok) {
     const directMessage = await res.json();
     dispatch(receiveDirectMessage(directMessage));
+    return directMessage;
   }
 };
 

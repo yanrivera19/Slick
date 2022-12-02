@@ -43,22 +43,23 @@ export const fetchUsers = () => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
+    console.log(data);
     dispatch(receiveUsers(data.users));
   }
 };
 
 export default function userReducer(state = {}, action) {
   switch (action.type) {
+    case RECEIVE_USERS:
+      return { ...action.users };
+    case RECEIVE_USER:
+      return action.user ? { ...state, [action.user.id]: action.user } : null;
     case RECEIVE_WORKSPACE:
       return { ...action.workspace.users };
     case RECEIVE_DIRECT_MESSAGE:
       return { ...action.directMessage.users };
     case RECEIVE_CHANNEL:
       return { ...action.channel.users };
-    case RECEIVE_USER:
-      return action.user ? { ...state, [action.user.id]: action.user } : null;
-    case RECEIVE_USERS:
-      return { ...state, ...action.users };
     default:
       return state;
   }

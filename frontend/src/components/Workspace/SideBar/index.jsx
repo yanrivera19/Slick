@@ -11,6 +11,8 @@ import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import CreateChannelModal from "../CreateChannelModal";
 import AddTeammatesModal from "../AddTeammatesModal";
 import userImg4 from "../../../assets/images/default-user-img4.png";
+import { updateWorkspace } from "../../../store/workspaces";
+import { useDispatch } from "react-redux";
 
 const SideBar = ({
   workspace,
@@ -28,6 +30,7 @@ const SideBar = ({
   const [hideChannels, setHideChannels] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
+  const dispatch = useDispatch();
 
   const handleAddChannelModal = () => {
     if (workspace.ownerId === sessionUser.id) {
@@ -43,8 +46,15 @@ const SideBar = ({
     // }
   };
 
-  const handleAddUsers = () => {
-    setShowAddTeammateModal(!showAddTeammateModal);
+  const handleAddUsers = (e, selectedUsers) => {
+    dispatch(
+      updateWorkspace(
+        {
+          ...workspace,
+        },
+        selectedUsers
+      )
+    ).then(() => setShowAddTeammateModal(!showAddTeammateModal));
   };
 
   return (
@@ -56,16 +66,18 @@ const SideBar = ({
       >
         <CreateChannelModal handleAddChannelModal={handleAddChannelModal} />
       </section>
-      <section
-        className={
-          showAddTeammateModal ? "add-teammates-modal-container" : "hide"
-        }
-      >
-        <AddTeammatesModal
-          handleOpenAddTeamModal={handleOpenAddTeamModal}
-          handleAddUsers={handleAddUsers}
-        />
-      </section>
+      {showAddTeammateModal && (
+        <section
+          className="add-teammates-modal-container"
+          // showAddTeammateModal ? "add-teammates-modal-container" : "hide"
+        >
+          <AddTeammatesModal
+            handleOpenAddTeamModal={handleOpenAddTeamModal}
+            handleAddUsers={handleAddUsers}
+            workspaceUsers={workspace.users}
+          />
+        </section>
+      )}
       <aside className="app-side-bar">
         <div>
           <header className="workspace-header">

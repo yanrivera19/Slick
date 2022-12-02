@@ -196,11 +196,6 @@ ApplicationRecord.transaction do
 		channel_id: c2.id
 	)
 
-	cs8 = ChannelSubscription.create!(
-		user_id: u4.id,
-		channel_id: c1.id
-	)
-
 	cs9 = ChannelSubscription.create!(
 		user_id: u5.id,
 		channel_id: c2.id

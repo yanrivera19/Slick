@@ -1,8 +1,8 @@
 const HashTagIconBold = () => {
   return (
     <svg
-      dataPsh="true"
-      ariaHidden="true"
+      data-psh="true"
+      aria-hidden="true"
       viewBox="0 0 20 20"
       height="18"
       width="18"

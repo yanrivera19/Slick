@@ -15,7 +15,7 @@ class Api::ChannelsController < ApplicationController
 			WorkspacesChannel.broadcast_to @workspace,
 				type: 'RECEIVE_NEW_CHANNEL',
 				**from_template('api/channels/show', channel: @channel)
-      # render "/api/workspaces/show"
+      # render "/api/workspaces/w_show"
 			render json: nil, status: :ok
 		else
       render json: {errors: @channel.errors.full_messages}, status: 422
@@ -27,7 +27,7 @@ class Api::ChannelsController < ApplicationController
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
 		#@channel?updaste or workspace&update????
 		if @channel.update(channel_params)
-			render "/api/workspaces/show"
+			render "/api/workspaces/w_show"
 		else
 			render json: {errors: @channel.errors.full_messages}, status: 422
 		end
@@ -44,7 +44,7 @@ class Api::ChannelsController < ApplicationController
 		
 		if @channel.owner_id == current_user.id
 			@channel.destroy
-			render "/api/workspaces/show"
+			render "/api/workspaces/w_show"
 		end
 	end
 

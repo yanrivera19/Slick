@@ -1,5 +1,5 @@
 .sign-in-container {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 .sign-page-header {
@@ -119,4 +119,14 @@ header .create-option {
   margin-bottom: 12px;
   color: #1d1c1d;
   font-size: 13px;
+}
+
+.error-msg {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.error-msg:last-child {
+  margin-bottom: 0;
 }

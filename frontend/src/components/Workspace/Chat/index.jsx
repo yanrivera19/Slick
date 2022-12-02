@@ -56,10 +56,20 @@ const Chat = ({
     state.messages ? Object.values(state.messages) : []
   );
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
+  const [conversationUsers, setConversationUsers] = useState();
 
   useEffect(() => {
-    dispatch(fetchConversation(conversation.id));
-  }, [conversation, channelType, lastMessage, newMessage, newChannel]);
+    dispatch(fetchConversation(conversation.id)).then((conv) =>
+      setConversationUsers(conv.users)
+    );
+  }, [
+    conversation,
+    channelType,
+    lastMessage,
+    newMessage,
+    newChannel,
+    users.length,
+  ]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -184,20 +194,25 @@ const Chat = ({
             )}
           </span>
         </div>
-        {channelType === "Channel" || users.length > 2 ? (
+        {conversationUsers &&
+        (channelType === "Channel" || conversationUsers.length > 2) ? (
           <div className="members-container">
-            {users.length > 1 && users.length < 3 ? (
+            {conversationUsers.length > 1 && conversationUsers.length < 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
-                <span style={{ paddingLeft: "5px" }}>{users.length}</span>
+                <span style={{ paddingLeft: "5px" }}>
+                  {conversationUsers.length}
+                </span>
               </>
-            ) : users.length >= 3 ? (
+            ) : conversationUsers.length >= 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
                 <img height={21} width={21} src={userImg5} alt="user-img" />
-                <span style={{ paddingLeft: "7px" }}>{users.length}</span>
+                <span style={{ paddingLeft: "7px" }}>
+                  {conversationUsers.length}
+                </span>
               </>
             ) : null}
           </div>
@@ -207,7 +222,6 @@ const Chat = ({
         {messages
           ? Object.values(messages).map((message, idx) => {
               let date = checkDate(message, idx);
-              console.log(date);
               return (
                 <Message
                   key={message.id}

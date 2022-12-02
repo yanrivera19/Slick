@@ -30,7 +30,7 @@ class Api::DirectMessagesController < ApplicationController
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 		#@direct_message?updaste or direct_message&update????
 		if @direct_message.update(direct_message_params)
-			render "/api/workspaces/show"
+			render "/api/workspaces/w_show"
 		else
 			render json: {errors: @direct_message.errors.full_messages}, status: 422
 		end
@@ -48,7 +48,7 @@ class Api::DirectMessagesController < ApplicationController
 		
 		if @direct_message.owner_id == current_user.id
 			@direct_message.destroy
-			render "/api/workspaces/show"
+			render "/api/workspaces/w_show"
 		end
 	end
 

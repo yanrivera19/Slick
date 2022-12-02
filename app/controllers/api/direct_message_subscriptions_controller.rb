@@ -21,7 +21,7 @@ class Api::DirectMessageSubscriptionsController < ApplicationController
 
 		if !@direct_message || !@user 
 			@direct_message_subscription.destroy
-			render "/api/workspaces/show"
+			render "/api/workspaces/w_show"
 		end
 	end
 

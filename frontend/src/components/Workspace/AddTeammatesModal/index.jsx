@@ -7,8 +7,13 @@ import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import { useEffect } from "react";
 import SearchResults from "../SearchResults";
+import SelectedNewMembers from "../../CreateWorkspacePage/CreateWorkspaceAddTeammates/SelectedNewMembers";
 
-const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
+const AddTeammatesModal = ({
+  handleOpenAddTeamModal,
+  handleAddUsers,
+  workspaceUsers,
+}) => {
   const dispatch = useDispatch();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [description, setDescription] = useState("");
@@ -17,23 +22,21 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
   const [inputValue, setInputValue] = useState("");
   const users = useSelector((state) => Object.values(state.users));
   const sessionUser = useSelector((state) => state.session.user);
+  let resultsCount = 0;
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
 
-  const removeUserFromNewMsg = (e, user) => {
-    setSelectedUsers(
-      selectedUsers.filter((selectedUser) => selectedUser.id !== user.id)
-    );
+  const handleResultClick = (user) => {
+    if (selectedUsers.includes(user)) {
+      setSelectedUsers(
+        selectedUsers.filter((selectedUser) => selectedUser.id !== user.id)
+      );
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
   };
-
-  const handleResultClick = (e, user) => {
-    setSelectedUsers([...selectedUsers, user]);
-  };
-  // console.log(users);
-  // console.log(selectedUsers);
-
   return (
     <div id="add-teammates-modal">
       <div className="create-modal-header">
@@ -42,27 +45,11 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
           <CrossIcon size={22} />
         </button>
       </div>
-      <div id="create-channel-info">
-        <p id="info-create-channel">Add other users to your workspace!</p>
+      <div id="add-teammate-info">
+        <p id="add-teammate-text">Add other users to your workspace!</p>
 
-        <section className="new-msg-search-container">
-          {/* <div ref={lastMessageRef}></div> */}
-          <div className="new-msg-search">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {selectedUsers.map((selectedUser) => (
-                <div className="selected-user">
-                  <span style={{ marginRight: "8px" }}>
-                    {selectedUser.username}
-                  </span>
-                  <button
-                    onClick={(e) => removeUserFromNewMsg(e, selectedUser)}
-                    className="remove-selected-btn"
-                  >
-                    <CrossIcon size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
+        <section className="new-teammate-search-container">
+          <div className="new-teammate-search">
             <input
               className="search-input"
               type="text"
@@ -72,71 +59,47 @@ const AddTeammatesModal = ({ handleOpenAddTeamModal, handleAddUsers }) => {
             />
           </div>
         </section>
-
         {inputValue.length > 0 && (
-          <div className="search-cont">
-            <div className="users-results-cont">
-              {/* {filteredData.map((obj) => { */}
+          <div className="search-cont users teammates">
+            <div
+              className={
+                resultsCount > 0 ? "users-results-cont users" : "results-hidden"
+              }
+            >
               {users.map((user) => {
                 if (
+                  inputValue.length > 0 &&
+                  workspaceUsers[user.id] === undefined &&
                   user.username !== sessionUser.username &&
-                  !selectedUsers
-                    .map((selUser) => selUser.username)
-                    .includes(user.username)
+                  (user.username.toLowerCase().includes(inputValue) ||
+                    user.email.toLowerCase().includes(inputValue))
                 ) {
+                  resultsCount++;
                   return (
-                    <span
-                      key={user.id}
-                      onClick={(e) => handleResultClick(e, user)}
-                      className="search-result-item"
-                      // key={obj.id * 29}
-                    >
-                      {/* {filterUserfromUsers(obj.users)} */}
-                      {user.username}
-                    </span>
+                    <div className="search-user-cont" style={{ width: "100%" }}>
+                      <SelectedNewMembers
+                        key={user.id}
+                        user={user}
+                        handleResultClick={handleResultClick}
+                      />
+                    </div>
                   );
+                } else {
+                  resultsCount--;
                 }
               })}
             </div>
           </div>
         )}
-
-        {/* <div className="">
-          <form onSubmit={createChannel}>
-            <p className="label">Name</p>
-            <input
-              className="input-field name"
-              placeholder="# e.g. plan-budget"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <div className="flex">
-              <p className="label">Description</p>
-              <span className="clear-text">{"(optional)"}</span>
-            </div>
-            <input
-              className="input-field"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <p id="about-text" className="clear-text">
-              What's this channel about?
-            </p>
-          </form>
-        </div> */}
       </div>
-      {/* <div
-        className={`create-channel-btn ${
-          name.trim().length > 0 ? "ready" : ""
-        }`}
-      > */}
       <button
         className={`create-channel-btn ${
           selectedUsers.length > 0 ? "ready" : ""
         }`}
-        onClick={handleAddUsers}
+        onClick={(e) => handleAddUsers(e, selectedUsers)}
       >
         Add
       </button>
-      {/* </div> */}
     </div>
   );
 };

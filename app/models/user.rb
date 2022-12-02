@@ -2,7 +2,7 @@ class User < ApplicationRecord
 	has_secure_password
 
 	validates :username, uniqueness: true
-	validates :email, length: { in: 3..255 }, format: { with: URI::MailTo::EMAIL_REGEXP, message: ": It looks like that isn't a valid email address" }, presence: true, uniqueness: true
+	validates :email, length: { in: 3..255 }, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, message: ": It looks like that isn't a valid email address" }, presence: true, uniqueness: true
 	validates :password_digest, presence: true
 	validates :session_token, presence: true, uniqueness: true
 	validates :password, length: {in: 6..255}, allow_nil: true

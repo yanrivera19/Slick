@@ -67,18 +67,22 @@ export const createWorkspace = (workspace, users) => async (dispatch) => {
   }
 };
 
-export const updateWorkspace = (workspace) => async (dispatch) => {
-  const res = await csrfFetch(`/api/workspaces/${workspace.id}`, {
-    method: "PUT",
-    body: JSON.stringify(workspace),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const updateWorkspace = (workspace, newUsers) => async (dispatch) => {
+  // debugger;
+  const res = await csrfFetch(
+    `/api/workspaces/${workspace.id}?newUsers=${JSON.stringify(newUsers)}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(workspace),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (res.ok) {
-    const workspace = await res.json();
-    dispatch(receiveWorkspace(workspace));
+    // const workspace = await res.json();
+    // dispatch(receiveWorkspace(workspace));
   }
 };
 

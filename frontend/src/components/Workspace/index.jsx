@@ -18,6 +18,7 @@ import {
   fetchMessage,
   getMessage,
 } from "../../store/messages";
+import { receiveWorkspace } from "../../store/workspaces";
 import { getUsers, fetchUsers } from "../../store/user";
 import {
   receiveDirectMessage,
@@ -92,7 +93,14 @@ const Workspace = () => {
         connected: () => {
           // console.log("connected");
         },
-        received: ({ type, message, id, directMessage, channel }) => {
+        received: ({
+          type,
+          message,
+          id,
+          directMessage,
+          channel,
+          workspace,
+        }) => {
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
@@ -127,6 +135,10 @@ const Workspace = () => {
               break;
             case "REMOVE_MESSAGE":
               dispatch(removeMessage(id));
+              break;
+            case "EDIT_WORKSPACE":
+              dispatch(receiveWorkspace(workspace));
+              console.log("received updated version of:", workspace);
               break;
             default:
               console.log("Unhandled broadcast: ", type);

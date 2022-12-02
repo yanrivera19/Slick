@@ -76,13 +76,7 @@ function SigninPage() {
           <div className="error-box">
             <ul>
               {errors.map((error) => (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "5px",
-                  }}
-                >
+                <div className="error-msg">
                   <FiAlertTriangle
                     style={{ color: "red", marginRight: "5px" }}
                   />
