@@ -1,11 +1,11 @@
-const HashTagIconBold = () => {
+const HashTagIconBold = ({ size = "18" }) => {
   return (
     <svg
       data-psh="true"
       aria-hidden="true"
       viewBox="0 0 20 20"
-      height="18"
-      width="18"
+      height={size}
+      width={size}
     >
       <path
         fill="currentColor"

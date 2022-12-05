@@ -68,7 +68,7 @@ const Chat = ({
     lastMessage,
     newMessage,
     newChannel,
-    users.length,
+    // users.length,
   ]);
 
   useEffect(() => {

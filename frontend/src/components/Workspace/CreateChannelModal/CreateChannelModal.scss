@@ -49,6 +49,7 @@
   padding: 8px 0;
   text-indent: 20px;
   font-size: 15px;
+  box-sizing: border-box;
 }
 
 .create-channel-btn {
@@ -102,7 +103,7 @@
   padding-top: 10px;
 }
 
-.create-modal-header {
+.modal-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,7 +112,7 @@
   box-sizing: border-box;
 }
 
-#create-header {
+.modal-header {
   font-size: 28px;
   color: #1d1c1d;
   font-weight: 700;
@@ -132,4 +133,5 @@
 
 .flex {
   display: flex;
+  align-items: baseline;
 }

@@ -38,8 +38,8 @@ const CreateChannelModal = ({ handleAddChannelModal }) => {
 
   return (
     <div id="create-channel-modal">
-      <div className="create-modal-header">
-        <h1 id="create-header">Create a channel</h1>
+      <div className="modal-header-container">
+        <h1 className="modal-header">Create a channel</h1>
         <button onClick={handleCloseModal} className="cross-btn">
           <CrossIcon size={22} />
         </button>

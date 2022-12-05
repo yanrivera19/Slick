@@ -37,6 +37,20 @@ const AddTeammatesModal = ({
       setSelectedUsers([...selectedUsers, user]);
     }
   };
+
+  console.log(resultsCount);
+
+  // if (filteredData.length === 0) {
+  //   return (
+  //     <div className="search-cont">
+  //       <div className="search-results-cont">
+  //         <span key={0} id="no-results-item">
+  //           No results...
+  //         </span>
+  //       </div>
+  //     </div>
+  //   );
+  // }
   return (
     <div id="add-teammates-modal">
       <div className="create-modal-header">
@@ -76,13 +90,13 @@ const AddTeammatesModal = ({
                 ) {
                   resultsCount++;
                   return (
-                    <div className="search-user-cont" style={{ width: "100%" }}>
-                      <SelectedNewMembers
-                        key={user.id}
-                        user={user}
-                        handleResultClick={handleResultClick}
-                      />
-                    </div>
+                    // <div className="search-user-cont">
+                    <SelectedNewMembers
+                      key={user.id}
+                      user={user}
+                      handleResultClick={handleResultClick}
+                    />
+                    // </div>
                   );
                 } else {
                   resultsCount--;

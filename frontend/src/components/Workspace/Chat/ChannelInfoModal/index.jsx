@@ -6,59 +6,43 @@ import CrossIcon from "../../../Svgs&Icons/CrossIcon";
 import HashTagIconBold from "../../../Svgs&Icons/HashTagIconBold";
 import HashTagIcon from "../../../Svgs&Icons/HashTagIcon";
 import CaretOutlineIcon from "../../../Svgs&Icons/CaretOutlineIcon";
-import { updateChannel } from "../../../../store/channels";
+import { useRef } from "react";
+import EditChannelModal from "./EditChannelModal";
 
 const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
   const dispatch = useDispatch();
-  const [name, setName] = useState(channel.name);
-  const [description, setDescription] = useState(channel.description);
-  const [errors, setErrors] = useState([]);
+
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const users = useSelector((state) => state.users);
   const workspace = useSelector((state) => Object.values(state.workspaces));
   const [openMembers, setOpenMembers] = useState(false);
   const [openEditChannel, setOpenEditChannel] = useState(false);
+  const membersModalRef = useRef(null);
 
-  // useEffect(() => {
-  //   dispatch(fetchWorkspace(workspaceId));
-  // }, []);
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
 
-  const createNewChannel = (e) => {
-    e.preventDefault();
-
-    // dispatch(
-    //   createChannel({
-    //     name: name,
-    //     description: description,
-    //     workspaceId: workspaceId,
-    //     ownerId: sessionUser.id,
-    //   })
-    // );
-    // setName("");
-    // setDescription("");
-    // handleAddChannelModal();
+  const handleClickOutside = (e) => {
+    if (membersModalRef.current && membersModalRef.current.contains(e.target)) {
+      setOpenMembers(!openMembers);
+    } else if (
+      membersModalRef.current &&
+      !membersModalRef.current.contains(e.target)
+    ) {
+      setOpenMembers(false);
+    }
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-
-    dispatch(
-      updateChannel({
-        ...channel,
-        name: name,
-        description: description,
-      })
-    );
-    handleEditChannelModal();
-    handleChannelNameClick(e);
-  };
-
-  const handleCloseModal = () => {
-    setName("");
-    setDescription("");
-    // handleAddChannelModal();
-  };
+  // const handleCloseModal = () => {
+  //   setName("");
+  //   setDescription("");
+  //   // handleAddChannelModal();
+  // };
 
   const handleOpenMembers = () => {
     setOpenMembers(!openMembers);
@@ -124,8 +108,12 @@ const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
               </p>
 
               {openMembers && (
-                <div className="channel-members-container">
+                <div
+                  className="channel-members-container"
+                  ref={membersModalRef}
+                >
                   <div className="cross-btn-members">
+                    <p className="label">Members</p>
                     <button
                       onClick={handleOpenMembers}
                       className="cross-btn members"
@@ -142,49 +130,21 @@ const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
                 </div>
               )}
             </div>
-            {/* {sessionUser.id === channel.ownerId && ( */}
-            <div className="flex-end edit-btn" onClick={handleEditChannelModal}>
-              <p>Edit</p>
-            </div>
-            {/* )} */}
+            {sessionUser.id === channel.ownerId && (
+              <div className="flex-end ">
+                <p className="edit-btn" onClick={handleEditChannelModal}>
+                  Edit
+                </p>
+              </div>
+            )}
           </div>
         </>
       ) : (
-        <div className="edit-channel-form">
-          <form onSubmit={createNewChannel}>
-            <p className="label">Name</p>
-            <input
-              value={name}
-              className="input-field name"
-              placeholder="# e.g. plan-budget"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <div className="flex">
-              <p className="label">Description</p>
-            </div>
-            <input
-              value={description}
-              className="input-field"
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <div id="create-channel-btn-container">
-              <button
-                className="cancel-edit-btn"
-                onClick={handleEditChannelModal}
-              >
-                Cancel
-              </button>
-              <button
-                disabled={name.trim().length < 1}
-                className={`create-channel-btn ${
-                  name.trim().length > 0 ? "ready" : ""
-                }`}
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
+        <EditChannelModal
+          channel={channel}
+          handleEditChannelModal={handleEditChannelModal}
+          handleChannelNameClick={handleChannelNameClick}
+        />
       )}
     </div>
   );

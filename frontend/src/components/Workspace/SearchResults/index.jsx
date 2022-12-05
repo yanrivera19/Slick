@@ -68,6 +68,8 @@ const SearchResults = ({
     return filteredUsers.join(", ");
   };
 
+  console.log(data);
+
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
     let filtered = data.filter((object) => {
       if (
@@ -107,7 +109,7 @@ const SearchResults = ({
       } else if (
         inputValueWithoutSymbol.length > 0 &&
         object.hasOwnProperty("users") &&
-        object.users
+        Object.values(object.users)
           .map((user) => user.username)
           .join(" ")
           .toLowerCase()

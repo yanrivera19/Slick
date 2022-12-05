@@ -9,6 +9,7 @@ import CrossIcon from "../../../Svgs&Icons/CrossIcon";
 import userImg2 from "../../../../assets/images/default-user-img2.png";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
+import DeleteMessageModal from "./DeleteMessageModal";
 
 const Message = ({ message, position, dateText }) => {
   const [editMode, setEditMode] = useState(false);
@@ -85,66 +86,11 @@ const Message = ({ message, position, dateText }) => {
   return !editMode ? (
     <>
       <section className={deleteAlertModal ? "delete-modal-container" : "hide"}>
-        <div id="delete-modal">
-          <div className="delete-modal-header">
-            <h1 id="delete-header">Delete Message</h1>
-            <button onClick={handleTrashClick} className="cross-btn">
-              <CrossIcon size={22} />
-            </button>
-          </div>
-          <div id="delete-modal-info-cont">
-            <p>
-              Are you sure you want to delete this message? This cannot be
-              undone.
-            </p>
-            <div
-              className="message-container-modal"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <img
-                className="user-img-default"
-                height={38}
-                width={38}
-                src={userImg2}
-                alt="user-img"
-              />
-
-              <div style={{ marginLeft: "10px" }}>
-                <div
-                  style={{
-                    marginBottom: "5px",
-                    display: "flex",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <strong id="name-author">
-                    {message.author
-                      ? message.author.username
-                      : message.authorName}
-                  </strong>
-                  <span id="time-of-msg">
-                    {getTimeOfMessage(message.createdAt)}
-                  </span>
-                </div>
-                <p className="message-text-content">
-                  {message.content}
-                  {message.edited && <span id="edited-msg">(edited)</span>}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="cancel-delete-btn-container">
-            <button id="cancel-delete-btn" onClick={handleTrashClick}>
-              Cancel
-            </button>
-            <button
-              id="delete-btn"
-              onClick={(e) => handleDelete(e, message.id)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
+        <DeleteMessageModal
+          handleTrashClick={handleTrashClick}
+          userImg2={userImg2}
+          message={message}
+        />
       </section>
       {dateText && (
         <div className="message-divider-container">
@@ -277,7 +223,7 @@ const Message = ({ message, position, dateText }) => {
                 >
                   Cancel
                 </button>
-                <button id="save-edit-btn">Save</button>
+                <button className="save-edit-btn">Save</button>
               </div>
             </div>
           </form>

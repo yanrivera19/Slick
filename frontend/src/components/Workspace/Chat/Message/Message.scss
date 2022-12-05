@@ -112,7 +112,7 @@
   border: 1px solid rgba(29, 28, 29, 0.416);
 }
 
-#save-edit-btn {
+.save-edit-btn {
   border-radius: 4px;
   height: 28px;
   min-width: 56px;
@@ -126,7 +126,11 @@
   text-align: center;
 }
 
-#save-edit-btn:active {
+.save-edit-btn:active {
+  background-color: #148567;
+}
+
+.save-edit-btn:hover {
   background-color: #148567;
 }
 
@@ -191,7 +195,7 @@
   width: 100%;
   box-sizing: border-box;
 }
-#delete-btn,
+.delete-btn,
 #cancel-delete-btn {
   border-radius: 4px;
   cursor: pointer;
@@ -208,7 +212,7 @@
   min-width: 80px;
 }
 
-#delete-btn {
+.delete-btn {
   margin-left: 12px;
 
   background-color: #e01e5a;
@@ -217,11 +221,11 @@
   transition: all 80ms linear;
 }
 
-#delete-btn:active {
+.delete-btn:active {
   transform: scale(0.95);
 }
 
-#delete-btn:hover {
+.delete-btn:hover {
   background: #e23067;
   box-shadow: 0 1px 4px #0000004d;
 }
