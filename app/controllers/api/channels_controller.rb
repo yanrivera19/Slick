@@ -27,30 +27,43 @@ class Api::ChannelsController < ApplicationController
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
 		#@channel?updaste or workspace&update????
 		if @channel.update(channel_params)
-			render "/api/workspaces/w_show"
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'EDIT_CHANNEL',
+				**from_template('api/channels/show', channel: @channel)
+
+			render json: nil, status: :ok			
 		else
 			render json: {errors: @channel.errors.full_messages}, status: 422
 		end
 	end 
+
+	def destroy
+		@channel = Channel.find_by_id(params[:id])
+		@workspace = Workspace.find_by_id(@channel.workspace_id)
+		
+		# if @channel.owner_id == current_user.id
+		# 	@channel.destroy
+		# 	render "/api/workspaces/w_show"
+		# end
+
+		if @channel.destroy 
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'REMOVE_CHANNEL',
+				id: @channel.id
+
+			render "/api/workspaces/w_show"		
+		end
+	end
 
 	def show
 		@channel = Channel.find_by_id(params[:id])
 		render "/api/channels/c_show"
 	end
 
-	def destroy
-		@channel = Channel.find_by_id(params[:id])
-		@workspace = Workspace.find_by_id(@channel.workspace_id)
-		
-		if @channel.owner_id == current_user.id
-			@channel.destroy
-			render "/api/workspaces/w_show"
-		end
-	end
 
 	private 
 
 	def channel_params
-		params.require(:channel).permit(:name, :description, :workspace_id, :owner_id)
+		params.require(:channel).permit(:id, :name, :description, :workspace_id, :owner_id)
 	end
 end

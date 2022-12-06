@@ -14,7 +14,8 @@ const DeleteChannelModal = ({
   const dispatch = useDispatch();
 
   const handleDelete = (e) => {
-    // dispatch(deleteChannel(channel.id));
+    dispatch(deleteChannel(channel.id));
+    handleChannelNameClick();
   };
 
   return (

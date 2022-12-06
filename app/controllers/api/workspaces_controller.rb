@@ -31,7 +31,6 @@ class Api::WorkspacesController < ApplicationController
 	def update 
 		@workspace = Workspace.find_by_id(params[:id]) 
 		@users = ActiveSupport::JSON.decode(params[:new_users])
-		debugger
 
 		if @users.length > 0
 			@user_ids = @users.map {|user| user["id"]} 

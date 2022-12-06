@@ -26,11 +26,7 @@ const EditChannelModal = ({
         description: description,
       })
     );
-    handleEditChannelModal();
-  };
-
-  const handleDelete = (e) => {
-    e.preventDefault();
+    handleChannelNameClick();
   };
 
   const handleDeleteAlertModal = (e) => {

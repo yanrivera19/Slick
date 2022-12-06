@@ -11,7 +11,6 @@ import EditChannelModal from "./EditChannelModal";
 
 const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
   const dispatch = useDispatch();
-
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const users = useSelector((state) => state.users);
@@ -38,12 +37,6 @@ const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
     }
   };
 
-  // const handleCloseModal = () => {
-  //   setName("");
-  //   setDescription("");
-  //   // handleAddChannelModal();
-  // };
-
   const handleOpenMembers = () => {
     setOpenMembers(!openMembers);
   };
@@ -51,10 +44,6 @@ const ChannelInfoModal = ({ channel, handleChannelNameClick }) => {
   const handleEditChannelModal = () => {
     setOpenEditChannel(!openEditChannel);
   };
-
-  // console.log(users);
-  // console.log(channel.users[channel.ownerId].username);
-  // console.log(workspace[0].users[channel.ownerId]);
 
   return (
     <div id="channel-info-modal">

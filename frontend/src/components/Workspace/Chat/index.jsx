@@ -36,6 +36,7 @@ const Chat = ({
   newMessage,
   newChannel,
   setNewChannel,
+  sentNewMsg,
 }) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
@@ -58,18 +59,12 @@ const Chat = ({
   );
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
   const [showChannelInfoModal, setShowChannelInfoModal] = useState(false);
-  const conversationUsers = Object.values(conversation.users);
+  let conversationUsers = null;
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
-  }, [
-    conversation,
-    channelType,
-    lastMessage,
-    newMessage,
-    newChannel,
-    // users.length,
-  ]);
+  }, [conversation, lastMessage, newMessage, newChannel, editMode, sentNewMsg]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -147,8 +142,9 @@ const Chat = ({
     }
   };
 
-  const dmUsersNames = (users) => {
-    let filteredUsers = users.filter(
+  const dmUsersNames = (dmUsers) => {
+    console.log(dmUsers);
+    let filteredUsers = Object.values(dmUsers).filter(
       (user) => user.username !== sessionUser.username
     );
 
@@ -171,6 +167,11 @@ const Chat = ({
 
   const handleChannelNameClick = (e) => {
     setShowChannelInfoModal(!showChannelInfoModal);
+    setEditMode(!editMode);
+  };
+
+  const handleEditMode = () => {
+    setEditMode(!editMode);
   };
 
   if (!conversation) return null;
@@ -201,25 +202,21 @@ const Chat = ({
             )}
           </span>
         </div>
-        {conversationUsers &&
-        (channelType === "Channel" || conversationUsers.length > 2) ? (
+        {conversation.users &&
+        (channelType === "Channel" || users.length > 2) ? (
           <div className="members-container">
-            {conversationUsers.length > 1 && conversationUsers.length < 3 ? (
+            {users.length > 1 && users.length < 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
-                <span style={{ paddingLeft: "5px" }}>
-                  {conversationUsers.length}
-                </span>
+                <span style={{ paddingLeft: "5px" }}>{users.length}</span>
               </>
-            ) : conversationUsers.length >= 3 ? (
+            ) : users.length >= 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
                 <img height={21} width={21} src={userImg5} alt="user-img" />
-                <span style={{ paddingLeft: "7px" }}>
-                  {conversationUsers.length}
-                </span>
+                <span style={{ paddingLeft: "7px" }}>{users.length}</span>
               </>
             ) : null}
           </div>

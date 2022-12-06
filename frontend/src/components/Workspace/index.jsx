@@ -6,7 +6,12 @@ import consumer from "../../consumer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWorkspace, getWorkspace } from "../../store/workspaces";
 import { NavLink, useHistory, useParams } from "react-router-dom";
-import { fetchChannel, getChannel } from "../../store/channels";
+import {
+  editChannel,
+  fetchChannel,
+  getChannel,
+  removeChannel,
+} from "../../store/channels";
 import {
   fetchDirectMessage,
   getDirectMessage,
@@ -18,7 +23,7 @@ import {
   fetchMessage,
   getMessage,
 } from "../../store/messages";
-import { receiveWorkspace } from "../../store/workspaces";
+import { editWorkspace } from "../../store/workspaces";
 import { getUsers, fetchUsers } from "../../store/user";
 import {
   receiveDirectMessage,
@@ -31,12 +36,10 @@ const Workspace = () => {
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const workspace = useSelector(getWorkspace(workspaceId));
+
   const dispatch = useDispatch();
   const [directMessages, setDirectMessages] = useState([]);
-  const dms = useSelector((state) => {
-    return Object.values(state.directMessages);
-  });
-
+  const dms = useSelector((state) => Object.values(state.directMessages));
   const channels = useSelector((state) => Object.values(state.channels));
   const channelSubscriptions = [];
   const directMessageSubscriptions = [];
@@ -51,9 +54,13 @@ const Workspace = () => {
   let dmLength = 0;
   const profilePopRef = useRef();
   const history = useHistory();
+  const [workspaceUsers, setWorkspaceUsers] = useState([]);
+  const [editedChannel, setEditedChannel] = useState(false);
+  const [sentNewMsg, setSentNewMsg] = useState(false);
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
+      setWorkspaceUsers(Object.values(data.workspace.users));
       subscription(data.workspace, "WorkspacesChannel");
       if (data.workspace.directMessages) {
         createSubscriptions(
@@ -71,9 +78,9 @@ const Workspace = () => {
     dmLength = dms.length;
 
     return () => {
-      subs.forEach((channelSub) => channelSub.unsubscribe());
+      subs.forEach((roomSub) => roomSub.unsubscribe());
     };
-  }, [workspaceId, dms.length, channels.length]);
+  }, [workspaceId, dms.length, channels.length, editedChannel]);
 
   const createSubscriptions = (rooms, roomName) => {
     rooms.forEach((room) => {
@@ -104,6 +111,7 @@ const Workspace = () => {
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
+              setSentNewMsg(!sentNewMsg);
               console.log("received:", message.content);
               break;
             case "RECEIVE_NEW_DIRECT_MESSAGE":
@@ -121,6 +129,8 @@ const Workspace = () => {
               break;
             case "RECEIVE_NEW_CHANNEL":
               if (channel.ownerId === sessionUser.id) {
+                setNewMessage(false);
+
                 setNewChannel(true);
                 setShownConversation(channel);
                 setConversationType("Channel");
@@ -137,8 +147,22 @@ const Workspace = () => {
               dispatch(removeMessage(id));
               break;
             case "EDIT_WORKSPACE":
-              dispatch(receiveWorkspace(workspace));
+              dispatch(editWorkspace(workspace));
               console.log("received updated version of:", workspace);
+              break;
+            case "EDIT_CHANNEL":
+              if (channel.ownerId === sessionUser.id) {
+                setShownConversation(channel);
+              }
+              dispatch(editChannel(channel));
+              setEditedChannel(!editedChannel);
+              console.log("received updated version of:", channel);
+              break;
+            case "REMOVE_CHANNEL":
+              // if (channel.owner_id === sessionUser.id) {
+              setConversationType(null);
+              dispatch(removeChannel(id));
+              // }
               break;
             default:
               console.log("Unhandled broadcast: ", type);
@@ -150,6 +174,8 @@ const Workspace = () => {
 
     subs.push(sub);
   };
+
+  console.log(conversationType);
 
   const handleChannelClick = (e, channel, channelType) => {
     setNewChannel(false);
@@ -226,14 +252,15 @@ const Workspace = () => {
                 <div className="separator">
                   <hr className="separator-line" />
                 </div>
-                <div
-                  onClick={() =>
-                    history.push(
-                      `/client/${sessionUser.id}/get-started/landing`
-                    )
-                  }
-                >
-                  <span className="profile-popup-items">{`Sign out of ${workspace.name}`}</span>
+                <div className="profile-popup-items-cont">
+                  <span
+                    onClick={() =>
+                      history.push(
+                        `/client/${sessionUser.id}/get-started/landing`
+                      )
+                    }
+                    className="profile-popup-items"
+                  >{`Sign out of ${workspace.name}`}</span>
                 </div>
               </div>
             )}
@@ -265,6 +292,7 @@ const Workspace = () => {
             newMessage={newMessage}
             newChannel={newChannel}
             setNewChannel={setNewChannel}
+            sentNewMsg={sentNewMsg}
           />
         ) : conversationType === "DirectMessage" ? (
           <Chat
@@ -276,6 +304,7 @@ const Workspace = () => {
             getConversation={getDirectMessage}
             channels={channels}
             newMessage={newMessage}
+            sentNewMsg={sentNewMsg}
           />
         ) : null}
         {newMessage ? (

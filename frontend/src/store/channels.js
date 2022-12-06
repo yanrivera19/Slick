@@ -5,6 +5,7 @@ import { RECEIVE_WORKSPACE } from "./workspaces";
 export const RECEIVE_CHANNEL = "channels/RECEIVE_CHANNEL";
 export const REMOVE_CHANNEL = "channels/REMOVE_CHANNEL";
 export const RECEIVE_NEW_CHANNEL = "channels/RECEIVE_NEW_CHANNEL";
+export const EDIT_CHANNEL = "channels/EDIT";
 
 export const receiveChannel = (channel) => {
   return {
@@ -24,6 +25,13 @@ export const removeChannel = (channelId) => {
   return {
     type: REMOVE_CHANNEL,
     channelId,
+  };
+};
+
+export const editChannel = (channel) => {
+  return {
+    type: EDIT_CHANNEL,
+    channel,
   };
 };
 
@@ -70,8 +78,8 @@ export const updateChannel = (channel) => async (dispatch) => {
   });
 
   if (res.ok) {
-    const channel = await res.json();
-    dispatch(receiveChannel(channel));
+    // const channel = await res.json();
+    // dispatch(receiveChannel(channel));
   }
 };
 
@@ -93,6 +101,10 @@ export default function channelReducer(state = {}, action) {
       return { ...state, [action.channel.id]: action.channel };
     case RECEIVE_NEW_CHANNEL:
       return { ...state, [action.channel.id]: action.channel };
+    case EDIT_CHANNEL:
+      return action.message
+        ? { ...state, [action.message.id]: action.message }
+        : { ...state };
     case REMOVE_CHANNEL:
       const newState = { ...state };
       delete newState[action.channelId];

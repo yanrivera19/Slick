@@ -5,6 +5,7 @@ import csrfFetch from "./csrf";
 export const RECEIVE_WORKSPACE = "workspaces/RECEIVE_WORKSPACE";
 export const RECEIVE_WORKSPACES = "workspaces/RECEIVE_WORKSPACES";
 export const REMOVE_WORKSPACE = "workspaces/REMOVE_WORKSPACE";
+export const EDIT_WORKSPACE = "workspaces/EDIT_WORKSPACE";
 
 export const receiveWorkspace = (workspace) => {
   return {
@@ -24,6 +25,13 @@ export const removeWorkspace = (workspaceId) => {
   return {
     type: REMOVE_WORKSPACE,
     workspaceId,
+  };
+};
+
+export const editWorkspace = (workspace) => {
+  return {
+    type: EDIT_WORKSPACE,
+    workspace,
   };
 };
 
@@ -102,6 +110,10 @@ export default function workspaceReducer(state = {}, action) {
       return { ...state, [action.workspace.id]: action.workspace };
     case RECEIVE_WORKSPACES:
       return { ...state, ...action.workspaces };
+    case EDIT_WORKSPACE:
+      return action.workspace
+        ? { ...state, [action.workspace.id]: action.workspace }
+        : { ...state };
     case REMOVE_WORKSPACE:
       const newState = { ...state };
 
