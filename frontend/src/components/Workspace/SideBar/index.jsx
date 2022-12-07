@@ -30,6 +30,7 @@ const SideBar = ({
   const [hideChannels, setHideChannels] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
+  const [clickedChatRoom, setClickedChatRoom] = useState(null);
   const dispatch = useDispatch();
 
   const handleAddChannelModal = () => {
@@ -56,6 +57,17 @@ const SideBar = ({
       )
     ).then(() => setShowAddTeammateModal(!showAddTeammateModal));
   };
+
+  const handleRoomClick = (e, room, roomType) => {
+    if (roomType === "Channel") {
+      setClickedChatRoom(room.name);
+    } else {
+      setClickedChatRoom(dmUsersNames(room.users));
+    }
+    handleChannelClick(e, room, roomType);
+  };
+
+  console.log(clickedChatRoom);
 
   return (
     <>
@@ -91,12 +103,7 @@ const SideBar = ({
               </button>
             </div>
           </header>
-          <section id="extras-section">
-            <div>
-              {/* <span>Direct messages</span> */}
-              <span></span>
-            </div>
-          </section>
+          <section id="extras-section"></section>
           <section id="channel-section">
             <div
               className="channel-item-header"
@@ -116,7 +123,7 @@ const SideBar = ({
                 return (
                   <div
                     className="channel-item"
-                    onClick={(e) => handleChannelClick(e, channel, "Channel")}
+                    onClick={(e) => handleRoomClick(e, channel, "Channel")}
                     key={channel.id}
                   >
                     <span style={{ marginRight: "11px", paddingTop: "4px" }}>
@@ -160,7 +167,7 @@ const SideBar = ({
                   <div
                     key={directMessage.id}
                     onClick={(e) =>
-                      handleChannelClick(e, directMessage, "DirectMessage")
+                      handleRoomClick(e, directMessage, "DirectMessage")
                     }
                   >
                     <div className="dm-item side-bar" key={directMessage.id}>
@@ -185,8 +192,8 @@ const SideBar = ({
             </div>
           </section>
         </div>
-        <section id="sidebar-footer">
-          <p>{sessionUser.username}</p>
+        <section className="sidebar-footer">
+          <p>{clickedChatRoom}</p>
         </section>
       </aside>
     </>

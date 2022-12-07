@@ -50,10 +50,11 @@ ApplicationRecord.transaction do
   )
 
 	u5 = User.create!(
-    username: 'Demo User', 
+    username: 'Demo User 1', 
     email: 'demo-user@gmail.com', 
     password: 'password'
   )
+	
 
 	u6 = User.create!(
     username: 'Geronimo Blass', 
@@ -66,6 +67,13 @@ ApplicationRecord.transaction do
     email: 'elopez@gmail.com', 
     password: 'password'
   )
+
+	u8 = User.create!(
+    username: 'Demo User 2', 
+    email: 'demo-user2@gmail.com', 
+    password: 'password'
+  )
+	
 
 	ApplicationRecord.connection.reset_pk_sequence!('workspaces')
 
@@ -108,7 +116,7 @@ ApplicationRecord.transaction do
 	ws5 = WorkspaceSubscription.create!(
 		user_id: u5.id,
 		workspace_id: w1.id
-	)
+	)	
 
 	ws6 = WorkspaceSubscription.create!(
 		user_id: u6.id,
@@ -118,6 +126,11 @@ ApplicationRecord.transaction do
 	ws7 = WorkspaceSubscription.create!(
 		user_id: u7.id,
 		workspace_id: w2.id
+	)
+
+	ws8 = WorkspaceSubscription.create!(
+		user_id: u8.id,
+		workspace_id: w1.id
 	)
 
 	ApplicationRecord.connection.reset_pk_sequence!('channels')
@@ -226,6 +239,16 @@ ApplicationRecord.transaction do
 		channel_id: c4.id
 	)
 
+	cs15 = ChannelSubscription.create!(
+		user_id: u8.id,
+		channel_id: c1.id
+	)
+
+	cs16 = ChannelSubscription.create!(
+		user_id: u8.id,
+		channel_id: c2.id
+	)
+
 	ApplicationRecord.connection.reset_pk_sequence!('direct_messages')
 
 	puts "creating direct_messages"
@@ -254,12 +277,7 @@ ApplicationRecord.transaction do
 	)
 
 	dms4 = DirectMessageSubscription.create!(
-		user_id: u4.id,
-		direct_message_id: dm1.id
-	)
-
-	dms5 = DirectMessageSubscription.create!(
-		user_id: u5.id,
+		user_id: u8.id,
 		direct_message_id: dm1.id
 	)
 
@@ -286,7 +304,7 @@ ApplicationRecord.transaction do
 	m3 = Message.create!(
 		author_id: u3.id,
 		author_name: u3.username,
-		content: u3.username,
+		content: "👆",
 		messageable_id: c1.id,
 		messageable_type: "Channel"
 	)

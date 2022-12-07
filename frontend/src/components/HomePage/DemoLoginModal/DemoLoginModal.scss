@@ -1,0 +1,92 @@
+.demo-modal-container {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0009;
+  z-index: 10000;
+  opacity: 1;
+  transition: opacity 80ms linear;
+}
+
+#demo-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #1d1c1d;
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.13), 0 18px 48px 0 #00000059;
+  border-radius: 8px;
+  font-family: "Lato", sans-serif;
+  transition: opacity 80ms linear,
+    transform 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
+  margin: 40px;
+  padding: 28px;
+  height: auto;
+  max-width: 520px;
+  width: 100%;
+}
+
+.demo-login-btns {
+  display: flex;
+  margin-top: 28px;
+  justify-content: center;
+}
+
+#demo-left-btn {
+  margin-right: 15px;
+}
+
+.demo-modal-header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.demo-modal-header-container h1 {
+  font-size: 30px;
+  font-weight: 900;
+  color: #611f69;
+}
+
+.cross-btn.demo {
+  position: absolute;
+  right: 0;
+}
+
+.demo-intro {
+  margin-bottom: 15px;
+}
+
+.demo-steps li {
+  margin-bottom: 10px;
+}
+
+.demo-stemps li::marker {
+  font-weight: 900;
+}
+
+.demo-steps:last-child {
+  margin-bottom: 0;
+}
+
+.demo-steps a,
+.demo-steps-cont span,
+#demo-note {
+  font-weight: 900;
+  color: #611f69;
+}
+
+#demo-note {
+  margin-bottom: 5px;
+}

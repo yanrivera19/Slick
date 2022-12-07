@@ -121,9 +121,9 @@ span {
   padding-bottom: 9px;
 }
 
-#sidebar-footer {
+.sidebar-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.13);
-  padding-left: 13px;
+  padding: 0 13px;
   height: 50px;
   display: flex;
   align-items: center;
@@ -131,6 +131,12 @@ span {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   font-size: 15px;
+}
+
+.sidebar-footer p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .hide {

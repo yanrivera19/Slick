@@ -10,12 +10,17 @@ import teamVid2 from "../../assets/vids/team-connected2.mp4";
 import teamVid3 from "../../assets/vids/team-connected3.mp4";
 import HomeVidTextRow from "./HomeVidTextRow";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import DemoLoginModal from "./DemoLoginModal";
+import * as sessionActions from "../../store/session";
 
 const HomePage = () => {
   const navRef = useRef();
   const navScrollRef = useRef();
   const sessionUser = useSelector((state) => state.session.user);
+  const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const eventId = document.addEventListener("scroll", checkNavPosition);
@@ -24,6 +29,31 @@ const HomePage = () => {
       document.removeEventListener("scroll", eventId);
     };
   }, []);
+
+  const handleDemoLogin = (e, userEmail) => {
+    setOpenDemoLoginModal(false);
+
+    return dispatch(
+      sessionActions.loginUser({
+        email: userEmail,
+        password: "password",
+      })
+    ).catch(async (res) => {
+      let data;
+      try {
+        data = await res.clone().json();
+      } catch {
+        data = await res.text();
+      }
+      if (data?.errors) setErrors(data.errors);
+      else if (data) setErrors([data]);
+      else setErrors([res.statusText]);
+    });
+  };
+
+  const handleOpenDemoModal = () => {
+    setOpenDemoLoginModal(!openDemoLoginModal);
+  };
 
   const checkNavPosition = () => {
     if (navRef.current) {
@@ -49,9 +79,25 @@ const HomePage = () => {
   return (
     <>
       <section className="main-container">
+        <section
+          className={openDemoLoginModal ? "demo-modal-container" : "hide"}
+        >
+          <DemoLoginModal
+            handleDemoLogin={handleDemoLogin}
+            handleOpenDemoModal={handleOpenDemoModal}
+          />
+        </section>
         <section className="nav-bars-cont">
-          <NavBar ref={navRef} />
-          <NavBarOnScroll ref={navScrollRef} onClick={scrollUp} />
+          <NavBar
+            ref={navRef}
+            scroll={false}
+            handleOpenDemoModal={handleOpenDemoModal}
+          />
+          <NavBarOnScroll
+            ref={navScrollRef}
+            onClick={scrollUp}
+            handleOpenDemoModal={handleOpenDemoModal}
+          />
         </section>
         <section className="home-billboard">
           <div className="home-billboard-head">
@@ -128,7 +174,7 @@ const HomePage = () => {
             <img src={slackLogoSolo} alt="logo" />
           </div>
           <a
-            href="https://github.com/yanrivera19/Sink-Oar-Swim"
+            href="https://github.com/yanrivera19/Slick"
             target="_blank"
             rel="noreferrer"
           >

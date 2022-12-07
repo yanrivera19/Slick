@@ -7,11 +7,13 @@ import slackLogoWhite from "../../assets/images/slack_logo_white.svg";
 import slackLogoBlack from "../../assets/images/slack_logo_black.svg";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
 import { useState } from "react";
+import DemoLoginModal from "../HomePage/DemoLoginModal";
 
-const NavBar = React.forwardRef((props, ref) => {
+const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [errors, setErrors] = useState([]);
+  const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
   let sessionLinks;
 
   const handleDemoLogin = () => {
@@ -45,7 +47,8 @@ const NavBar = React.forwardRef((props, ref) => {
         <button
           style={{ textDecoration: "none", color: "#fff" }}
           className="sign-btn right"
-          onClick={handleDemoLogin}
+          // onClick={handleDemoLogin}
+          onClick={handleOpenDemoModal}
         >
           Demo Login
         </button>
@@ -77,12 +80,41 @@ const NavBar = React.forwardRef((props, ref) => {
 
   return (
     <div className="nav-bar-container" ref={ref}>
+      <section className={openDemoLoginModal ? "demo-modal-container" : "hide"}>
+        <DemoLoginModal />
+      </section>
       <nav className="nav-bar">
         <NavLink to="/" className="home-logo-cont">
           <img src={slackLogoSolo} alt="logo" style={{ height: 25 }} />
           <h3>slick</h3>
         </NavLink>
-        <section className="sign-buttons">{sessionLinks}</section>
+
+        <div className="nav-links-container">
+          <div className="user-links-container">
+            <a
+              href="https://github.com/yanrivera19/Slick"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>GitHub-Repo</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ycrivera/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>LinkedIn</span>
+            </a>
+            <a
+              href="https://yanrivera19.github.io/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Portfolio</span>
+            </a>
+          </div>
+          <section className="sign-buttons">{sessionLinks}</section>
+        </div>
       </nav>
     </div>
   );

@@ -55,3 +55,29 @@
 .sign-btn.left:hover {
   box-shadow: inset 0 0 0 2px #fff;
 }
+
+.nav-links-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-links-container {
+  display: flex;
+  margin-left: 4rem;
+  font-family: Slack-Circular-Pro, "Helvetica Neue", Helvetica, "Segoe UI",
+    Tahoma, Arial, sans-serif;
+  font-weight: 700;
+  position: relative;
+  top: 2.5px;
+}
+
+.user-links-container a {
+  margin-right: 3rem;
+  white-space: nowrap;
+}
+
+.user-links-container a:hover {
+  text-decoration: underline;
+}

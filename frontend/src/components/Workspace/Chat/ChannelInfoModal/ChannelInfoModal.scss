@@ -285,3 +285,10 @@
   text-decoration: underline;
   text-decoration-color: #e01e5a;
 }
+
+.cancel-edit-btn.channel,
+.save-edit-btn.channel {
+  padding: 0 20px 1px;
+  height: 35px;
+  font-size: 15px;
+}

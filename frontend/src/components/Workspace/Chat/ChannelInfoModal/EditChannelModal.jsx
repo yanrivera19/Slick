@@ -73,14 +73,14 @@ const EditChannelModal = ({
           />
           <div id="edit-channel-btn-container">
             <button
-              className="cancel-edit-btn"
+              className="cancel-edit-btn channel"
               onClick={handleEditChannelModal}
             >
               Cancel
             </button>
             <button
               disabled={name.trim().length < 1}
-              className={`save-edit-btn ${
+              className={`save-edit-btn channel ${
                 name.trim().length > 0 ? "ready" : ""
               }`}
             >

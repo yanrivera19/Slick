@@ -4,7 +4,7 @@
   top: 0;
   justify-content: center;
   margin: 0 auto;
-  z-index: 100000;
+  z-index: 100;
   left: 0;
   right: 0;
   background-color: transparent;
@@ -67,4 +67,8 @@
 
 .sign-btn.left.scroll:hover {
   box-shadow: inset 0 0 0 2px #611f69;
+}
+
+.user-links-container.scroll {
+  color: #000;
 }
