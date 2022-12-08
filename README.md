@@ -129,6 +129,10 @@ end
 
 ```
 
+## Features for the Future
+
+ - User profiles and profile image upload
+ - Remove users from workspace
 
 
 
