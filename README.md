@@ -47,7 +47,7 @@ Slick's core application is built around the WebSocket Communication Protocol to
  - Users can create workspaces
  - Users can choose which workspace to work on
  - Users can invite other users to their workspaces and join other workspaces
- - Users can switch between the workspaces to which they are subscribed to
+ - Users can switch between the workspaces that they're members of
 
 ### Channels:
 
