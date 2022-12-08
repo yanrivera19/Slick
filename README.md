@@ -68,5 +68,67 @@ Slick's core application is built around the WebSocket Communication Protocol to
 
 ## Code Snippets
 
+1. When a message is created, the ```RECEIVE_MESSAGE``` action gets triggered and any user currently subscribed to that slice of state, will receive updates of it whenever it changes. This logic makes sure that when a message gets created in a specific room (channel or direct message conversation) of a workspace, only users that have that conversation open get their 'messages' slice of state updated.
+
+```javascript
+// frontend/src/store/messages.js line 87
+
+export default function messageReducer(state = {}, action) {
+  switch (action.type) { 
+  ....  
+  case RECEIVE_MESSAGE:
+    let checker = state[Object.keys(state)[0]];
+    if (checker) {
+      if (
+        checker.messageableId === action.message.messageableId &&
+        checker.messageableType === action.message.messageableType
+      ) {
+        return { ...state, [action.message.id]: action.message };
+      }
+    } else {
+      return state;
+    }
+    break;      
+   ...
+  }
+}
+
+```
+
+2. This logic deals with the addition of new members of a workspace. The update controller action of the ```workspaces_controller.rb``` can receive new users through the request params. After checking that those users don't already belong to that workspace, subscriptions are created so that the new users become memmbers of the workspace, and of the channels that that workspace has. Because the param that contains the new users comes as JSON, the method makes use of ```ActiveSupport::JSON.decode()``` to turn it into Ruby syntax.
+
+```ruby
+// app/api/workspaces_controller.rb line 31
+
+def update 
+  @workspace = Workspace.find_by_id(params[:id]) 
+  @users = ActiveSupport::JSON.decode(params[:new_users])
+
+  if @users.length > 0
+    @user_ids = @users.map {|user| user["id"]} 
+    @channels = @workspace.channels
+
+    @user_ids.each do |id|
+      WorkspaceSubscription.create(user_id: id, workspace_id: @workspace.id)
+      @channels.each do |channel|
+        ChannelSubscription.create(user_id: id, channel_id: channel.id)
+      end
+    end
+  end
+
+  if @workspace.update(workspace_params)
+    WorkspacesChannel.broadcast_to @workspace,
+      type: 'EDIT_WORKSPACE',
+      **from_template('api/workspaces/show', workspace: @workspace)
+
+    render json: nil, status: :ok
+  else
+    render json: {errors: @workspace.errors.full_messages}, status: 422
+  end
+end 
+
+```
+
+
 
 
