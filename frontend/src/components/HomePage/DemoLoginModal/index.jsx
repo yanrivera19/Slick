@@ -27,8 +27,8 @@ const DemoLoginModal = ({ handleDemoLogin, handleOpenDemoModal }) => {
           </li>
           <li>
             Click on the <span>Demo Login</span> button at the top-right corner
-            of the page and then click the 'Demo User 2' button at the bottom of
-            the modal
+            of the page and then click the <span>Demo User 2</span> button at
+            the bottom of the modal
           </li>
           <li>
             Click the <span>Launch Slick</span> button of the{" "}
@@ -47,7 +47,7 @@ const DemoLoginModal = ({ handleDemoLogin, handleOpenDemoModal }) => {
         <p id="demo-note">Note:</p>
         <p>
           Only <span>Demo User 1</span> can create, edit, and delete channels,
-          since it is the owner of the 'Fight Club' workspace.
+          since it is the owner of the <span>Fight Club</span> workspace.
         </p>
       </div>
       <div className="demo-login-btns">

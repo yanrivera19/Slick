@@ -63,9 +63,33 @@ export function getDate(date) {
     }
   });
 
+  let ordinal;
+
+  switch (dateObj["dayNumber"]) {
+    case String(dateObj["dayNumber"])[
+      String(dateObj["dayNumber"]).length - 1
+    ] === 1:
+      ordinal = "st";
+      break;
+    case String(dateObj["dayNumber"])[
+      String(dateObj["dayNumber"]).length - 1
+    ] === 2:
+      ordinal = "nd";
+      break;
+    case String(dateObj["dayNumber"])[
+      String(dateObj["dayNumber"]).length - 1
+    ] === 3:
+      ordinal = "rd";
+      break;
+    default:
+      ordinal = "th";
+  }
+
   let year =
     new Date().getFullYear() === dateObj["year"] ? "" : `, ${dateObj["year"]}`;
   let weekDay = year === "" ? `${days[dateObj["dayOfWeek"]]}, ` : "";
 
-  return `${weekDay}${months[dateObj["month"]]} ${dateObj["dayNumber"]}${year}`;
+  return `${weekDay}${months[dateObj["month"]]} ${
+    dateObj["dayNumber"]
+  }${ordinal}${year}`;
 }
