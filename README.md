@@ -1,24 +1,42 @@
-# README
+# Slick
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[Live Site](https://slick-ngn1.onrender.com/)
 
-Things you may want to cover:
+Slick, a clone of the popular messaging app Slack, allows users from a workspace to live chat with each other through direct messages or through channels, and organizes these conversations.
 
-* Ruby version
+---
 
-* System dependencies
+## Technologies Used
 
-* Configuration
+ - JavaScript
+ - React
+ - Redux
+ - Ruby On Rails
+ - PostgreSQL, ActionCable (for WebSockets)
+ - HTML5
+ - SCSS
 
-* Database creation
+Slick's core application is built around the WebSocket Communication Protocol to provide to users live updates without refreshing the page. The back end is built using Ruby on Rails and the database using PostgreSQL. The front end is built using React.js, Redux for the global state management of the application, HTML5, and SCSS.
 
-* Database initialization
+---
 
-* How to run the test suite
+## Features
 
-* Services (job queues, cache servers, search engines, etc.)
+### User Authentication: 
 
-* Deployment instructions
+### Messages:
 
-* ...
+### Workspaces:
+
+### Channels:
+
+### Direct Messages: 
+
+### Search:
+
+---
+
+## Code Snippets
+
+
+
