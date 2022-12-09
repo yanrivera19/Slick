@@ -20,9 +20,9 @@ const DemoLoginModal = ({ handleDemoLogin, handleOpenDemoModal }) => {
           <li>
             Open a new incognito window, copy and paste the following url, and
             navigate to it:
-            <a href="https://slick-ngn1.onrender.com/">
+            <a href="https://slick-x3v8.onrender.com">
               {" "}
-              https://slick-ngn1.onrender.com/
+              https://slick-x3v8.onrender.com
             </a>
           </li>
           <li>

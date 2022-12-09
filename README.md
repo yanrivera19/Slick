@@ -1,6 +1,6 @@
 # Slick
 
-[Live Site](https://slick-ngn1.onrender.com/)
+[Live Site](https://slick-x3v8.onrender.com)
 
 Slick, a clone of the popular messaging app Slack, allows users from a workspace to live chat with each other through direct messages or through channels, and organizes these conversations.
 
