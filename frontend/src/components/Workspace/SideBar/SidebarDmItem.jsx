@@ -20,7 +20,11 @@ const SidebarDmItem = ({
         key={directMessage.id}
       >
         {directMessage.users.length > 1 && (
-          <button className="dm-users-count">
+          <button
+            className={
+              selected ? "dm-users-count transparent-bg" : "dm-users-count"
+            }
+          >
             <p style={{ lineHeight: "1.4em" }}>{directMessage.users.length}</p>
           </button>
         )}
