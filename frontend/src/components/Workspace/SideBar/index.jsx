@@ -8,6 +8,7 @@ import { updateWorkspace } from "../../../store/workspaces";
 import { useDispatch } from "react-redux";
 import SidebarDmItem from "./SidebarDmItem";
 import SidebarChannelItem from "./SidebarChannelItem";
+import { NavLink, useHistory } from "react-router-dom";
 
 const SideBar = ({
   workspace,
@@ -24,7 +25,7 @@ const SideBar = ({
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [showAddTeammateModal, setShowAddTeammateModal] = useState(false);
   const [clickedChatRoom, setClickedChatRoom] = useState(null);
-
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const handleAddChannelModal = () => {
@@ -80,7 +81,12 @@ const SideBar = ({
         <div>
           <header className="workspace-header">
             <div className="workspace-header-cont">
-              <div>
+              <div
+                onClick={() => {
+                  history.push(`/client/${sessionUser.id}/${workspace.id}`);
+                  handleChannelClick(null);
+                }}
+              >
                 <span id="works-name">{workspace.name}</span>
                 <span></span>
               </div>
@@ -107,12 +113,20 @@ const SideBar = ({
             <div className={hideChannels ? "hide" : ""}>
               {channels.map((channel) => {
                 return (
-                  <SidebarChannelItem
-                    channel={channel}
-                    handleRoomClick={handleRoomClick}
-                    sessionUser={sessionUser}
-                    selected={channel.name === clickedChatRoom}
-                  />
+                  <div
+                    onClick={() =>
+                      history.push(
+                        `/client/${sessionUser.id}/${workspace.id}/channel/${channel.id}`
+                      )
+                    }
+                  >
+                    <SidebarChannelItem
+                      channel={channel}
+                      handleRoomClick={handleRoomClick}
+                      sessionUser={sessionUser}
+                      selected={channel.name === clickedChatRoom}
+                    />
+                  </div>
                 );
               })}
             </div>
@@ -146,15 +160,23 @@ const SideBar = ({
                 const names = dmUsersNames(members);
 
                 return (
-                  <SidebarDmItem
-                    directMessage={directMessage}
-                    handleRoomClick={handleRoomClick}
-                    names={names}
-                    sessionUser={sessionUser}
-                    selected={
-                      dmUsersNames(directMessage.users) === clickedChatRoom
+                  <div
+                    onClick={() =>
+                      history.push(
+                        `/client/${sessionUser.id}/${workspace.id}/dm/${directMessage.id}`
+                      )
                     }
-                  />
+                  >
+                    <SidebarDmItem
+                      directMessage={directMessage}
+                      handleRoomClick={handleRoomClick}
+                      names={names}
+                      sessionUser={sessionUser}
+                      selected={
+                        dmUsersNames(directMessage.users) === clickedChatRoom
+                      }
+                    />
+                  </div>
                 );
               })}
             </div>
