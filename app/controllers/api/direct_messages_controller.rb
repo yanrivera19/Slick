@@ -12,7 +12,8 @@ class Api::DirectMessagesController < ApplicationController
     if @direct_message.save
 			@user_ids.each do |user_id|
 				@direct_message_subscription = DirectMessageSubscription.create(user_id: user_id, direct_message_id: @direct_message.id)
-
+				# for dms, add seen_last_message column with default value of empty array
+				#shovel into dm.seen_last_message array each user_id
 			end
 			WorkspacesChannel.broadcast_to @workspace,
 				type: 'RECEIVE_NEW_DIRECT_MESSAGE',

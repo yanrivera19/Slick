@@ -36,7 +36,6 @@ const Chat = ({
   newMessage,
   newChannel,
   setNewChannel,
-  sentNewMsg,
 }) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
@@ -64,7 +63,7 @@ const Chat = ({
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
-  }, [conversation, lastMessage, newMessage, newChannel, editMode, sentNewMsg]);
+  }, [conversation, lastMessage, newMessage, newChannel, editMode]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -143,7 +142,6 @@ const Chat = ({
   };
 
   const dmUsersNames = (dmUsers) => {
-    console.log(dmUsers);
     let filteredUsers = Object.values(dmUsers).filter(
       (user) => user.username !== sessionUser.username
     );

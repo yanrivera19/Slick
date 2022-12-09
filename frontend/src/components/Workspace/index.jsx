@@ -56,7 +56,6 @@ const Workspace = () => {
   const history = useHistory();
   const [workspaceUsers, setWorkspaceUsers] = useState([]);
   const [editedChannel, setEditedChannel] = useState(false);
-  const [sentNewMsg, setSentNewMsg] = useState(false);
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
@@ -111,7 +110,6 @@ const Workspace = () => {
           switch (type) {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
-              setSentNewMsg(!sentNewMsg);
               console.log("received:", message.content);
               break;
             case "RECEIVE_NEW_DIRECT_MESSAGE":
@@ -174,8 +172,6 @@ const Workspace = () => {
 
     subs.push(sub);
   };
-
-  console.log(conversationType);
 
   const handleChannelClick = (e, channel, channelType) => {
     setNewChannel(false);
@@ -292,7 +288,6 @@ const Workspace = () => {
             newMessage={newMessage}
             newChannel={newChannel}
             setNewChannel={setNewChannel}
-            sentNewMsg={sentNewMsg}
           />
         ) : conversationType === "DirectMessage" ? (
           <Chat
@@ -304,7 +299,6 @@ const Workspace = () => {
             getConversation={getDirectMessage}
             channels={channels}
             newMessage={newMessage}
-            sentNewMsg={sentNewMsg}
           />
         ) : null}
         {newMessage ? (

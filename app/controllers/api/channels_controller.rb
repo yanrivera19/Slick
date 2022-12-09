@@ -10,6 +10,8 @@ class Api::ChannelsController < ApplicationController
     if @channel.save
 			@user_ids.each do |user_id|
 				@channel_subscription = ChannelSubscription.create(user_id: user_id, channel_id: @channel.id)
+				#add seen_last_message column to channel table with default value of empty array
+				#shovel into channel.seen_last_message array each user_id
 			end
 
 			WorkspacesChannel.broadcast_to @workspace,

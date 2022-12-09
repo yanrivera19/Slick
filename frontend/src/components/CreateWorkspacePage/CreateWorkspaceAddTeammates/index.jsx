@@ -36,8 +36,6 @@ const CreateWorkspaceAddTeammates = ({
     handleNextStep();
   };
 
-  // console.log(selectedUsers);
-
   return (
     <>
       <div className="setup-page-step-head">
@@ -48,16 +46,10 @@ const CreateWorkspaceAddTeammates = ({
       <div className="">
         <div className="search-cont users">
           <div className="users-results-cont users">
-            {/* {filteredData.map((obj) => { */}
             {users.map((user) => {
-              // console.log(selectedUsers);
               if (user.username !== sessionUser.username) {
                 return (
-                  <div
-                    // onClick={(e) => handleResultClick(e, user)}
-                    className="search-user-cont"
-                    style={{ width: "100%" }}
-                  >
+                  <div className="search-user-cont" style={{ width: "100%" }}>
                     <SelectedNewMembers
                       key={user.id}
                       user={user}

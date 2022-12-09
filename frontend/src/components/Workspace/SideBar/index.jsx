@@ -67,8 +67,6 @@ const SideBar = ({
     handleChannelClick(e, room, roomType);
   };
 
-  console.log(clickedChatRoom);
-
   return (
     <>
       <section

@@ -38,8 +38,6 @@ const AddTeammatesModal = ({
     }
   };
 
-  console.log(resultsCount);
-
   // if (filteredData.length === 0) {
   //   return (
   //     <div className="search-cont">

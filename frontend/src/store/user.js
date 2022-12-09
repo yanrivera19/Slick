@@ -43,7 +43,6 @@ export const fetchUsers = () => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    console.log(data);
     dispatch(receiveUsers(data.users));
   }
 };

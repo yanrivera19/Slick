@@ -67,9 +67,7 @@ const SearchResults = ({
 
     return filteredUsers.join(", ");
   };
-
-  console.log(data);
-
+	
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
     let filtered = data.filter((object) => {
       if (
