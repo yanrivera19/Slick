@@ -27,6 +27,8 @@ Slick's core application is built around the WebSocket Communication Protocol to
  - Logged in users that are subscribed to a specific room will receive live updates of the changes that occur in it without having to refresh the page
  - Users can also see in real time if a channel was edited or deleted, and if a new direct message conversation directed to them by another user was created 
 
+https://user-images.githubusercontent.com/56778101/206611124-3c90f20d-9403-42ed-9bb8-9d3e285465fb.mp4
+
 ### User Authentication: 
 
 - Users can create an account and login/logout with their credentials.
@@ -98,7 +100,7 @@ export default function messageReducer(state = {}, action) {
 2. This logic deals with the addition of new members of a workspace. The update controller action of the ```workspaces_controller.rb``` can receive new users through the request params. After checking that those users don't already belong to that workspace, subscriptions are created so that the new users become memmbers of the workspace, and of the channels that that workspace has. Because the param that contains the new users comes as JSON, the method makes use of ```ActiveSupport::JSON.decode()``` to turn it into Ruby syntax.
 
 ```ruby
-// app/api/workspaces_controller.rb line 31
+# app/api/workspaces_controller.rb line 31
 
 def update 
   @workspace = Workspace.find_by_id(params[:id]) 
@@ -129,6 +131,10 @@ end
 
 ```
 
+## Features for the Future
+
+ - User profiles and profile image upload
+ - Remove users from workspace
 
 
 
