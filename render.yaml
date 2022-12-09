@@ -12,7 +12,7 @@ services:
     maxmemoryPolicy: allkeys-lfu # optional (defaults to allkeys-lru). Rails recommends allkeys-lfu as a default.
   - type: web
     name: Slick
-    plan: free
+    plan: starter
     region: oregon
     branch: main
     env: ruby
