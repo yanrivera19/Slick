@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import {
-  AiFillCaretDown,
-  AiFillCaretRight,
-  AiOutlinePlus,
-} from "react-icons/ai";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { BsFillCaretDownFill, BsCaretRightFill } from "react-icons/bs";
 import WriteIcon from "../../Svgs&Icons/WriteMsgIcon";
 import CreateChannelModal from "../CreateChannelModal";
 import AddTeammatesModal from "../AddTeammatesModal";
 import { updateWorkspace } from "../../../store/workspaces";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchWorkspace } from "../../../store/workspaces";
-import SidebarChannelItem from "./SidebarChannelItem";
+import { useDispatch } from "react-redux";
 import SidebarDmItem from "./SidebarDmItem";
+import SidebarChannelItem from "./SidebarChannelItem";
 
 const SideBar = ({
   workspace,
