@@ -1,11 +1,9 @@
 import { RECEIVE_WORKSPACE } from "./workspaces";
 import { RECEIVE_DIRECT_MESSAGE } from "./directMessages";
 import { RECEIVE_CHANNEL } from "./channels";
-import { RECEIVE_WORKSPACES } from "./workspaces";
 
 export const RECEIVE_USER = "users/RECEIVE_USER";
 export const RECEIVE_USERS = "users/RECEIVE_USERS";
-// export const RECEIVE_ALL_USERS = "users/"
 
 export const receiveUser = (user) => {
   return {

@@ -1,5 +1,5 @@
 class Api::ChannelsController < ApplicationController
-	wrap_parameters :channel, include: Channel.attribute_names + ["workspaceId", "ownerId"]
+	wrap_parameters :channel, include: Channel.attribute_names + ["workspaceId", "ownerId", "contentEdited" "seenUser"]
   before_action :require_logged_in
 
   def create
@@ -10,14 +10,12 @@ class Api::ChannelsController < ApplicationController
     if @channel.save
 			@user_ids.each do |user_id|
 				@channel_subscription = ChannelSubscription.create(user_id: user_id, channel_id: @channel.id)
-				#add seen_last_message column to channel table with default value of empty array
-				#shovel into channel.seen_last_message array each user_id
 			end
 
 			WorkspacesChannel.broadcast_to @workspace,
 				type: 'RECEIVE_NEW_CHANNEL',
 				**from_template('api/channels/show', channel: @channel)
-      # render "/api/workspaces/w_show"
+
 			render json: nil, status: :ok
 		else
       render json: {errors: @channel.errors.full_messages}, status: 422
@@ -27,13 +25,23 @@ class Api::ChannelsController < ApplicationController
 	def update 
 		@channel = Channel.find_by_id(params[:id]) 
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
-		#@channel?updaste or workspace&update????
-		if @channel.update(channel_params)
-			WorkspacesChannel.broadcast_to @workspace,
-				type: 'EDIT_CHANNEL',
-				**from_template('api/channels/show', channel: @channel)
+		@content_edited = params[:content_edited] == "true"
+		@seen_user = params[:seen_user]
+		
+		if !@channel.seen_last_message.include?(@seen_user.to_i)
+			@channel.seen_last_message << @seen_user
+		end
 
-			render json: nil, status: :ok			
+		if @channel.update(channel_params)
+			if @content_edited == true
+				WorkspacesChannel.broadcast_to @workspace,
+					type: 'EDIT_CHANNEL',
+					**from_template('api/channels/show', channel: @channel)
+
+				render json: nil, status: :ok
+			else  
+				render "api/channels/c_show"
+			end		
 		else
 			render json: {errors: @channel.errors.full_messages}, status: 422
 		end
@@ -42,11 +50,6 @@ class Api::ChannelsController < ApplicationController
 	def destroy
 		@channel = Channel.find_by_id(params[:id])
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
-		
-		# if @channel.owner_id == current_user.id
-		# 	@channel.destroy
-		# 	render "/api/workspaces/w_show"
-		# end
 
 		if @channel.destroy 
 			WorkspacesChannel.broadcast_to @workspace,
@@ -66,6 +69,6 @@ class Api::ChannelsController < ApplicationController
 	private 
 
 	def channel_params
-		params.require(:channel).permit(:id, :name, :description, :workspace_id, :owner_id)
+		params.require(:channel).permit(:id, :name, :description, :workspace_id, :owner_id, :content_edited, :seen_user)
 	end
 end

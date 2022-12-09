@@ -1,11 +1,10 @@
 import csrfFetch from "./csrf";
-import { receiveWorkspace, getWorkspace } from "./workspaces";
 import { RECEIVE_WORKSPACE } from "./workspaces";
 
 export const RECEIVE_CHANNEL = "channels/RECEIVE_CHANNEL";
 export const REMOVE_CHANNEL = "channels/REMOVE_CHANNEL";
 export const RECEIVE_NEW_CHANNEL = "channels/RECEIVE_NEW_CHANNEL";
-export const EDIT_CHANNEL = "channels/EDIT";
+export const EDIT_CHANNEL = "channels/EDIT_CHANNEL";
 
 export const receiveChannel = (channel) => {
   return {
@@ -44,7 +43,6 @@ export const fetchChannel = (channelId) => async (dispatch) => {
 
   if (res.ok) {
     const channel = await res.json();
-    // console.log(channel);
     dispatch(receiveChannel(channel));
     return channel;
   }
@@ -59,29 +57,29 @@ export const createChannel = (channel) => async (dispatch) => {
     },
   });
 
-  if (res.ok) {
-    //CATCH ERRORS
-    // const channel = await res.json();
-    // dispatch(receiveChannel(channel));
-    // const workspace = await dispatch(getWorkspace(channel.channel.workspaceId));
-    // dispatch(receiveWorkspace(workspace));
+  if (!res.ok) {
+    console.log("error creating channel");
   }
 };
 
-export const updateChannel = (channel) => async (dispatch) => {
-  const res = await csrfFetch(`/api/channels/${channel.id}`, {
-    method: "PUT",
-    body: JSON.stringify(channel),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const updateChannel =
+  (channel, contentEdited, seenUser) => async (dispatch) => {
+    const res = await csrfFetch(
+      `/api/channels/${channel.id}?contentEdited=${contentEdited}&seenUser=${seenUser}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(channel),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (res.ok) {
-    // const channel = await res.json();
-    // dispatch(receiveChannel(channel));
-  }
-};
+    if (res.ok && !contentEdited) {
+      const channel = await res.json();
+      dispatch(receiveChannel(channel));
+    }
+  };
 
 export const deleteChannel = (channelId) => async (dispatch) => {
   const res = await csrfFetch(`/api/channels/${channelId}`, {
@@ -102,8 +100,8 @@ export default function channelReducer(state = {}, action) {
     case RECEIVE_NEW_CHANNEL:
       return { ...state, [action.channel.id]: action.channel };
     case EDIT_CHANNEL:
-      return action.message
-        ? { ...state, [action.message.id]: action.message }
+      return action.channel
+        ? { ...state, [action.channel.id]: action.channel }
         : { ...state };
     case REMOVE_CHANNEL:
       const newState = { ...state };

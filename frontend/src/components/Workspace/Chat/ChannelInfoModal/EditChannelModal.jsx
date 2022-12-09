@@ -18,13 +18,17 @@ const EditChannelModal = ({
 
   const handleEdit = (e) => {
     e.preventDefault();
+    let contentEdited = true;
 
     dispatch(
-      updateChannel({
-        ...channel,
-        name: name,
-        description: description,
-      })
+      updateChannel(
+        {
+          ...channel,
+          name: name,
+          description: description,
+        },
+        contentEdited
+      )
     );
     handleChannelNameClick();
   };
@@ -88,12 +92,6 @@ const EditChannelModal = ({
             </button>
           </div>
         </form>
-        {/* <button
-          className="delete-btn-channel"
-          onClick={(e) => setDeleteAlertModal(!deleteAlertModal)}
-        >
-          Delete
-        </button> */}
         <div className="delete-channel-link-cont">
           <p className="delete-channel-link" onClick={handleDeleteAlertModal}>
             Delete channel

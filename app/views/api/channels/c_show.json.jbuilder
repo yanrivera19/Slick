@@ -6,6 +6,11 @@ json.users do
 		end
 	end
 end
+json.seen_last_message do
+	@channel.seen_last_message.each do |user_id|
+		json.set! user_id, user_id
+	end
+end		
 json.messages do
 	@channel.messages.each do |message|
 		json.set! message.id do 

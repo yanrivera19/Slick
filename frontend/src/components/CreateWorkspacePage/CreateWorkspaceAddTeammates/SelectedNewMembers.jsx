@@ -12,7 +12,6 @@ const SelectedNewMembers = ({ user, handleResultClick }) => {
     <span
       className={`search-result-item-teammates ${selected ? "selected" : ""}`}
       onClick={handleClick}
-      // key={obj.id * 29}
     >
       {user.username} - ({user.email})
     </span>

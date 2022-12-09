@@ -3,8 +3,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as sessionActions from "../../store/session";
 import "./NavBar.scss";
-import slackLogoWhite from "../../assets/images/slack_logo_white.svg";
-import slackLogoBlack from "../../assets/images/slack_logo_black.svg";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
 import { useState } from "react";
 import DemoLoginModal from "../HomePage/DemoLoginModal";
@@ -12,28 +10,8 @@ import DemoLoginModal from "../HomePage/DemoLoginModal";
 const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-  const [errors, setErrors] = useState([]);
   const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
   let sessionLinks;
-
-  const handleDemoLogin = () => {
-    return dispatch(
-      sessionActions.loginUser({
-        email: "demo-user@gmail.com",
-        password: "password",
-      })
-    ).catch(async (res) => {
-      let data;
-      try {
-        data = await res.clone().json();
-      } catch {
-        data = await res.text();
-      }
-      if (data?.errors) setErrors(data.errors);
-      else if (data) setErrors([data]);
-      else setErrors([res.statusText]);
-    });
-  };
 
   if (sessionUser) {
     sessionLinks = (
@@ -47,7 +25,6 @@ const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
         <button
           style={{ textDecoration: "none", color: "#fff" }}
           className="sign-btn right"
-          // onClick={handleDemoLogin}
           onClick={handleOpenDemoModal}
         >
           Demo Login

@@ -1,16 +1,13 @@
 
-	json.extract! @direct_message, :id
-	json.users @direct_message.users do |user|
-		json.extract! user, :id, :username, :email
+json.extract! @direct_message, :id
+json.users @direct_message.users do |user|
+	json.extract! user, :id, :username, :email
+end
+json.seen_last_message do
+	@direct_message.seen_last_message.each do |user_id|
+		json.set! user_id, user_id
 	end
-
-# json.users do 
-# 		@direct_message.users.each do |user|
-# 			json.set! user.id do 
-# 				json.extract! user, :id, :username, :email
-# 			end
-# 		end
-# 	end
+end	
 	json.messages do
 		@direct_message.messages.each do |message|
 			json.set! message.id do 

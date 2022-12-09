@@ -1,5 +1,5 @@
 class Api::DirectMessagesController < ApplicationController
-	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId"]
+	wrap_parameters :direct_message, include: DirectMessage.attribute_names + ["workspaceId", "seenUser"]
   before_action :require_logged_in
 
   def create
@@ -12,8 +12,6 @@ class Api::DirectMessagesController < ApplicationController
     if @direct_message.save
 			@user_ids.each do |user_id|
 				@direct_message_subscription = DirectMessageSubscription.create(user_id: user_id, direct_message_id: @direct_message.id)
-				# for dms, add seen_last_message column with default value of empty array
-				#shovel into dm.seen_last_message array each user_id
 			end
 			WorkspacesChannel.broadcast_to @workspace,
 				type: 'RECEIVE_NEW_DIRECT_MESSAGE',
@@ -29,9 +27,16 @@ class Api::DirectMessagesController < ApplicationController
 	def update 
 		@direct_message = DirectMessage.find_by_id(params[:id]) 
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
-		#@direct_message?updaste or direct_message&update????
+		@seen_user = params[:seen_user]
+
+		@direct_message.seen_last_message << @seen_user
+
 		if @direct_message.update(direct_message_params)
-			render "/api/workspaces/w_show"
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'EDIT_DIRECT_MESSAGE',
+				**from_template('api/direct_messages/show', direct_message: @direct_message)
+
+			render json: nil, status: :ok			
 		else
 			render json: {errors: @direct_message.errors.full_messages}, status: 422
 		end
@@ -56,6 +61,6 @@ class Api::DirectMessagesController < ApplicationController
 	private 
 
 	def direct_message_params
-		params.require(:direct_message).permit(:workspace_id, :users, :message)
+		params.require(:direct_message).permit(:workspace_id, :users, :message, :seen_user)
 	end
 end

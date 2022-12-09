@@ -8,8 +8,8 @@
 }
 
 .workspace-header:hover,
-.channel-item:hover,
-.dm-item:hover,
+.channel-item.hover:hover,
+.dm-item.hover:hover,
 .square-btn-sidebar:hover,
 .channel-item-header:hover,
 .dm-item-header:hover {
@@ -141,4 +141,60 @@ span {
 
 .hide {
   display: none;
+}
+
+.new-message,
+.new-dm-message {
+  font-weight: 900;
+  color: #fff;
+}
+
+.selected {
+  background: #1164a3;
+  color: #fff;
+}
+
+.selected:hover {
+  background-color: none;
+}
+
+.dm-item-container {
+  position: relative;
+}
+
+#dm-notification-badge {
+  display: inline-block;
+  color: #fff;
+  background-color: #e01e5a;
+  font-weight: 700;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 10px;
+  font-size: 14px;
+  padding: 0 10px;
+  line-height: 20px;
+  vertical-align: bottom;
+  z-index: 88;
+}
+
+.dm-img-container {
+  position: relative;
+}
+
+.dm-item.side-bar {
+  position: relative;
+}
+
+.dm-users-count {
+  position: absolute;
+  bottom: 2px;
+  left: 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  vertical-align: center;
+  font-weight: 700;
+  height: 14px;
+  text-align: center;
+  width: 14px;
+  background: #4f2e50;
 }

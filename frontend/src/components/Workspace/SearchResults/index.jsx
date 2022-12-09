@@ -9,14 +9,12 @@ const SearchResults = ({
   handleChannelClick,
   handleResultClick,
   selectedUsers,
-  oneToOneDmUsers,
 }) => {
   const [filteredData, setFilteredData] = useState([]);
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
     checkForSymbol();
-    // filterData();
   }, [inputValue]);
 
   const checkForSymbol = () => {

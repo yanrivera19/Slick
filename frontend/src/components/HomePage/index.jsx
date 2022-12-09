@@ -1,4 +1,3 @@
-// import consumer from "../../consumer";
 import { NavLink, Redirect } from "react-router-dom";
 import NavBar from "../NavBar";
 import NavBarOnScroll from "../NavBarOnScroll";

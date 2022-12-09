@@ -1,5 +1,3 @@
-import { RECEIVE_CHANNEL } from "./channels";
-import { RECEIVE_DIRECT_MESSAGE } from "./directMessages";
 import csrfFetch from "./csrf";
 
 export const RECEIVE_WORKSPACE = "workspaces/RECEIVE_WORKSPACE";
@@ -76,7 +74,6 @@ export const createWorkspace = (workspace, users) => async (dispatch) => {
 };
 
 export const updateWorkspace = (workspace, newUsers) => async (dispatch) => {
-  // debugger;
   const res = await csrfFetch(
     `/api/workspaces/${workspace.id}?newUsers=${JSON.stringify(newUsers)}`,
     {
@@ -88,9 +85,8 @@ export const updateWorkspace = (workspace, newUsers) => async (dispatch) => {
     }
   );
 
-  if (res.ok) {
-    // const workspace = await res.json();
-    // dispatch(receiveWorkspace(workspace));
+  if (!res.ok) {
+    console.log("error updating workspace");
   }
 };
 
