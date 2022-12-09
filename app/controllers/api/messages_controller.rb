@@ -15,13 +15,18 @@ class Api::MessagesController < ApplicationController
     if @message.save
 			if type == "channel"
 				@channel = Channel.find_by_id(params[:messageable_id])
-				@channel_messages = @channel.messages
+				@channel.seen_last_message = [];
+				@channel.seen_last_message << @message.author_id
+				@channel.save
 
 				ChannelsChannel.broadcast_to @message.messageable, 
 				  type: 'RECEIVE_MESSAGE',
-			    **from_template("api/messages/show", message: @message, channel_messages: @channel_messages)
+			    **from_template("api/messages/show", message: @message)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
+				@direct_message.seen_last_message = [];
+				@direct_message.seen_last_message << @message.author_id
+				@direct_message.save
 				
 				DirectMessagesChannel.broadcast_to @message.messageable, 
 				  type: 'RECEIVE_MESSAGE',
@@ -68,12 +73,6 @@ class Api::MessagesController < ApplicationController
 
 		#if I end up adding threads, should check for type thread
 		#in conditional below	
-
-		# if @message.messageable_type == "Channel"
-		#   @channel = Channel.find_by_id(@message.messageable_id)
-		# else 
-		# 	@direct_message = DirectMessage.find_by_id(@message.messageable_id)
-		# end
 
 		if @message.destroy
 			if type == "channel"

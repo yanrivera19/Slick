@@ -1,41 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import consumer from "../../../consumer";
-import { fetchChannel, getChannel } from "../../../store/channels";
-import {
-  createMessage,
-  updateMessage,
-  deleteMessage,
-  getMessage,
-} from "../../../store/messages";
-import { getTimeOfMessage, getDate } from "../../../util";
+import { updateChannel } from "../../../store/channels";
+import { updateDirectMessage } from "../../../store/directMessages";
+import { createMessage } from "../../../store/messages";
+import { getDate } from "../../../util";
 import Message from "./Message";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import CaretOutlineIcon from "../../Svgs&Icons/CaretOutlineIcon";
 import userImg1 from "../../../assets/images/default-user-img.png";
-import userImg2 from "../../../assets/images/default-user-img2.png";
 import userImg3 from "../../../assets/images/default-user-img3png.png";
-import userImg4 from "../../../assets/images/default-user-img4.png";
 import userImg5 from "../../../assets/images/default-user-img-5.png";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
-import EmojiOutlineIcon from "../../Svgs&Icons/EmojiOutlineIcon";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 import HashTagIconBold from "../../Svgs&Icons/HashTagIconBold";
 import ChannelInfoModal from "./ChannelInfoModal";
 
 const Chat = ({
   conversation,
-  subs,
   channelType,
-  dms,
-  channels,
   fetchConversation,
-  getConversation,
-  lastMsg,
   newMessage,
   newChannel,
   setNewChannel,
+  newMessageSent,
 }) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
@@ -44,26 +31,46 @@ const Chat = ({
   const [lastMessage, setLastMessage] = useState("");
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
-  let hoveredElement = "";
-  const [date, setDate] = useState(null);
-  const userImages = [userImg1, userImg2, userImg3, userImg4, userImg5];
   const users = useSelector((state) => Object.values(state.users));
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef();
   const emojiIconRef = useRef();
   const textAreaRef = useRef();
-  let usersString = "";
   let messages = useSelector((state) =>
     state.messages ? Object.values(state.messages) : []
   );
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
   const [showChannelInfoModal, setShowChannelInfoModal] = useState(false);
-  let conversationUsers = null;
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     dispatch(fetchConversation(conversation.id));
   }, [conversation, lastMessage, newMessage, newChannel, editMode]);
+
+  useEffect(() => {
+    let contentEdited = false;
+
+    if (channelType === "Channel") {
+      dispatch(
+        updateChannel(
+          {
+            ...conversation,
+          },
+          contentEdited,
+          sessionUser.id
+        )
+      );
+    } else if (channelType === "DirectMessage") {
+      dispatch(
+        updateDirectMessage(
+          {
+            ...conversation,
+          },
+          sessionUser.id
+        )
+      );
+    }
+  }, [channelType, conversation.id, newMessageSent]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();
@@ -282,7 +289,6 @@ const Chat = ({
                   onMouseEnter={() => setShowLaughingEmoji(true)}
                   onMouseLeave={() => setShowLaughingEmoji(false)}
                 >
-                  {/* <EmojiOutlineIcon /> */}
                   {showLaughingEmoji ? (
                     <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
                   ) : (

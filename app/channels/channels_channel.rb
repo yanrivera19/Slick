@@ -1,5 +1,3 @@
-# require "byebug" 
-
 class ChannelsChannel < ApplicationCable::Channel
   def subscribed
 

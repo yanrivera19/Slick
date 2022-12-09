@@ -46,10 +46,8 @@ export const createMessage = (message) => async (dispatch) => {
     body: JSON.stringify(message),
   });
 
-  if (res.ok) {
-    //ERROR HANDLING
-    // const message = await res.json();
-    // dispatch(receiveMessage(message));
+  if (!res.ok) {
+    console.log("error creating message");
   }
 };
 
@@ -61,10 +59,8 @@ export const updateMessage = (message) => async (dispatch) => {
       "Content-Type": "application/json",
     },
   });
-  if (res.ok) {
-    //ERROR HANDLING
-    // const message = await res.json();
-    // dispatch(editMessage(message));
+  if (!res.ok) {
+    console.log("error updating message");
   }
 };
 
@@ -92,6 +88,8 @@ export default function messageReducer(state = {}, action) {
           checker.messageableType === action.message.messageableType
         ) {
           return { ...state, [action.message.id]: action.message };
+        } else {
+          return state;
         }
       } else {
         return state;

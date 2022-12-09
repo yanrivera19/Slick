@@ -1,10 +1,10 @@
 import csrfFetch from "./csrf";
-import { receiveWorkspace, getWorkspace } from "./workspaces";
 import { RECEIVE_WORKSPACE } from "./workspaces";
 
 export const RECEIVE_DIRECT_MESSAGE = "directMessages/RECEIVE_DIRECT_MESSAGE";
 export const RECEIVE_NEW_DIRECT_MESSAGE =
   "directMessages/RECEIVE_DIRECT_MESSAGE";
+export const EDIT_DIRECT_MESSAGE = "directMessages/EDIT_DIRECT_MESSAGE";
 // export const REMOVE_DIRECT_MESSAGE = "direct_messages/REMOVE_direct_message";
 
 export const receiveDirectMessage = (directMessage) => {
@@ -17,6 +17,13 @@ export const receiveDirectMessage = (directMessage) => {
 export const receiveNewDirectMessage = (directMessage) => {
   return {
     type: RECEIVE_NEW_DIRECT_MESSAGE,
+    directMessage,
+  };
+};
+
+export const editDirectMessage = (directMessage) => {
+  return {
+    type: EDIT_DIRECT_MESSAGE,
     directMessage,
   };
 };
@@ -44,32 +51,28 @@ export const createDirectMessage =
         "Content-Type": "application/json",
       },
     });
-
-    if (res.ok) {
-      // const directMessage = await res.json();
-      // dispatch(receiveDirectMessage(directMessage));
-      //   // const workspace = await dispatch(
-      //   //   getWorkspace(directMessage.directMessage.workspaceId)
-      //   // );
-      //   // dispatch(receiveWorkspace(workspace));
-      // return directMessage;
+    if (!res.ok) {
+      console.log("error creating dm");
     }
   };
 
-export const updateDirectMessage = (directMessage) => async (dispatch) => {
-  const res = await csrfFetch(`/api/direct_messages/${directMessage.id}`, {
-    method: "PUT",
-    body: JSON.stringify(directMessage),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const updateDirectMessage =
+  (directMessage, seenUser) => async (dispatch) => {
+    const res = await csrfFetch(
+      `/api/direct_messages/${directMessage.id}?seenUser=${seenUser}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(directMessage),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (res.ok) {
-    const directMessage = await res.json();
-    dispatch(receiveDirectMessage(directMessage));
-  }
-};
+    if (!res.ok) {
+      console.log("error updating dm");
+    }
+  };
 
 // export const deleteDirectMessage = (directMessageId) => async (dispatch) => {
 //   const res = await csrfFetch(`/api/direct_messages/${directMessageId}`, {
@@ -96,6 +99,11 @@ export default function directMessageReducer(state = {}, action) {
         ...state,
         [action.directMessage.id]: action.directMessage,
       };
+
+    case EDIT_DIRECT_MESSAGE:
+      return action.directMessage
+        ? { ...state, [action.directMessage.id]: action.directMessage }
+        : { ...state };
 
     // case REMOVE_DIRECT_MESSAGE:
     //   const newState = { ...state };

@@ -1,19 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
-import csrfFetch from "../../../store/csrf";
 import SearchResults from "../SearchResults";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import {
-  createMessage,
-  updateMessage,
-  deleteMessage,
-  getMessage,
-} from "../../../store/messages";
-
-import {
   createDirectMessage,
-  fetchDirectMessage,
 } from "../../../store/directMessages";
 import { useParams } from "react-router-dom";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
@@ -24,23 +15,12 @@ const NewMessage = ({
   channels,
   dms,
   handleChannelClick,
-  dmUsersNames,
 }) => {
-  const [body, setBody] = useState("");
-  const [usersInRoom, setUsersInRoom] = useState([]);
   const dispatch = useDispatch();
   const { workspaceId } = useParams();
-  // const { clientId, channelId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
-  const [lastMessage, setLastMessage] = useState("");
-  const messageContRef = useRef();
-  const lastMessageRef = useRef(null);
-  let hoveredElement = "";
-  const [editOrDeleteMsg, setEditOrDeleteMsg] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [date, setDate] = useState(null);
   const [searchInputValue, setSearchInputValue] = useState("");
   const data = [...channels, ...users, ...dms];
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -50,8 +30,6 @@ const NewMessage = ({
   const emojiIconRef = useRef();
   const textAreaRef = useRef();
   const oneToOneDmUsers = [];
-  const [udm, setudm] = useState();
-  const inputRef = useRef();
   const searchResultsRef = useRef();
 
   useEffect(() => {

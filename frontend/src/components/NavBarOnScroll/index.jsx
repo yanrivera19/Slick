@@ -26,7 +26,6 @@ const NavBarOnScroll = React.forwardRef(
           <button
             style={{ textDecoration: "none", color: "#fff" }}
             className="sign-btn right scroll"
-            // onClick={handleDemoLogin}
             onClick={handleOpenDemoModal}
           >
             Demo Login

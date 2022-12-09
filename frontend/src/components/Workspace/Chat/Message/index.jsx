@@ -130,7 +130,6 @@ const Message = ({ message, position, dateText }) => {
         </div>
         <div
           className={moreActionsClicked ? "big-overlayed-div" : "hide"}
-          // ={moreActionsBox}
           ref={moreActionsBox}
         ></div>
         <div
