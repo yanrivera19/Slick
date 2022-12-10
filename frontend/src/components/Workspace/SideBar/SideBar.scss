@@ -7,13 +7,20 @@
   font-size: 15px;
 }
 
-.workspace-header:hover,
 .channel-item.hover:hover,
 .dm-item.hover:hover,
 .square-btn-sidebar:hover,
 .channel-item-header:hover,
 .dm-item-header:hover {
   background: #350d36;
+  cursor: pointer;
+}
+
+.workspace-header:hover {
+  background: #350d36;
+}
+
+.works-name-cont {
   cursor: pointer;
 }
 

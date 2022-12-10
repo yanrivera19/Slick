@@ -86,6 +86,7 @@ const SideBar = ({
                   history.push(`/client/${sessionUser.id}/${workspace.id}`);
                   handleChannelClick(null);
                 }}
+                className="works-name-cont"
               >
                 <span id="works-name">{workspace.name}</span>
                 <span></span>
