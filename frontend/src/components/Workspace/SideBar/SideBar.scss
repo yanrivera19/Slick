@@ -96,6 +96,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  margin-right: 4px;
 }
 
 .channel-item-header,
@@ -177,7 +178,7 @@ span {
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   padding: 0 10px;
   line-height: 20px;
   vertical-align: bottom;
