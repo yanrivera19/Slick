@@ -34,7 +34,7 @@ const SidebarDmItem = ({
         }
         key={directMessage.id}
       >
-        {dmUsers.length > 1 && (
+        {dmUsers.length > 2 && (
           <button
             className={
               selected ? "dm-users-count transparent-bg" : "dm-users-count"
@@ -46,8 +46,8 @@ const SidebarDmItem = ({
 
         <img
           className="user-img-default"
-          height={dmUsers.length > 1 ? 14 : 21}
-          width={dmUsers.length > 1 ? 14 : 21}
+          height={dmUsers.length > 2 ? 14 : 21}
+          width={dmUsers.length > 2 ? 14 : 21}
           src={userImg4}
           alt="user-img"
         />
@@ -58,7 +58,7 @@ const SidebarDmItem = ({
               ? "dm-users side-bar"
               : "dm-users side-bar new-dm-message"
           }
-          style={dmUsers.length > 1 && { marginLeft: "14px" }}
+          style={dmUsers.length > 2 ? { marginLeft: "14px" } : {}}
         >
           {names}
         </span>
