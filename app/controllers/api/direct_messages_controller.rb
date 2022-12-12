@@ -32,11 +32,17 @@ class Api::DirectMessagesController < ApplicationController
 		@direct_message.seen_last_message << @seen_user
 
 		if @direct_message.update(direct_message_params)
-			WorkspacesChannel.broadcast_to @workspace,
-				type: 'EDIT_DIRECT_MESSAGE',
-				**from_template('api/direct_messages/show', direct_message: @direct_message)
+			# debugger
+			# debugger 
+			# if @direct_message.users.include?(current_user)
+				# debugger
+				WorkspacesChannel.broadcast_to @workspace,
+					type: 'EDIT_DIRECT_MESSAGE',
+					**from_template('api/direct_messages/show', direct_message: @direct_message)
+	
+				render json: nil, status: :ok			
+			# end
 
-			render json: nil, status: :ok			
 		else
 			render json: {errors: @direct_message.errors.full_messages}, status: 422
 		end
@@ -61,6 +67,6 @@ class Api::DirectMessagesController < ApplicationController
 	private 
 
 	def direct_message_params
-		params.require(:direct_message).permit(:workspace_id, :users, :message, :seen_user)
+		params.require(:direct_message).permit(:id, :workspace_id, :users, :message, :seen_user)
 	end
 end

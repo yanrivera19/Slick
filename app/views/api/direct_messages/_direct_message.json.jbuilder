@@ -1,6 +1,10 @@
 json.extract! direct_message, :id
-json.users direct_message.users do |user|
-	json.extract! user, :id, :username, :email
+json.users do
+	direct_message.users.each do |user|
+		json.set! user.id do 
+			json.extract! user, :id, :username, :email
+		end
+	end
 end
 json.seen_last_message do
 	direct_message.seen_last_message.each do |user_id|

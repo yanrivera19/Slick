@@ -1,12 +1,9 @@
-import { createChannel } from "../../../store/channels";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { fetchUsers } from "../../../store/user";
 import { useParams } from "react-router-dom";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
-import HashTagIcon from "../../Svgs&Icons/HashTagIcon";
 import { useEffect } from "react";
-import SearchResults from "../SearchResults";
 import SelectedNewMembers from "../../CreateWorkspacePage/CreateWorkspaceAddTeammates/SelectedNewMembers";
 
 const AddTeammatesModal = ({
@@ -16,9 +13,6 @@ const AddTeammatesModal = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState([]);
-  const { workspaceId } = useParams();
   const [inputValue, setInputValue] = useState("");
   const users = useSelector((state) => Object.values(state.users));
   const sessionUser = useSelector((state) => state.session.user);
@@ -67,7 +61,7 @@ const AddTeammatesModal = ({
                 resultsCount > 0 ? "users-results-cont users" : "results-hidden"
               }
             >
-              {users.map((user) => {
+              {Object.values(users).map((user) => {
                 if (
                   inputValue.length > 0 &&
                   workspaceUsers[user.id] === undefined &&

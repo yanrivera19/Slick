@@ -31,7 +31,6 @@ const Workspace = () => {
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const workspace = useSelector(getWorkspace(workspaceId));
-
   const dispatch = useDispatch();
   const dms = useSelector((state) => Object.values(state.directMessages));
   const channels = useSelector((state) => Object.values(state.channels));
@@ -50,6 +49,7 @@ const Workspace = () => {
   const [workspaceUsers, setWorkspaceUsers] = useState([]);
   const [editedChannel, setEditedChannel] = useState(false);
   const [toggleNewMessageSent, setToggleNewMessageSent] = useState(false);
+  const [toggleNewMembers, setTogggleNewMembers] = useState(false);
 
   useEffect(() => {
     dispatch(fetchWorkspace(workspaceId)).then((data) => {
@@ -77,6 +77,7 @@ const Workspace = () => {
     channels.length,
     editedChannel,
     toggleNewMessageSent,
+    toggleNewMembers,
   ]);
 
   const createSubscriptions = (rooms, roomName) => {
@@ -109,19 +110,17 @@ const Workspace = () => {
             case "RECEIVE_MESSAGE":
               dispatch(receiveMessage(message));
               setToggleNewMessageSent(!toggleNewMessageSent);
-              console.log("received:", message.content);
               break;
             case "RECEIVE_NEW_DIRECT_MESSAGE":
-              directMessage.users.forEach((user) => {
-                if (user.id === sessionUser.id) {
+              if (directMessage.users[sessionUser.id]) {
+                if (directMessage.messages.authorId === sessionUser.id) {
                   setNewMessage(false);
                   setShownConversation(directMessage);
                   setConversationType("DirectMessage");
-
                   dispatch(receiveNewDirectMessage(directMessage));
-                  console.log("received:", directMessage);
                 }
-              });
+                setToggleNewMessageSent(!toggleNewMessageSent);
+              }
               break;
             case "RECEIVE_NEW_CHANNEL":
               if (channel.ownerId === sessionUser.id) {
@@ -132,19 +131,17 @@ const Workspace = () => {
                 setConversationType("Channel");
               }
               dispatch(receiveNewChannel(channel));
-              console.log("received:", channel);
               break;
             case "EDIT_MESSAGE":
               dispatch(editMessage(message));
               lastMsg = message;
-              console.log("received:", message.content);
               break;
             case "REMOVE_MESSAGE":
               dispatch(removeMessage(id));
               break;
             case "EDIT_WORKSPACE":
               dispatch(editWorkspace(workspace));
-              console.log("received updated version of:", workspace);
+              setTogggleNewMembers(!toggleNewMembers);
               break;
             case "EDIT_CHANNEL":
               if (channel.ownerId === sessionUser.id) {
@@ -152,12 +149,12 @@ const Workspace = () => {
               }
               dispatch(editChannel(channel));
               setEditedChannel(!editedChannel);
-              console.log("received updated version of:", channel);
               break;
             case "EDIT_DIRECT_MESSAGE":
-              dispatch(editDirectMessage(directMessage));
-              setEditedChannel(!editedChannel);
-              console.log("received updated version of:", directMessage);
+              if (directMessage.users[sessionUser.id]) {
+                dispatch(editDirectMessage(directMessage));
+                setEditedChannel(!editedChannel);
+              }
               break;
             case "REMOVE_CHANNEL":
               setConversationType(null);
@@ -193,7 +190,7 @@ const Workspace = () => {
   };
 
   const dmUsersNames = (users) => {
-    let filteredUsers = users.filter(
+    let filteredUsers = Object.values(users).filter(
       (user) => user.username !== sessionUser.username
     );
 
@@ -277,6 +274,7 @@ const Workspace = () => {
           setNewChannel={setNewChannel}
           newChannel={newChannel}
           newMessageSent={toggleNewMessageSent}
+          shownConversation={shownConversation}
         />
         {conversationType === "Channel" ? (
           <Chat
@@ -291,6 +289,7 @@ const Workspace = () => {
             newChannel={newChannel}
             setNewChannel={setNewChannel}
             newMessageSent={toggleNewMessageSent}
+            newMembers={toggleNewMembers}
           />
         ) : conversationType === "DirectMessage" ? (
           <Chat

@@ -23,7 +23,6 @@ const Message = ({ message, position, dateText }) => {
   const [actionsBox, setActionsBox] = useState(null);
   const [moreActionsBox, setMoreActionsBox] = useState(null);
   const [deleteAlertModal, setDeleteAlertModal] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef();
@@ -55,20 +54,12 @@ const Message = ({ message, position, dateText }) => {
     setDeleteAlertModal(!deleteAlertModal);
   };
 
-  const handleDelete = (e, msgId) => {
-    dispatch(deleteMessage(msgId));
-  };
-
   const handleMouseOver = () => {
     setIsHovered(true);
   };
 
   const handleMouseOut = () => {
     setIsHovered(false);
-  };
-
-  const showMoreActionsPopUp = () => {
-    setMoreActionsClicked(!moreActionsClicked);
   };
 
   const handleEnterKeyPress = (e) => {
@@ -114,7 +105,6 @@ const Message = ({ message, position, dateText }) => {
           ref={actionsBox}
           style={position === 0 ? { top: "10px" } : { top: "-15px" }}
         >
-          {/* onClick={showMoreActionsPopUp} */}
           <button
             className="pop-menu-btns"
             onClick={(e) => {

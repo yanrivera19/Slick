@@ -1,8 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import SideBar from "../../Workspace/SideBar";
-import CrossIcon from "../../Svgs&Icons/CrossIcon";
 import { fetchUsers } from "../../../store/user";
 import SelectedNewMembers from "./SelectedNewMembers";
 
@@ -12,7 +9,6 @@ const CreateWorkspaceAddTeammates = ({
   sessionUser,
   saveSelectedUsers,
 }) => {
-  const [inputValue, setInputValue] = useState("");
   const users = useSelector((state) => Object.values(state.users));
   const [selectedUsers, setSelectedUsers] = useState([sessionUser]);
   const dispatch = useDispatch();
@@ -46,7 +42,7 @@ const CreateWorkspaceAddTeammates = ({
       <div className="">
         <div className="search-cont users">
           <div className="users-results-cont users">
-            {users.map((user) => {
+            {Object.values(users).map((user) => {
               if (user.username !== sessionUser.username) {
                 return (
                   <div className="search-user-cont" style={{ width: "100%" }}>
@@ -62,7 +58,6 @@ const CreateWorkspaceAddTeammates = ({
           </div>
         </div>
         <div className="setup-next-btn-cont">
-          {/* <NavLink to={inputValue.trim().length < 1 ? ``}> */}
           <button
             disabled={selectedUsers.length < 0}
             className={`setup-next-btn ${
@@ -72,29 +67,8 @@ const CreateWorkspaceAddTeammates = ({
           >
             Next
           </button>
-          {/* </NavLink> */}
         </div>
-        {/* <form onSubmit={onSubmit}>
-              <input
-                placeholder="Ex: Acme Marketing or Acme Co"
-                className="setup-input-field"
-                onChange={(e) => setInputValue(e.target.value)}
-              />
-              <div className="setup-next-btn-cont"> */}
-        {/* <NavLink to={inputValue.trim().length < 1 ? ``}> */}
-        {/* <button
-                  disabled={inputValue.trim().length < 1}
-                  className={`setup-next-btn ${
-                    inputValue.trim().length > 0 ? "ready" : ""
-                  }`}
-                >
-                  Next
-                </button> */}
-        {/* </NavLink> */}
-        {/* </div> */}
-        {/* </form> */}
       </div>
-      {/* </section> */}
     </>
   );
 };

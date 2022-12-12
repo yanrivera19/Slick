@@ -8,7 +8,7 @@ import { updateWorkspace } from "../../../store/workspaces";
 import { useDispatch } from "react-redux";
 import SidebarDmItem from "./SidebarDmItem";
 import SidebarChannelItem from "./SidebarChannelItem";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const SideBar = ({
   workspace,
@@ -19,6 +19,7 @@ const SideBar = ({
   handleChannelClick,
   dmUsersNames,
   closeAddChannelModal,
+  shownConversation,
 }) => {
   const [hideDms, setHideDms] = useState(false);
   const [hideChannels, setHideChannels] = useState(false);
@@ -120,12 +121,13 @@ const SideBar = ({
                         `/client/${sessionUser.id}/${workspace.id}/channel/${channel.id}`
                       )
                     }
+                    key={channel.id}
                   >
                     <SidebarChannelItem
                       channel={channel}
                       handleRoomClick={handleRoomClick}
                       sessionUser={sessionUser}
-                      selected={channel.name === clickedChatRoom}
+                      selected={channel.name === shownConversation?.name}
                     />
                   </div>
                 );
@@ -167,14 +169,17 @@ const SideBar = ({
                         `/client/${sessionUser.id}/${workspace.id}/dm/${directMessage.id}`
                       )
                     }
+                    key={directMessage.id}
                   >
                     <SidebarDmItem
                       directMessage={directMessage}
                       handleRoomClick={handleRoomClick}
                       names={names}
                       sessionUser={sessionUser}
+                      shownConversation={shownConversation}
                       selected={
-                        dmUsersNames(directMessage.users) === clickedChatRoom
+                        shownConversation?.id === directMessage?.id &&
+                        !shownConversation.name
                       }
                     />
                   </div>

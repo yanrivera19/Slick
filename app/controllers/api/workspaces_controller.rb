@@ -60,7 +60,6 @@ class Api::WorkspacesController < ApplicationController
 		@direct_messages = DirectMessage.joins(:direct_message_subscriptions).where(direct_messages: {workspace_id: params[:id]}).where(direct_message_subscriptions: {user_id: current_user.id})
 
 		render "/api/workspaces/w_show"
-
 	end
 
 	def destroy

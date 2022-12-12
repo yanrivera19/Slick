@@ -18,8 +18,12 @@ json.extract! workspace, :id, :name, :owner_id, :created_at
 		workspace.direct_messages.each do |direct_message|
 			json.set! direct_message.id do 
 				json.extract! direct_message, :id
-				json.users direct_message.users do |user|
-					json.extract! user, :username
+				json.users do
+					direct_message.users.each do |user|
+						json.set! user.id do 
+							json.extract! user, :id, :username, :email
+						end
+					end
 				end
 			end
 		end 

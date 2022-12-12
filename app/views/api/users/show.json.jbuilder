@@ -19,7 +19,7 @@ json.user do
 	json.direct_messages do 
 		@user.direct_messages.each do |direct_message|
 			json.set! direct_message.id do 
-				json.extract! direct_message, :id
+				json.extract! direct_message, :id, :workspace_id
 			end
 		end
 	end

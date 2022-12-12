@@ -35,29 +35,10 @@ const SearchResults = ({
     filterData(inputValueWithoutSymbol, atSymbol, hashTagSymbol);
   };
 
-  const checkDms = (user) => {
-    let oneToOne = [];
-    let includes = false;
-
-    dms.forEach((dm) => {
-      if (dm.users.length === 2) {
-        oneToOne.push(dm);
-      }
-    });
-
-    oneToOne.forEach((dm) => {
-      if (dm.users.map((dmUser) => dmUser.username).includes(user)) {
-        includes = true;
-      }
-    });
-
-    return includes;
-  };
-
   const filterUserfromUsers = (users) => {
     let filteredUsers = [];
 
-    users.forEach((user) => {
+    Object.values(users).forEach((user) => {
       if (user.username !== sessionUser.username) {
         filteredUsers.push(user.username);
       }
@@ -65,7 +46,30 @@ const SearchResults = ({
 
     return filteredUsers.join(", ");
   };
-	
+
+  // const checkDms = (user) => {
+  //   let oneToOne = [];
+  //   let includes = false;
+
+  //   dms.forEach((dm) => {
+  //     if (Object.values(dm.users).length === 2) {
+  //       oneToOne.push(dm);
+  //     }
+  //   });
+
+  //   oneToOne.forEach((dm) => {
+  //     if (
+  //       Object.values(dm.users)
+  //         .map((dmUser) => dmUser.username)
+  //         .includes(user)
+  //     ) {
+  //       includes = true;
+  //     }
+  //   });
+
+  //   return includes && selectedUsers.length === 0;
+  // };
+
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
     let filtered = data.filter((object) => {
       if (
@@ -84,6 +88,7 @@ const SearchResults = ({
       } else if (
         inputValueWithoutSymbol.length === 0 &&
         object.hasOwnProperty("users") &&
+        !object.hasOwnProperty("ownerId") &&
         !hashTagSymbol
       ) {
         return true;
@@ -105,6 +110,7 @@ const SearchResults = ({
       } else if (
         inputValueWithoutSymbol.length > 0 &&
         object.hasOwnProperty("users") &&
+        !object.hasOwnProperty("ownerId") &&
         Object.values(object.users)
           .map((user) => user.username)
           .join(" ")
@@ -157,19 +163,23 @@ const SearchResults = ({
             );
           } else if (
             obj.hasOwnProperty("username") &&
-            obj.username !== sessionUser.username &&
-            !checkDms(obj.username)
+            obj.username !== sessionUser.username
           ) {
             return (
               <span
-                onClick={(e) => handleResultClick(e, obj)}
+                onClick={(e) => {
+                  handleResultClick(e, obj);
+                }}
                 key={obj.id * 7}
                 className="search-result-item"
               >
                 {obj.username}
               </span>
             );
-          } else if (obj.hasOwnProperty("users")) {
+          } else if (
+            obj.hasOwnProperty("users") &&
+            selectedUsers.length === 0
+          ) {
             return (
               <span
                 onClick={(e) =>
@@ -177,8 +187,9 @@ const SearchResults = ({
                 }
                 className="search-result-item"
                 key={obj.id * 29}
+                style={{ fontWeight: "900" }}
               >
-                {filterUserfromUsers(obj.users)}
+                {`Open DM: ${filterUserfromUsers(obj.users)}`}
               </span>
             );
           }

@@ -27,7 +27,7 @@ json.extract! @workspace, :id, :name, :owner_id, :created_at
 		end
 	end
 	json.direct_messages do
-		@workspace.direct_messages.each do |direct_message|
+		@direct_messages.each do |direct_message|
 			json.set! direct_message.id do 
 				json.extract! direct_message, :id
 				json.seen_last_message do
@@ -35,8 +35,12 @@ json.extract! @workspace, :id, :name, :owner_id, :created_at
 						json.set! user_id, user_id
 					end
 				end	
-				json.users direct_message.users do |user|
-					json.extract! user, :username
+				json.users do
+					direct_message.users.each do |user|
+						json.set! user.id do 
+							json.extract! user, :id, :username, :email
+						end
+					end
 				end
 			end
 		end 

@@ -221,3 +221,29 @@ textarea {
 .channel-name:active {
   background: rgb(223, 223, 223);
 }
+
+.loader-container {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.loader {
+  display: flex;
+  margin: auto;
+  border: 5px solid rgb(216, 216, 216);
+  border-top: 5px solid #350d36;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 0.65s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

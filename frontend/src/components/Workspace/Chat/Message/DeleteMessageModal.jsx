@@ -27,33 +27,42 @@ const DeleteMessageModal = ({ handleTrashClick, message, userImg2 }) => {
           className="message-container-modal"
           style={{ display: "flex", alignItems: "center" }}
         >
-          <img
-            className="user-img-default"
-            height={38}
-            width={38}
-            src={userImg2}
-            alt="user-img"
-          />
+          <div
+            style={{
+              padding: "10px 20px",
+              display: "flex",
+            }}
+          >
+            <img
+              className="user-img-default"
+              height={38}
+              width={38}
+              src={userImg2}
+              alt="user-img"
+            />
 
-          <div style={{ marginLeft: "10px" }}>
-            <div
-              style={{
-                marginBottom: "5px",
-                display: "flex",
-                alignItems: "flex-end",
-              }}
-            >
-              <strong id="name-author">
-                {message.author ? message.author.username : message.authorName}
-              </strong>
-              <span id="time-of-msg">
-                {getTimeOfMessage(message.createdAt)}
-              </span>
+            <div style={{ marginLeft: "10px" }}>
+              <div
+                style={{
+                  marginBottom: "5px",
+                  display: "flex",
+                  alignItems: "flex-end",
+                }}
+              >
+                <strong id="name-author">
+                  {message.author
+                    ? message.author.username
+                    : message.authorName}
+                </strong>
+                <span id="time-of-msg">
+                  {getTimeOfMessage(message.createdAt)}
+                </span>
+              </div>
+              <p className="message-text-content">
+                {message.content}
+                {message.edited && <span id="edited-msg">(edited)</span>}
+              </p>
             </div>
-            <p className="message-text-content">
-              {message.content}
-              {message.edited && <span id="edited-msg">(edited)</span>}
-            </p>
           </div>
         </div>
       </div>

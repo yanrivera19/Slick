@@ -3,26 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import SearchResults from "../SearchResults";
 import CrossIcon from "../../Svgs&Icons/CrossIcon";
-import {
-  createDirectMessage,
-} from "../../../store/directMessages";
+import { createDirectMessage } from "../../../store/directMessages";
 import { useParams } from "react-router-dom";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
+import ChatBox from "../Chat/ChatBox";
 
-const NewMessage = ({
-  users,
-  channels,
-  dms,
-  handleChannelClick,
-}) => {
+const NewMessage = ({ users, channels, dms, handleChannelClick }) => {
   const dispatch = useDispatch();
   const { workspaceId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const [messageContent, setMessageContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const data = [...channels, ...users, ...dms];
+  const data = [...channels, ...dms, ...users];
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -176,7 +170,6 @@ const NewMessage = ({
                   onMouseEnter={() => setShowLaughingEmoji(true)}
                   onMouseLeave={() => setShowLaughingEmoji(false)}
                 >
-                  {/* <EmojiOutlineIcon /> */}
                   {showLaughingEmoji ? (
                     <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
                   ) : (
@@ -205,6 +198,14 @@ const NewMessage = ({
           </div>
         </div>
       </section>
+      <div id="shift-enter-cont">
+        {messageContent.length > 0 && (
+          <p className="shift-enter-message">
+            <span id="shift-enter-span">Shift + Enter </span>
+            to add a new line
+          </p>
+        )}
+      </div>
     </div>
   );
 };

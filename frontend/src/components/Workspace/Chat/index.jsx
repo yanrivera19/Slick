@@ -2,18 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateChannel } from "../../../store/channels";
 import { updateDirectMessage } from "../../../store/directMessages";
-import { createMessage } from "../../../store/messages";
 import { getDate } from "../../../util";
 import Message from "./Message";
-import SendMsgIcon from "../../Svgs&Icons/SendMsgIcon";
 import CaretOutlineIcon from "../../Svgs&Icons/CaretOutlineIcon";
 import userImg1 from "../../../assets/images/default-user-img.png";
 import userImg3 from "../../../assets/images/default-user-img3png.png";
 import userImg5 from "../../../assets/images/default-user-img-5.png";
-import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
-import { BsEmojiSmile, BsEmojiLaughing } from "react-icons/bs";
 import HashTagIconBold from "../../Svgs&Icons/HashTagIconBold";
 import ChannelInfoModal from "./ChannelInfoModal";
+import ChatBox from "./ChatBox";
 
 const Chat = ({
   conversation,
@@ -23,29 +20,47 @@ const Chat = ({
   newChannel,
   setNewChannel,
   newMessageSent,
+  newMembers,
 }) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-  const [messageContent, setMessageContent] = useState("");
-  const [errors, setErrors] = useState([]);
   const [lastMessage, setLastMessage] = useState("");
   const messageContRef = useRef();
   const lastMessageRef = useRef(null);
-  const users = useSelector((state) => Object.values(state.users));
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const emojiPickerRef = useRef();
-  const emojiIconRef = useRef();
-  const textAreaRef = useRef();
   let messages = useSelector((state) =>
     state.messages ? Object.values(state.messages) : []
   );
-  const [showLaughingEmoji, setShowLaughingEmoji] = useState(false);
   const [showChannelInfoModal, setShowChannelInfoModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [conversationUsers, setConversationUsers] = useState(
+    Object.values(conversation.users)
+  );
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchConversation(conversation.id));
-  }, [conversation, lastMessage, newMessage, newChannel, editMode]);
+    setLoader(true);
+    let loaderTimeout = setTimeout(() => {
+      setLoader(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(loaderTimeout);
+    };
+  }, [conversation]);
+
+  useEffect(() => {
+    dispatch(fetchConversation(conversation.id)).then((conv) => {
+      setConversationUsers(Object.values(conv.users));
+    });
+  }, [
+    conversation,
+    lastMessage,
+    newMessage,
+    newChannel,
+    editMode,
+    newMessageSent,
+    newMembers,
+  ]);
 
   useEffect(() => {
     let contentEdited = false;
@@ -76,23 +91,6 @@ const Chat = ({
     lastMessageRef.current.scrollIntoView();
   }, [messages, conversation.name]);
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
-  }, []);
-
-  const handleClickOutside = (e) => {
-    if (emojiIconRef.current && emojiIconRef.current.contains(e.target)) {
-      setShowEmojiPicker(!showEmojiPicker);
-    } else if (
-      emojiPickerRef.current &&
-      !emojiPickerRef.current.contains(e.target)
-    ) {
-      setShowEmojiPicker(false);
-    }
-  };
   const checkDate = (message, idx) => {
     const today = new Date().toLocaleDateString();
     let messageDate = new Date(message.createdAt).toLocaleDateString();
@@ -120,34 +118,6 @@ const Chat = ({
     }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setErrors([]);
-    setLastMessage(messageContent);
-
-    if (newChannel) {
-      setNewChannel(false);
-    }
-
-    dispatch(
-      createMessage({
-        content: messageContent,
-        authorName: sessionUser.username,
-        authorId: sessionUser.id,
-        messageableType: channelType,
-        messageableId: conversation.id,
-      })
-    );
-
-    setMessageContent("");
-  };
-
-  const handleEnterKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      onSubmit(e);
-    }
-  };
-
   const dmUsersNames = (dmUsers) => {
     let filteredUsers = Object.values(dmUsers).filter(
       (user) => user.username !== sessionUser.username
@@ -164,19 +134,13 @@ const Chat = ({
     return results.join("");
   };
 
-  const handleEmojiPick = (emojiObj, e) => {
-    setMessageContent(messageContent + emojiObj.emoji);
-    setShowEmojiPicker(false);
-    textAreaRef.current.focus();
-  };
-
   const handleChannelNameClick = (e) => {
     setShowChannelInfoModal(!showChannelInfoModal);
     setEditMode(!editMode);
   };
 
-  const handleEditMode = () => {
-    setEditMode(!editMode);
+  const handleLastMessage = (messageContent) => {
+    setLastMessage(messageContent);
   };
 
   if (!conversation) return null;
@@ -207,21 +171,25 @@ const Chat = ({
             )}
           </span>
         </div>
-        {conversation.users &&
-        (channelType === "Channel" || users.length > 2) ? (
+        {conversationUsers &&
+        (channelType === "Channel" || conversationUsers.length > 2) ? (
           <div className="members-container">
-            {users.length > 1 && users.length < 3 ? (
+            {conversationUsers.length > 1 && conversationUsers.length < 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
-                <span style={{ paddingLeft: "5px" }}>{users.length}</span>
+                <span style={{ paddingLeft: "5px" }}>
+                  {conversationUsers.length}
+                </span>
               </>
-            ) : users.length >= 3 ? (
+            ) : conversationUsers.length >= 3 ? (
               <>
                 <img height={21} width={21} src={userImg1} alt="user-img" />
                 <img height={21} width={21} src={userImg3} alt="user-img" />
                 <img height={21} width={21} src={userImg5} alt="user-img" />
-                <span style={{ paddingLeft: "7px" }}>{users.length}</span>
+                <span style={{ paddingLeft: "7px" }}>
+                  {conversationUsers.length}
+                </span>
               </>
             ) : null}
           </div>
@@ -236,90 +204,32 @@ const Chat = ({
         </section>
       )}
       <div className="messages-container" ref={messageContRef}>
-        {messages
-          ? Object.values(messages).map((message, idx) => {
-              let date = checkDate(message, idx);
-              return (
-                <Message
-                  key={message.id}
-                  position={idx}
-                  message={message}
-                  dateText={date}
-                />
-              );
-            })
-          : null}
-        <div ref={lastMessageRef}></div>
-      </div>
-
-      <section id="chat-box">
-        <div className="chat-cont">
-          <div className="top-chat"></div>
-          <div className="textarea-container">
-            <form onSubmit={onSubmit}>
-              <textarea
-                value={messageContent}
-                onChange={(e) => {
-                  setMessageContent(e.target.value);
-                }}
-                rows="1"
-                placeholder={`Message #${
-                  channelType === "Channel"
-                    ? conversation.name
-                    : dmUsersNames(conversation.users)
-                }`}
-                onKeyPress={handleEnterKeyPress}
-                ref={textAreaRef}
-              />
-              <div className="bottom-chat">
-                {showEmojiPicker && (
-                  <div className="emoji-picker-box" ref={emojiPickerRef}>
-                    <EmojiPicker
-                      height={380}
-                      width={355}
-                      onEmojiClick={handleEmojiPick}
-                      emojiStyle={EmojiStyle.NATIVE}
-                    />
-                  </div>
-                )}
-                <div
-                  className="emoji-icon"
-                  ref={emojiIconRef}
-                  onClick={() => setShowEmojiPicker(true)}
-                  onMouseEnter={() => setShowLaughingEmoji(true)}
-                  onMouseLeave={() => setShowLaughingEmoji(false)}
-                >
-                  {showLaughingEmoji ? (
-                    <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
-                  ) : (
-                    <BsEmojiSmile size={18} className="emoji-smile-icon" />
-                  )}
-                </div>
-                <div
-                  className={`send-msg-cont ${
-                    messageContent.trim().length > 0 ? "ready" : ""
-                  }`}
-                >
-                  <button
-                    disabled={messageContent.trim().length < 1}
-                    className="send-btn"
-                  >
-                    <SendMsgIcon />
-                  </button>
-                </div>
+        {messages &&
+          !loader &&
+          Object.values(messages).map((message, idx) => {
+            let date = checkDate(message, idx);
+            return (
+              <div key={message.id}>
+                <Message position={idx} message={message} dateText={date} />
               </div>
-            </form>
+            );
+          })}
+        <div ref={lastMessageRef}></div>
+        {loader && (
+          <div className="loader-container">
+            <div className="loader"></div>
           </div>
-        </div>
-      </section>
-      <div id="shift-enter-cont">
-        {messageContent.length > 0 && (
-          <p className="shift-enter-message">
-            <span id="shift-enter-span">Shift + Enter </span>
-            to add a new line
-          </p>
         )}
       </div>
+      <ChatBox
+        conversation={conversation}
+        channelType={channelType}
+        handleLastMessage={handleLastMessage}
+        newChannel={newChannel}
+        setNewChannel={setNewChannel}
+        sessionUser={sessionUser}
+        dmUsersNames={dmUsersNames}
+      />
     </div>
   );
 };
