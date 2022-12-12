@@ -15,7 +15,7 @@ const SidebarDmItem = ({
   useEffect(() => {
     let showBadgeTimeout = setTimeout(() => {
       setShowBadge(true);
-    }, 800);
+    }, 1000);
 
     return () => {
       clearTimeout(showBadgeTimeout);

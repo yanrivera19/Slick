@@ -44,7 +44,7 @@ const NewMessage = ({ users, channels, dms, handleChannelClick }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
+
     let usersForNewDm = [...selectedUsers, sessionUser];
 
     dispatch(

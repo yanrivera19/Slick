@@ -71,52 +71,87 @@ const SearchResults = ({
   // };
 
   const filterData = (inputValueWithoutSymbol, atSymbol, hashTagSymbol) => {
+    // let filtered = data.filter((object) => {
+    //   if (
+    //     inputValueWithoutSymbol.length === 0 &&
+    //     object.hasOwnProperty("name") &&
+    //     !atSymbol
+    //   ) {
+    //     return true;
+    //   } else if (
+    //     inputValueWithoutSymbol.length === 0 &&
+    //     object.hasOwnProperty("username") &&
+    //     !selectedUsers.includes(object) &&
+    //     !hashTagSymbol
+    //   ) {
+    //     return true;
+    //   } else if (
+    //     inputValueWithoutSymbol.length === 0 &&
+    //     object.hasOwnProperty("users") &&
+    //     !object.hasOwnProperty("ownerId") &&
+    //     !hashTagSymbol
+    //   ) {
+    //     return true;
+    //   } else if (
+    //     inputValueWithoutSymbol.length > 0 &&
+    //     object.hasOwnProperty("name") &&
+    //     object.name.toLowerCase().includes(inputValueWithoutSymbol) &&
+    //     !atSymbol
+    //   ) {
+    //     return true;
+    //   } else if (
+    //     inputValueWithoutSymbol.length > 0 &&
+    //     object.hasOwnProperty("username") &&
+    //     !selectedUsers.includes(object) &&
+    //     object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
+    //     !hashTagSymbol
+    //   ) {
+    //     return true;
+    //   } else if (
+    //     inputValueWithoutSymbol.length > 0 &&
+    //     object.hasOwnProperty("users") &&
+    //     !object.hasOwnProperty("ownerId") &&
+    //     Object.values(object.users)
+    //       .map((user) => user.username)
+    //       .join(" ")
+    //       .toLowerCase()
+    //       .includes(inputValueWithoutSymbol) &&
+    //     !hashTagSymbol
+    //   ) {
+    //     return true;
+    //   }
+    // });
     let filtered = data.filter((object) => {
       if (
-        inputValueWithoutSymbol.length === 0 &&
-        object.hasOwnProperty("name") &&
-        !atSymbol
-      ) {
-        return true;
-      } else if (
-        inputValueWithoutSymbol.length === 0 &&
-        object.hasOwnProperty("username") &&
-        !selectedUsers.includes(object) &&
-        !hashTagSymbol
-      ) {
-        return true;
-      } else if (
-        inputValueWithoutSymbol.length === 0 &&
-        object.hasOwnProperty("users") &&
-        !object.hasOwnProperty("ownerId") &&
-        !hashTagSymbol
-      ) {
-        return true;
-      } else if (
-        inputValueWithoutSymbol.length > 0 &&
-        object.hasOwnProperty("name") &&
-        object.name.toLowerCase().includes(inputValueWithoutSymbol) &&
-        !atSymbol
-      ) {
-        return true;
-      } else if (
-        inputValueWithoutSymbol.length > 0 &&
-        object.hasOwnProperty("username") &&
-        !selectedUsers.includes(object) &&
-        object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
-        !hashTagSymbol
-      ) {
-        return true;
-      } else if (
-        inputValueWithoutSymbol.length > 0 &&
-        object.hasOwnProperty("users") &&
-        !object.hasOwnProperty("ownerId") &&
-        Object.values(object.users)
-          .map((user) => user.username)
-          .join(" ")
-          .toLowerCase()
-          .includes(inputValueWithoutSymbol) &&
-        !hashTagSymbol
+        (inputValueWithoutSymbol.length === 0 &&
+          object.hasOwnProperty("name") &&
+          !atSymbol) ||
+        (inputValueWithoutSymbol.length === 0 &&
+          object.hasOwnProperty("username") &&
+          !selectedUsers.includes(object) &&
+          !hashTagSymbol) ||
+        (inputValueWithoutSymbol.length === 0 &&
+          object.hasOwnProperty("users") &&
+          !object.hasOwnProperty("ownerId") &&
+          !hashTagSymbol) ||
+        (inputValueWithoutSymbol.length > 0 &&
+          object.hasOwnProperty("name") &&
+          object.name.toLowerCase().includes(inputValueWithoutSymbol) &&
+          !atSymbol) ||
+        (inputValueWithoutSymbol.length > 0 &&
+          object.hasOwnProperty("username") &&
+          !selectedUsers.includes(object) &&
+          object.username.toLowerCase().includes(inputValueWithoutSymbol) &&
+          !hashTagSymbol) ||
+        (inputValueWithoutSymbol.length > 0 &&
+          object.hasOwnProperty("users") &&
+          !object.hasOwnProperty("ownerId") &&
+          Object.values(object.users)
+            .map((user) => user.username)
+            .join(" ")
+            .toLowerCase()
+            .includes(inputValueWithoutSymbol) &&
+          !hashTagSymbol)
       ) {
         return true;
       }

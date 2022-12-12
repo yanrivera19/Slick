@@ -161,64 +161,72 @@ const Message = ({ message, position, dateText }) => {
       </div>
     </>
   ) : (
-    <div id="edit-textarea" ref={editTextRef}>
-      <div className="chat-cont">
-        <div className="top-chat"></div>
-        <div className="textarea-container">
-          <form onSubmit={handleEdit}>
-            <textarea
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              rows="1"
-              onKeyPress={handleEnterKeyPress}
-              ref={textAreaRef}
-            />
-            <div className="bottom-chat edit">
-              {showEmojiPicker && (
-                <div
-                  className="emoji-picker-box"
-                  ref={emojiPickerRef}
-                  style={position < 6 ? { top: "35px" } : { bottom: "80px" }}
-                >
-                  <EmojiPicker
-                    height={350}
-                    width={340}
-                    onEmojiClick={handleEmojiPick}
-                    emojiStyle={EmojiStyle.NATIVE}
-                  />
-                </div>
-              )}
-              <div
-                className="emoji-icon"
-                ref={emojiIconRef}
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                onMouseEnter={() => setShowLaughingEmoji(true)}
-                onMouseLeave={() => setShowLaughingEmoji(false)}
-              >
-                {/* <EmojiOutlineIcon /> */}
-                {showLaughingEmoji ? (
-                  <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
-                ) : (
-                  <BsEmojiSmile size={18} className="emoji-smile-icon" />
+    <>
+      <div id="edit-textarea" ref={editTextRef}>
+        <div className="chat-cont">
+          <div className="top-chat"></div>
+          <div className="textarea-container">
+            <form onSubmit={handleEdit}>
+              <textarea
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                rows="1"
+                onKeyPress={handleEnterKeyPress}
+                ref={textAreaRef}
+              />
+              <div className="bottom-chat edit">
+                {showEmojiPicker && (
+                  <div
+                    className="emoji-picker-box"
+                    ref={emojiPickerRef}
+                    style={position < 6 ? { top: "35px" } : { bottom: "80px" }}
+                  >
+                    <EmojiPicker
+                      height={350}
+                      width={340}
+                      onEmojiClick={handleEmojiPick}
+                      emojiStyle={EmojiStyle.NATIVE}
+                    />
+                  </div>
                 )}
-              </div>
-              <div className="msg-edit-btns">
-                <button
-                  className="cancel-edit-btn"
-                  onClick={(e) => {
-                    setShowEmojiPicker(false);
-                    setEditMode(!editMode);
-                  }}
+                <div
+                  className="emoji-icon"
+                  ref={emojiIconRef}
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  onMouseEnter={() => setShowLaughingEmoji(true)}
+                  onMouseLeave={() => setShowLaughingEmoji(false)}
                 >
-                  Cancel
-                </button>
-                <button className="save-edit-btn">Save</button>
+                  {/* <EmojiOutlineIcon /> */}
+                  {showLaughingEmoji ? (
+                    <BsEmojiLaughing size={18} className="emoji-laugh-icon" />
+                  ) : (
+                    <BsEmojiSmile size={18} className="emoji-smile-icon" />
+                  )}
+                </div>
+                <div className="msg-edit-btns">
+                  <div style={{ marginRight: "10px", color: "#1d1c1db3" }}>
+                    <p className="shift-enter-message">
+                      <span id="shift-enter-span">Shift + Enter </span>
+                      to add a new line
+                    </p>
+                  </div>
+                  <button
+                    className="cancel-edit-btn"
+                    onClick={(e) => {
+                      setShowEmojiPicker(false);
+                      setEditMode(!editMode);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button className="save-edit-btn">Save</button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
