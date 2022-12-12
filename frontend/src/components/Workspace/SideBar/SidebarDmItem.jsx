@@ -40,7 +40,7 @@ const SidebarDmItem = ({
               selected ? "dm-users-count transparent-bg" : "dm-users-count"
             }
           >
-            <p style={{ lineHeight: "1.4em" }}>{dmUsers.length}</p>
+            <p style={{ lineHeight: "1.4em" }}>{dmUsers.length - 1}</p>
           </button>
         )}
 
