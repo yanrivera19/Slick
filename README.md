@@ -27,7 +27,7 @@ Slick's core application is built around the WebSocket Communication Protocol to
  - Logged in users that are subscribed to a specific room will receive live updates of the changes that occur in it without having to refresh the page
  - Users can also see in real time if a channel was edited or deleted, and if a new direct message conversation directed to them by another user was created 
 
-https://user-images.githubusercontent.com/56778101/206611124-3c90f20d-9403-42ed-9bb8-9d3e285465fb.mp4
+https://user-images.githubusercontent.com/56778101/207145089-4d315d46-85fd-49de-8c69-dcf36817fa86.mp4
 
 ### User Authentication: 
 
@@ -43,6 +43,7 @@ https://user-images.githubusercontent.com/56778101/206611124-3c90f20d-9403-42ed-
  - Users can edit their messages
  - Users can delete their messages
  - Users can send emojis in their messages, thanks to the React Emoji Picker package
+ - Users get notifications of unseen messages in chat sidebar
 
 ### Workspaces:
 
@@ -59,7 +60,7 @@ https://user-images.githubusercontent.com/56778101/206611124-3c90f20d-9403-42ed-
 
 ### Direct Messages: 
 
- - Users can create new conversations with selected members from same workspace and chat with them
+ - Users can create one-to-one or group direct message conversations with selected members from same workspace and chat with them
 
 ### Search:
 
