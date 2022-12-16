@@ -57,7 +57,7 @@ body {
 }
 
 .home-billboard video {
-  max-width: 600px;
+  max-width: 100%;
   max-height: 400px;
 }
 
@@ -161,4 +161,45 @@ body {
   max-width: 400px;
   margin: 0 auto;
   padding-bottom: 4rem;
+}
+
+.section-4-content i {
+  font-size: 54px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .video {
+    width: 350px;
+  }
+  .sec-two-row {
+    justify-content: center !important;
+    text-align: center;
+    padding-bottom: 0;
+  }
+
+  .sec-two-row h2 {
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .home-billboard {
+    display: block;
+    text-align: center;
+  }
+  .home-billboard-head {
+    text-align: center;
+  }
+  .sign-up-bill-cont {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .section-4-content {
+    margin-right: 20px;
+    margin-left: 20px;
+  }
 }

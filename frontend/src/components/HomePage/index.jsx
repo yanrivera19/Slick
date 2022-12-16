@@ -117,7 +117,7 @@ const HomePage = () => {
               </NavLink>
             </div>
           </div>
-          <video src={videoBillboard} autoPlay loop muted />
+          <video className="video" src={videoBillboard} autoPlay loop muted />
         </section>
       </section>
 
@@ -177,17 +177,14 @@ const HomePage = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <i className="fa-brands fa-github" style={{ fontSize: 54 }} />
+            <i className="fa-brands fa-github" />
           </a>
           <a
             href="https://www.linkedin.com/in/ycrivera/"
             target="_blank"
             rel="noreferrer"
           >
-            <i
-              className="fa-brands fa-linkedin-in"
-              style={{ fontSize: 54 }}
-            ></i>
+            <i className="fa-brands fa-linkedin-in"></i>
           </a>
         </div>
       </section>
