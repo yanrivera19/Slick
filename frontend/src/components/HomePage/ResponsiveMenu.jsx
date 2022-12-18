@@ -15,11 +15,10 @@ const ResponsiveMenu = ({
         <div
           className="hamburger-menu responsive"
           onClick={(e) => setShowResponsiveMenu(false)}
-          style={{ color: "black" }}
+          style={{ color: "#454245" }}
         >
           <GiHamburgerMenu size={28} />
         </div>
-        {/* <div className="user-links-container"> */}
         <a
           href="https://github.com/yanrivera19/Slick"
           target="_blank"

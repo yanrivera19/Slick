@@ -98,7 +98,6 @@ const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
         <div
           className="hamburger-menu"
           onClick={(e) => setShowResponsiveMenu(true)}
-          style={showResponsiveMenu ? { color: "black" } : {}}
         >
           <GiHamburgerMenu size={28} />
         </div>
