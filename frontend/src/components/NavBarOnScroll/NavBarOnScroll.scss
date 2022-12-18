@@ -1,5 +1,4 @@
 .nav-bar-container.scroll {
-  display: none;
   position: fixed;
   top: 0;
   justify-content: center;
@@ -10,7 +9,7 @@
   background-color: transparent;
   padding: 0 1vw;
   max-width: 1250px;
-  animation: slidein 0.3s;
+  animation: slideIn 0.3s;
   animation-fill-mode: forwards;
 }
 
@@ -29,7 +28,7 @@
   line-height: 1.0625;
 }
 
-@keyframes slidein {
+@keyframes slideIn {
   from {
     transform: translateY(-100%);
   }

@@ -19,6 +19,7 @@ const HomePage = () => {
   const sessionUser = useSelector((state) => state.session.user);
   const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [showScrollNav, setShowScrollNav] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,9 +59,9 @@ const HomePage = () => {
     if (navRef.current) {
       const rect = navRef.current.getBoundingClientRect();
       if (rect.bottom < -10) {
-        navScrollRef.current.style.display = "flex";
+        setShowScrollNav(true);
       } else if (rect.bottom > -5) {
-        navScrollRef.current.style.display = "none";
+        setShowScrollNav(false);
       }
     }
   };
@@ -92,11 +93,13 @@ const HomePage = () => {
             scroll={false}
             handleOpenDemoModal={handleOpenDemoModal}
           />
-          <NavBarOnScroll
-            ref={navScrollRef}
-            onClick={scrollUp}
-            handleOpenDemoModal={handleOpenDemoModal}
-          />
+          {showScrollNav && (
+            <NavBarOnScroll
+              ref={navScrollRef}
+              onClick={scrollUp}
+              handleOpenDemoModal={handleOpenDemoModal}
+            />
+          )}
         </section>
         <section className="home-billboard">
           <div className="home-billboard-head">
@@ -117,7 +120,7 @@ const HomePage = () => {
               </NavLink>
             </div>
           </div>
-          <video src={videoBillboard} autoPlay loop muted />
+          <video className="video" src={videoBillboard} autoPlay loop muted />
         </section>
       </section>
 
@@ -177,17 +180,14 @@ const HomePage = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <i className="fa-brands fa-github" style={{ fontSize: 54 }} />
+            <i className="fa-brands fa-github" />
           </a>
           <a
             href="https://www.linkedin.com/in/ycrivera/"
             target="_blank"
             rel="noreferrer"
           >
-            <i
-              className="fa-brands fa-linkedin-in"
-              style={{ fontSize: 54 }}
-            ></i>
+            <i className="fa-brands fa-linkedin-in"></i>
           </a>
         </div>
       </section>

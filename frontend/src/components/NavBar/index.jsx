@@ -6,12 +6,15 @@ import "./NavBar.scss";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
 import { useState } from "react";
 import DemoLoginModal from "../HomePage/DemoLoginModal";
+import { GiHamburgerMenu } from "react-icons/gi";
+import ResponsiveMenu from "../HomePage/ResponsiveMenu";
 
 const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
   let sessionLinks;
+  const [showResponsiveMenu, setShowResponsiveMenu] = useState(false);
 
   if (sessionUser) {
     sessionLinks = (
@@ -92,6 +95,20 @@ const NavBar = React.forwardRef(({ handleOpenDemoModal }, ref) => {
           </div>
           <section className="sign-buttons">{sessionLinks}</section>
         </div>
+        <div
+          className="hamburger-menu"
+          onClick={(e) => setShowResponsiveMenu(true)}
+        >
+          <GiHamburgerMenu size={28} />
+        </div>
+        {showResponsiveMenu && (
+          <ResponsiveMenu
+            sessionLinks={sessionLinks}
+            sessionUser={sessionUser}
+            handleOpenDemoModal={handleOpenDemoModal}
+            setShowResponsiveMenu={setShowResponsiveMenu}
+          />
+        )}
       </nav>
     </div>
   );

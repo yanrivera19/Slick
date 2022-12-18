@@ -5,11 +5,17 @@ import * as sessionActions from "../../store/session";
 import slackLogoBlack from "../../assets/images/slack_logo_black.svg";
 import slackLogoSolo from "../../assets/images/solo-logo.svg";
 import { useState, useEffect, useRef } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import DemoLoginModal from "../HomePage/DemoLoginModal";
+
+import ResponsiveMenu from "../HomePage/ResponsiveMenu";
 
 const NavBarOnScroll = React.forwardRef(
   ({ onClick, handleOpenDemoModal }, ref) => {
     const dispatch = useDispatch();
     const sessionUser = useSelector((state) => state.session.user);
+    const [showResponsiveMenu, setShowResponsiveMenu] = useState(false);
+    const [openDemoLoginModal, setOpenDemoLoginModal] = useState(false);
     let sessionLinks;
 
     if (sessionUser) {
@@ -58,6 +64,11 @@ const NavBarOnScroll = React.forwardRef(
 
     return (
       <div className="nav-bar-container scroll" ref={ref}>
+        <section
+          className={openDemoLoginModal ? "demo-modal-container" : "hide"}
+        >
+          <DemoLoginModal />
+        </section>
         <nav className="nav-bar scroll">
           <div
             onClick={onClick}
@@ -93,6 +104,21 @@ const NavBarOnScroll = React.forwardRef(
             </div>
             <section className="sign-buttons scroll">{sessionLinks}</section>
           </div>
+          <div
+            className="hamburger-menu"
+            onClick={(e) => setShowResponsiveMenu(true)}
+            style={{ color: "#454245" }}
+          >
+            <GiHamburgerMenu size={28} />
+          </div>
+          {showResponsiveMenu && (
+            <ResponsiveMenu
+              sessionLinks={sessionLinks}
+              sessionUser={sessionUser}
+              handleOpenDemoModal={handleOpenDemoModal}
+              setShowResponsiveMenu={setShowResponsiveMenu}
+            />
+          )}
         </nav>
       </div>
     );
