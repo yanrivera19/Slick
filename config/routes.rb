@@ -10,8 +10,6 @@ Rails.application.routes.draw do
 
 	mount ActionCable.server => "/cable"
 
-	#NESTED ROUTES FOR MESSAGES AND OTHER THINGS????
-
 	namespace :api, defaults: { format: :json } do
 		resources :users, only: [:index, :create, :show]
 		resource :session, only: [:show, :create, :destroy]
