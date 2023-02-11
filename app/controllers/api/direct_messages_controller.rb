@@ -29,20 +29,16 @@ class Api::DirectMessagesController < ApplicationController
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 		@seen_user = params[:seen_user]
 
-		@direct_message.seen_last_message << @seen_user
+		if !@direct_message.seen_last_message.has_key?(@seen_user)
+			@direct_message.seen_last_message[@seen_user] = @seen_user.to_i
+		end
 
 		if @direct_message.update(direct_message_params)
-			# debugger
-			# debugger 
-			# if @direct_message.users.include?(current_user)
-				# debugger
-				WorkspacesChannel.broadcast_to @workspace,
-					type: 'EDIT_DIRECT_MESSAGE',
-					**from_template('api/direct_messages/show', direct_message: @direct_message)
-	
-				render json: nil, status: :ok			
-			# end
+			WorkspacesChannel.broadcast_to @workspace,
+				type: 'EDIT_DIRECT_MESSAGE',
+				**from_template('api/direct_messages/show', direct_message: @direct_message)
 
+			render json: nil, status: :ok			
 		else
 			render json: {errors: @direct_message.errors.full_messages}, status: 422
 		end

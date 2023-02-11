@@ -28,8 +28,8 @@ class Api::ChannelsController < ApplicationController
 		@content_edited = params[:content_edited] == "true"
 		@seen_user = params[:seen_user]
 		
-		if !@channel.seen_last_message.include?(@seen_user.to_i)
-			@channel.seen_last_message << @seen_user
+		if !@channel.seen_last_message.has_key?(@seen_user)
+			@channel.seen_last_message[@seen_user] = @seen_user.to_i
 		end
 
 		if @channel.update(channel_params)

@@ -9,7 +9,7 @@ json.users do
 end
 json.seen_last_message do
 	@direct_message.seen_last_message.each do |user_id|
-		json.set! user_id, user_id
+		json.set! user_id[0], user_id[1]
 	end
 end	
 	json.messages do

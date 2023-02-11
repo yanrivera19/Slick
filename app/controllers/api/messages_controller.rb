@@ -6,8 +6,7 @@ class Api::MessagesController < ApplicationController
 		@message = Message.new(message_params)
 		@author = User.find_by(id: params[:author_id])
 
-		type = (params[:messageable_type]).downcase
-		
+		type = (params[:messageable_type]).downcase		
 
 		#if I end up adding threads, should check for type thread
 		#in conditional below
@@ -15,8 +14,8 @@ class Api::MessagesController < ApplicationController
     if @message.save
 			if type == "channel"
 				@channel = Channel.find_by_id(params[:messageable_id])
-				@channel.seen_last_message = [];
-				@channel.seen_last_message << @message.author_id
+				@channel.seen_last_message = {};
+				@channel.seen_last_message[@message.author_id] = @message.author_id
 				@channel.save
 
 				ChannelsChannel.broadcast_to @message.messageable, 
@@ -24,8 +23,8 @@ class Api::MessagesController < ApplicationController
 			    **from_template("api/messages/show", message: @message)
 			else 
 				@direct_message = DirectMessage.find_by_id(params[:messageable_id])
-				@direct_message.seen_last_message = [];
-				@direct_message.seen_last_message << @message.author_id
+				@direct_message.seen_last_message = {};
+				@direct_message.seen_last_message[@message.author_id] = @message.author_id
 				@direct_message.save
 				
 				DirectMessagesChannel.broadcast_to @message.messageable, 

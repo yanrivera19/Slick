@@ -1,5 +1,3 @@
-# require "byebug"
-
 class Api::UsersController < ApplicationController
   wrap_parameters :user, include: User.attribute_names + ["password"]
 

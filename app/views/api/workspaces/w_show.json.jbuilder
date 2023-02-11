@@ -13,7 +13,7 @@ json.extract! @workspace, :id, :name, :owner_id, :created_at
 				json.type channel.class.name
 				json.seen_last_message do
 					channel.seen_last_message.each do |user_id|
-						json.set! user_id, user_id
+						json.set! user_id[0], user_id[1]
 					end
 				end		
 				json.users do
@@ -32,7 +32,7 @@ json.extract! @workspace, :id, :name, :owner_id, :created_at
 				json.extract! direct_message, :id
 				json.seen_last_message do
 					direct_message.seen_last_message.each do |user_id|
-						json.set! user_id, user_id
+						json.set! user_id[0], user_id[1]
 					end
 				end	
 				json.users do
