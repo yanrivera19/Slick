@@ -8,7 +8,7 @@ json.users do
 	end
 end
 json.seen_last_message do
-	@channel.seen_last_message.each do |user_id|
+	channel.seen_last_message.each do |user_id|
 		json.set! user_id[0], user_id[1]
 	end
 end	

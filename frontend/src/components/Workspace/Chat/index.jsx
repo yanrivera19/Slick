@@ -16,7 +16,7 @@ const Chat = ({
   conversation,
   channelType,
   fetchConversation,
-  newMessage,
+  newDmMessage,
   newChannel,
   setNewChannel,
   newMessageSent,
@@ -55,7 +55,7 @@ const Chat = ({
   }, [
     conversation,
     lastMessage,
-    newMessage,
+    newDmMessage,
     newChannel,
     editMode,
     newMessageSent,
@@ -63,29 +63,31 @@ const Chat = ({
   ]);
 
   useEffect(() => {
-    let contentEdited = false;
+    if (!(sessionUser.id in conversation.seenLastMessage)) {
+      if (channelType === "Channel") {
+        const detailsEdited = false;
 
-    if (channelType === "Channel") {
-      dispatch(
-        updateChannel(
-          {
-            ...conversation,
-          },
-          contentEdited,
-          sessionUser.id
-        )
-      );
-    } else if (channelType === "DirectMessage") {
-      dispatch(
-        updateDirectMessage(
-          {
-            ...conversation,
-          },
-          sessionUser.id
-        )
-      );
+        dispatch(
+          updateChannel(
+            {
+              ...conversation,
+            },
+            detailsEdited,
+            sessionUser.id
+          )
+        );
+      } else if (channelType === "DirectMessage") {
+        dispatch(
+          updateDirectMessage(
+            {
+              ...conversation,
+            },
+            sessionUser.id
+          )
+        );
+      }
     }
-  }, [channelType, conversation.id, newMessageSent]);
+  }, [channelType, conversation.id]);
 
   useEffect(() => {
     lastMessageRef.current.scrollIntoView();

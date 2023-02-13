@@ -63,9 +63,9 @@ export const createChannel = (channel) => async (dispatch) => {
 };
 
 export const updateChannel =
-  (channel, contentEdited, seenUser) => async (dispatch) => {
+  (channel, detailsEdited, seenUser) => async (dispatch) => {
     const res = await csrfFetch(
-      `/api/channels/${channel.id}?contentEdited=${contentEdited}&seenUser=${seenUser}`,
+      `/api/channels/${channel.id}?detailsEdited=${detailsEdited}&seenUser=${seenUser}`,
       {
         method: "PUT",
         body: JSON.stringify(channel),
@@ -75,7 +75,7 @@ export const updateChannel =
       }
     );
 
-    if (res.ok && !contentEdited) {
+    if (res.ok && !detailsEdited) {
       const channel = await res.json();
       dispatch(receiveChannel(channel));
     }
