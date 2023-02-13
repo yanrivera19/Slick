@@ -63,7 +63,7 @@ const Chat = ({
   ]);
 
   useEffect(() => {
-    if (!(sessionUser.id in conversation.seenLastMessage)) {
+    if (conversation && !(sessionUser.id in conversation.seenLastMessage)) {
       if (channelType === "Channel") {
         const detailsEdited = false;
 
