@@ -8,6 +8,7 @@ class Api::DirectMessagesController < ApplicationController
 		@user_ids = params[:users].map {|user| user[:id]}
 		@users =  params[:users]
 		@message = Message.create(content: params[:message][:content], author_name: params[:message][:author_name], author_id: params[:message][:author_id], messageable_type: params[:message][:messageable_type], messageable_id: @direct_message.id )
+		@direct_message.seen_last_message[@message.author_id] = @message.author_id.to_i
 
     if @direct_message.save
 			@user_ids.each do |user_id|
