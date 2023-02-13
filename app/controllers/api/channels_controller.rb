@@ -1,5 +1,5 @@
 class Api::ChannelsController < ApplicationController
-	wrap_parameters :channel, include: Channel.attribute_names + ["workspaceId", "ownerId", "contentEdited" "seenUser"]
+	wrap_parameters :channel, include: Channel.attribute_names + ["workspaceId", "ownerId", "detailsEdited" "seenUser"]
   before_action :require_logged_in
 
   def create
@@ -25,15 +25,15 @@ class Api::ChannelsController < ApplicationController
 	def update 
 		@channel = Channel.find_by_id(params[:id]) 
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
-		@content_edited = params[:content_edited] == "true"
-		@seen_user = params[:seen_user]
-		
-		if !@channel.seen_last_message.has_key?(@seen_user)
+		@details_edited = params[:details_edited] == "true"
+		@seen_user = params[:seen_user]	
+
+		if @seen_user != "undefined"
 			@channel.seen_last_message[@seen_user] = @seen_user.to_i
 		end
 
 		if @channel.update(channel_params)
-			if @content_edited == true
+			if @details_edited == true
 				WorkspacesChannel.broadcast_to @workspace,
 					type: 'EDIT_CHANNEL',
 					**from_template('api/channels/show', channel: @channel)
@@ -69,6 +69,6 @@ class Api::ChannelsController < ApplicationController
 	private 
 
 	def channel_params
-		params.require(:channel).permit(:id, :name, :description, :workspace_id, :owner_id, :content_edited, :seen_user)
+		params.require(:channel).permit(:id, :name, :description, :workspace_id, :owner_id, :details_edited, :seen_user)
 	end
 end

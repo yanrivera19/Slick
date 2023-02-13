@@ -29,7 +29,7 @@ class Api::DirectMessagesController < ApplicationController
 		@workspace = Workspace.find_by_id(@direct_message.workspace_id)
 		@seen_user = params[:seen_user]
 
-		if !@direct_message.seen_last_message.has_key?(@seen_user)
+		if @seen_user != "undefined"
 			@direct_message.seen_last_message[@seen_user] = @seen_user.to_i
 		end
 

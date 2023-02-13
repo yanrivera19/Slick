@@ -18,7 +18,7 @@ const EditChannelModal = ({
 
   const handleEdit = (e) => {
     e.preventDefault();
-    let contentEdited = true;
+    const detailsEdited = true;
 
     dispatch(
       updateChannel(
@@ -27,7 +27,7 @@ const EditChannelModal = ({
           name: name,
           description: description,
         },
-        contentEdited
+        detailsEdited
       )
     );
     handleChannelNameClick();

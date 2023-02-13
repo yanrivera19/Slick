@@ -38,7 +38,7 @@ const Workspace = () => {
   const directMessageSubscriptions = [];
   const [shownConversation, setShownConversation] = useState(null);
   const [conversationType, setConversationType] = useState(null);
-  const [newMessage, setNewMessage] = useState(false);
+  const [newDmMessage, setNewDmMessage] = useState(false);
   const [newChannel, setNewChannel] = useState(false);
   const [userProfilePop, setUserProfilePop] = useState(false);
   let lastMsg;
@@ -114,7 +114,7 @@ const Workspace = () => {
             case "RECEIVE_NEW_DIRECT_MESSAGE":
               if (directMessage.users[sessionUser.id]) {
                 if (directMessage.messages.authorId === sessionUser.id) {
-                  setNewMessage(false);
+                  setNewDmMessage(false);
                   setShownConversation(directMessage);
                   setConversationType("DirectMessage");
                   dispatch(receiveNewDirectMessage(directMessage));
@@ -124,7 +124,7 @@ const Workspace = () => {
               break;
             case "RECEIVE_NEW_CHANNEL":
               if (channel.ownerId === sessionUser.id) {
-                setNewMessage(false);
+                setNewDmMessage(false);
 
                 setNewChannel(true);
                 setShownConversation(channel);
@@ -173,7 +173,7 @@ const Workspace = () => {
 
   const handleChannelClick = (e, channel, channelType) => {
     setNewChannel(false);
-    setNewMessage(false);
+    setNewDmMessage(false);
     setShownConversation(channel);
     setConversationType(channelType);
   };
@@ -182,7 +182,7 @@ const Workspace = () => {
     setNewChannel(false);
     setShownConversation(null);
     setConversationType(null);
-    setNewMessage(true);
+    setNewDmMessage(true);
   };
 
   const closeAddChannelModal = () => {
@@ -285,7 +285,7 @@ const Workspace = () => {
             getConversation={getChannel}
             dms={dms}
             channels={channels}
-            newMessage={newMessage}
+            newDmMessage={newDmMessage}
             newChannel={newChannel}
             setNewChannel={setNewChannel}
             newMessageSent={toggleNewMessageSent}
@@ -300,11 +300,11 @@ const Workspace = () => {
             fetchConversation={fetchDirectMessage}
             getConversation={getDirectMessage}
             channels={channels}
-            newMessage={newMessage}
+            newDmMessage={newDmMessage}
             newMessageSent={toggleNewMessageSent}
           />
         ) : null}
-        {newMessage ? (
+        {newDmMessage ? (
           <NewMessage
             users={Object.values(workspace.users)}
             channels={channels}
