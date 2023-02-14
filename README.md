@@ -12,7 +12,8 @@ Slick, a clone of the popular messaging app Slack, allows users from a workspace
 - React
 - Redux
 - Ruby On Rails
-- PostgreSQL, ActionCable (for WebSockets)
+- PostgreSQL
+- ActionCable (for WebSockets)
 - HTML5
 - SCSS
 
