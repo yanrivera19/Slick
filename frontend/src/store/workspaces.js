@@ -105,7 +105,7 @@ export default function workspaceReducer(state = {}, action) {
     case RECEIVE_WORKSPACE:
       return { ...state, [action.workspace.id]: action.workspace };
     case RECEIVE_WORKSPACES:
-      return { ...state, ...action.workspaces };
+      return { ...action.workspaces };
     case EDIT_WORKSPACE:
       return action.workspace
         ? { ...state, [action.workspace.id]: action.workspace }

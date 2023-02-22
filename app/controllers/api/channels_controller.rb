@@ -6,6 +6,7 @@ class Api::ChannelsController < ApplicationController
 		@channel = Channel.create(channel_params)
 		@workspace = Workspace.find_by_id(@channel.workspace_id)
 		@user_ids = @workspace.users.map {|user| user[:id]}
+		@channel.seen_last_message[@channel.owner_id] = @channel.owner_id.to_i
 
     if @channel.save
 			@user_ids.each do |user_id|
