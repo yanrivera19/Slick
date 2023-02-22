@@ -13,10 +13,10 @@ class Api::WorkspacesController < ApplicationController
 			@user_ids.each do |user_id|
 				@workspace_subscription = WorkspaceSubscription.create(user_id: user_id, workspace_id: @workspace.id)
 				@channel_subscription_1 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_1.id)
-				@channel_subscription_2 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_2.id)
+				@channel_subscription_2 = ChannelSubscription.create(user_id: user_id, channel_id: @channel_2.id)			
 			end
 
-      render "/api/workspaces/w_show"
+      render "/api/workspaces/w_create_show"
     else
       render json: {errors: @workspace.errors.full_messages}, status: 422
     end
